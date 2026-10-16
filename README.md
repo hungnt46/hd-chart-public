@@ -26,5 +26,4 @@ Node 22. `out/` là trang tĩnh, phục vụ được bằng mọi host tĩnh (b
 
 ## Giấy phép và nguồn của bên thứ ba
 
-Xem `NOTICE.md`: Swiss Ephemeris (AGPL-3.0), dữ liệu địa danh GeoNames (CC-BY 4.0), hình học bodygraph và bảng
-fixing từ hdkit (MIT © 2023 Jonah Dempcy).
+Xem `NOTICE.md`: Swiss Ephemeris (AGPL-3.0), dữ liệu địa danh GeoNames (CC-BY 4.0)

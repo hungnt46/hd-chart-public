@@ -1,0 +1,40 @@
+node_modules/
+# ...kể cả khi nó là SYMLINK: mẫu có dấu `/` chỉ khớp thư mục, nên một symlink
+# tên `node_modules` (dùng khi làm trên `git worktree` riêng) vẫn lọt vào `git add`.
+node_modules
+.next/
+out/
+
+# Playwright — ảnh tham chiếu (*-snapshots/) PHẢI commit; kết quả chạy thì không
+test-results/
+playwright-report/
+blob-report/
+
+# spike Phase 0: giữ mã + REPORT.md, bỏ dữ liệu tải về
+spikes/**/node_modules/
+spikes/**/data/*.se1
+
+*.tsbuildinfo
+
+# Tệp GeoNames tải về cho `npm run gen:places` — chỉ commit tệp đã sinh ở public/data/
+.cache/
+.DS_Store
+
+# Ảnh bodygraph tham chiếu của Hưng — tài sản riêng, không commit
+reference-bodygraph.*
+
+# Kho tham khảo `../hd-corpus/` (675 MB, 7 repo của bên thứ ba) là thư mục ANH EM,
+# KHÔNG phải nội dung repo này — xem research/repository-inventory.md. Dòng dưới
+# chỉ để chặn nếu ai đó lỡ chép vào đây.
+hd-corpus/
+
+# Bí mật triển khai (G3) — chỉ commit deploy/.env.example
+deploy/.env
+
+# Claude Code per-machine settings
+.claude/settings.local.json
+
+# Bí mật cục bộ — chỉ `deploy/.env.example` (giữ chỗ) được commit
+.env
+.env.*
+!deploy/.env.example

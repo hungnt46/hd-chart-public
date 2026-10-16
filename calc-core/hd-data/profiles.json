@@ -1,0 +1,19 @@
+{
+  "_source": "Bảng chuỗi tham chiếu (ghi chép nội bộ)",
+  "_extractedAt": "2026-09-21",
+  "_note": "CHỈ dữ kiện cấu trúc. Văn bản diễn giải không nằm ở đây — xem SPEC.md §3.2.",
+  "profiles": [
+    13,
+    14,
+    24,
+    25,
+    35,
+    36,
+    41,
+    46,
+    51,
+    52,
+    62,
+    63
+  ]
+}

@@ -1,0 +1,282 @@
+{
+  "_what": "Mạch (circuit) + nhóm mạch + loại kênh (channel type) của 36 kênh. Khoá `id` = `channels.json`.",
+  "_confidence": "STRONG INFERENCE (README nhóm B): không có trong bảng chuỗi tham chiếu (enum CircuitGroup không có chuỗi).",
+  "_source": [
+    "Ra Uru Hu, Channels by Type 1–4 (hd-translation-studio/archive/source_backups/): chương Manifesting / Generating / Projected Channels; \"The 10-57 is a Projected Channel\", \"Only Four Manifesting Channels\" (20-34, 12-22, 45-21, 35-36).",
+    "Đối chiếu từng kênh với bảng Planetary Influence của một ứng dụng tham chiếu (fixture đối chiếu 2026-09-28): mạch khớp 36/36, loại kênh khớp 35/36."
+  ],
+  "_deviations": {
+    "53-42": "Bản tham chiếu ghi Projecting. Sách Ra xếp 42-53 trong chương \"The Generating Channels\" (Channels by Type 2, tr. 107: \"authority is from what is being expressed through the Sacral\"); mọi kênh chạm Xương Cùng còn lại bản tham chiếu cũng ghi Generating (3-60, 9-52 cùng nối Gốc–Xương Cùng). Hưng chốt theo SÁCH (2026-09-28)."
+  },
+  "_labelsEn": {
+    "circuit": {
+      "Sensing": "Sensing (Abstract)",
+      "Understanding": "Understanding (Logic)",
+      "Knowing": "Knowing",
+      "Centering": "Centering",
+      "Ego": "Ego",
+      "Defense": "Defense",
+      "Integration": "Integration Channels"
+    },
+    "channelType": {
+      "Generating": "Generating",
+      "Projecting": "Projecting",
+      "Manifesting": "Manifesting",
+      "ManifestingGenerating": "Manifesting Generating"
+    }
+  },
+  "channels": [
+    {
+      "id": 0,
+      "gates": [20, 10],
+      "group": "Integration",
+      "circuit": "Integration",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 1,
+      "gates": [20, 34],
+      "group": "Integration",
+      "circuit": "Integration",
+      "channelType": "ManifestingGenerating"
+    },
+    {
+      "id": 2,
+      "gates": [34, 57],
+      "group": "Integration",
+      "circuit": "Integration",
+      "channelType": "Generating"
+    },
+    {
+      "id": 3,
+      "gates": [10, 57],
+      "group": "Integration",
+      "circuit": "Integration",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 4,
+      "gates": [61, 24],
+      "group": "Individual",
+      "circuit": "Knowing",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 5,
+      "gates": [43, 23],
+      "group": "Individual",
+      "circuit": "Knowing",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 6,
+      "gates": [28, 38],
+      "group": "Individual",
+      "circuit": "Knowing",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 7,
+      "gates": [57, 20],
+      "group": "Individual",
+      "circuit": "Knowing",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 8,
+      "gates": [39, 55],
+      "group": "Individual",
+      "circuit": "Knowing",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 9,
+      "gates": [12, 22],
+      "group": "Individual",
+      "circuit": "Knowing",
+      "channelType": "Manifesting"
+    },
+    {
+      "id": 10,
+      "gates": [60, 3],
+      "group": "Individual",
+      "circuit": "Knowing",
+      "channelType": "Generating"
+    },
+    {
+      "id": 11,
+      "gates": [2, 14],
+      "group": "Individual",
+      "circuit": "Knowing",
+      "channelType": "Generating"
+    },
+    {
+      "id": 12,
+      "gates": [8, 1],
+      "group": "Individual",
+      "circuit": "Knowing",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 13,
+      "gates": [10, 34],
+      "group": "Individual",
+      "circuit": "Centering",
+      "channelType": "Generating"
+    },
+    {
+      "id": 14,
+      "gates": [51, 25],
+      "group": "Individual",
+      "circuit": "Centering",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 15,
+      "gates": [63, 4],
+      "group": "Collective",
+      "circuit": "Understanding",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 16,
+      "gates": [17, 62],
+      "group": "Collective",
+      "circuit": "Understanding",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 17,
+      "gates": [18, 58],
+      "group": "Collective",
+      "circuit": "Understanding",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 18,
+      "gates": [48, 16],
+      "group": "Collective",
+      "circuit": "Understanding",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 19,
+      "gates": [9, 52],
+      "group": "Collective",
+      "circuit": "Understanding",
+      "channelType": "Generating"
+    },
+    {
+      "id": 20,
+      "gates": [5, 15],
+      "group": "Collective",
+      "circuit": "Understanding",
+      "channelType": "Generating"
+    },
+    {
+      "id": 21,
+      "gates": [31, 7],
+      "group": "Collective",
+      "circuit": "Understanding",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 22,
+      "gates": [30, 41],
+      "group": "Collective",
+      "circuit": "Sensing",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 23,
+      "gates": [35, 36],
+      "group": "Collective",
+      "circuit": "Sensing",
+      "channelType": "Manifesting"
+    },
+    {
+      "id": 24,
+      "gates": [47, 64],
+      "group": "Collective",
+      "circuit": "Sensing",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 25,
+      "gates": [56, 11],
+      "group": "Collective",
+      "circuit": "Sensing",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 26,
+      "gates": [53, 42],
+      "group": "Collective",
+      "circuit": "Sensing",
+      "channelType": "Generating"
+    },
+    {
+      "id": 27,
+      "gates": [46, 29],
+      "group": "Collective",
+      "circuit": "Sensing",
+      "channelType": "Generating"
+    },
+    {
+      "id": 28,
+      "gates": [33, 13],
+      "group": "Collective",
+      "circuit": "Sensing",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 29,
+      "gates": [54, 32],
+      "group": "Tribal",
+      "circuit": "Ego",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 30,
+      "gates": [26, 44],
+      "group": "Tribal",
+      "circuit": "Ego",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 31,
+      "gates": [49, 19],
+      "group": "Tribal",
+      "circuit": "Ego",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 32,
+      "gates": [37, 40],
+      "group": "Tribal",
+      "circuit": "Ego",
+      "channelType": "Projecting"
+    },
+    {
+      "id": 33,
+      "gates": [45, 21],
+      "group": "Tribal",
+      "circuit": "Ego",
+      "channelType": "Manifesting"
+    },
+    {
+      "id": 34,
+      "gates": [59, 6],
+      "group": "Tribal",
+      "circuit": "Defense",
+      "channelType": "Generating"
+    },
+    {
+      "id": 35,
+      "gates": [27, 50],
+      "group": "Tribal",
+      "circuit": "Defense",
+      "channelType": "Generating"
+    }
+  ]
+}

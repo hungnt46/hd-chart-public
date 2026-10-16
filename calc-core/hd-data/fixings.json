@@ -1,0 +1,1580 @@
+{
+ "_what": "Hành tinh exalted / detriment của từng hào. DỮ KIỆN, không phải diễn giải.",
+ "_source": {
+  "chinh": {
+   "repo": "../hd-corpus/hdkit/constants.js",
+   "variable": "fixings",
+   "soO": 746
+  },
+  "cong32": {
+   "_what": "hdkit thiếu sạch cổng 32; lấp từ nguồn khác, xem GATE_32 trong generate/",
+   "doc": "thư viện Rave I'Ching bản trả phí của Jovian",
+   "doiChieu": "humdes.com/en/kb/gates/32 (đã kiểm nguồn này trên cổng 1, 31, 33: khớp 12/12)",
+   "xacMinh": "đoạn văn kèm mỗi ô khớp từng chữ với lines.json trong i18n/hd-content",
+   "soO": 12
+  },
+  "suaTheoSachIhds": {
+   "_what": "hdkit ghi sai; sửa theo sách, xem IHDS_OVERRIDES trong generate/",
+   "sach": "IHDS — The Complete Rave I'Ching (Gates, Crosses, Lines), 133 tr., 2001",
+   "bangTrich": "hd-translation-studio/work/temp_dict/planet_symbols_rave_iching.json",
+   "doiChieu": "khớp hdkit 752/758 ô có hành tinh + 10/10 ô không có fixing",
+   "o": [
+    "24.1.d: Pluto → Neptune",
+    "54.2.d: Venus → Mars",
+    "55.5.e: Mars → Uranus",
+    "63.2.d: Mars → Uranus",
+    "63.6.e: Pluto → Jupiter",
+    "63.6.d: Jupiter → Pluto"
+   ]
+  },
+  "extractedAt": "2026-09-25"
+ },
+ "_gaps": {
+  "_what": "Ô không có hành tinh. HAI loại, đừng gộp — xem generate/extract-fixings.ts.",
+  "khongCoFixing": {
+   "_what": "Hào thật sự không có fixing; Jovian cũng không viết chữ.",
+   "keys": [
+    "5.6.d",
+    "25.4.d",
+    "37.1.d",
+    "47.5.d",
+    "47.6.e",
+    "54.4.e",
+    "54.4.d",
+    "54.5.d",
+    "57.3.d",
+    "58.2.e"
+   ]
+  },
+  "noCuaNguon": {
+   "_what": "Nợ dữ liệu. RỖNG từ 2026-09-22 — cổng 32 đã lấp, xem GATE_32.",
+   "keys": []
+  }
+ },
+ "fixings": {
+  "1.1": {
+   "exalted": "Moon",
+   "detriment": "Uranus"
+  },
+  "1.2": {
+   "exalted": "Venus",
+   "detriment": "Mars"
+  },
+  "1.3": {
+   "exalted": "Mars",
+   "detriment": "Earth"
+  },
+  "1.4": {
+   "exalted": "Earth",
+   "detriment": "Jupiter"
+  },
+  "1.5": {
+   "exalted": "Mars",
+   "detriment": "Uranus"
+  },
+  "1.6": {
+   "exalted": "Earth",
+   "detriment": "Pluto"
+  },
+  "2.1": {
+   "exalted": "Venus",
+   "detriment": "Mars"
+  },
+  "2.2": {
+   "exalted": "Saturn",
+   "detriment": "Mars"
+  },
+  "2.3": {
+   "exalted": "Jupiter",
+   "detriment": "Uranus"
+  },
+  "2.4": {
+   "exalted": "Venus",
+   "detriment": "Mars"
+  },
+  "2.5": {
+   "exalted": "Mercury",
+   "detriment": "Earth"
+  },
+  "2.6": {
+   "exalted": "Mercury",
+   "detriment": "Saturn"
+  },
+  "3.1": {
+   "exalted": "Earth",
+   "detriment": "Mercury"
+  },
+  "3.2": {
+   "exalted": "Mars",
+   "detriment": "Uranus"
+  },
+  "3.3": {
+   "exalted": "Venus",
+   "detriment": "Pluto"
+  },
+  "3.4": {
+   "exalted": "Neptune",
+   "detriment": "Mars"
+  },
+  "3.5": {
+   "exalted": "Mars",
+   "detriment": "Earth"
+  },
+  "3.6": {
+   "exalted": "Sun",
+   "detriment": "Pluto"
+  },
+  "4.1": {
+   "exalted": "Moon",
+   "detriment": "Earth"
+  },
+  "4.2": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "4.3": {
+   "exalted": "Venus",
+   "detriment": "Pluto"
+  },
+  "4.4": {
+   "exalted": "Sun",
+   "detriment": "Saturn"
+  },
+  "4.5": {
+   "exalted": "Jupiter",
+   "detriment": "Pluto"
+  },
+  "4.6": {
+   "exalted": "Mercury",
+   "detriment": "Mars"
+  },
+  "5.1": {
+   "exalted": "Mars",
+   "detriment": "Earth"
+  },
+  "5.2": {
+   "exalted": "Venus",
+   "detriment": "Pluto"
+  },
+  "5.3": {
+   "exalted": "Neptune",
+   "detriment": "Moon"
+  },
+  "5.4": {
+   "exalted": "Uranus",
+   "detriment": "Sun"
+  },
+  "5.5": {
+   "exalted": "Venus",
+   "detriment": "Pluto"
+  },
+  "5.6": {
+   "exalted": "Neptune"
+  },
+  "6.1": {
+   "exalted": "Pluto",
+   "detriment": "Mercury"
+  },
+  "6.2": {
+   "exalted": "Venus",
+   "detriment": "Mars"
+  },
+  "6.3": {
+   "exalted": "Neptune",
+   "detriment": "Pluto"
+  },
+  "6.4": {
+   "exalted": "Sun",
+   "detriment": "Pluto"
+  },
+  "6.5": {
+   "exalted": "Venus",
+   "detriment": "Moon"
+  },
+  "6.6": {
+   "exalted": "Mercury",
+   "detriment": "Venus"
+  },
+  "7.1": {
+   "exalted": "Venus",
+   "detriment": "Mercury"
+  },
+  "7.2": {
+   "exalted": "Neptune",
+   "detriment": "Mercury"
+  },
+  "7.3": {
+   "exalted": "Moon",
+   "detriment": "Mercury"
+  },
+  "7.4": {
+   "exalted": "Sun",
+   "detriment": "Uranus"
+  },
+  "7.5": {
+   "exalted": "Venus",
+   "detriment": "Neptune"
+  },
+  "7.6": {
+   "exalted": "Mercury",
+   "detriment": "Uranus"
+  },
+  "8.1": {
+   "exalted": "Neptune",
+   "detriment": "Mercury"
+  },
+  "8.2": {
+   "exalted": "Sun",
+   "detriment": "Earth"
+  },
+  "8.3": {
+   "exalted": "Moon",
+   "detriment": "Saturn"
+  },
+  "8.4": {
+   "exalted": "Jupiter",
+   "detriment": "Mercury"
+  },
+  "8.5": {
+   "exalted": "Jupiter",
+   "detriment": "Sun"
+  },
+  "8.6": {
+   "exalted": "Venus",
+   "detriment": "Pluto"
+  },
+  "9.1": {
+   "exalted": "Pluto",
+   "detriment": "Mars"
+  },
+  "9.2": {
+   "exalted": "Pluto",
+   "detriment": "Jupiter"
+  },
+  "9.3": {
+   "exalted": "Earth",
+   "detriment": "Sun"
+  },
+  "9.4": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "9.5": {
+   "exalted": "Jupiter",
+   "detriment": "Earth"
+  },
+  "9.6": {
+   "exalted": "Moon",
+   "detriment": "Pluto"
+  },
+  "10.1": {
+   "exalted": "Sun",
+   "detriment": "Moon"
+  },
+  "10.2": {
+   "exalted": "Mercury",
+   "detriment": "Mars"
+  },
+  "10.3": {
+   "exalted": "Earth",
+   "detriment": "Moon"
+  },
+  "10.4": {
+   "exalted": "Uranus",
+   "detriment": "Mercury"
+  },
+  "10.5": {
+   "exalted": "Jupiter",
+   "detriment": "Mars"
+  },
+  "10.6": {
+   "exalted": "Pluto",
+   "detriment": "Saturn"
+  },
+  "11.1": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "11.2": {
+   "exalted": "Neptune",
+   "detriment": "Mars"
+  },
+  "11.3": {
+   "exalted": "Pluto",
+   "detriment": "Venus"
+  },
+  "11.4": {
+   "exalted": "Moon",
+   "detriment": "Sun"
+  },
+  "11.5": {
+   "exalted": "Moon",
+   "detriment": "Mercury"
+  },
+  "11.6": {
+   "exalted": "Neptune",
+   "detriment": "Jupiter"
+  },
+  "12.1": {
+   "exalted": "Venus",
+   "detriment": "Jupiter"
+  },
+  "12.2": {
+   "exalted": "Saturn",
+   "detriment": "Mercury"
+  },
+  "12.3": {
+   "exalted": "Neptune",
+   "detriment": "Mars"
+  },
+  "12.4": {
+   "exalted": "Earth",
+   "detriment": "Mercury"
+  },
+  "12.5": {
+   "exalted": "Sun",
+   "detriment": "Mars"
+  },
+  "12.6": {
+   "exalted": "Sun",
+   "detriment": "Earth"
+  },
+  "13.1": {
+   "exalted": "Venus",
+   "detriment": "Moon"
+  },
+  "13.2": {
+   "exalted": "Moon",
+   "detriment": "Sun"
+  },
+  "13.3": {
+   "exalted": "Earth",
+   "detriment": "Venus"
+  },
+  "13.4": {
+   "exalted": "Pluto",
+   "detriment": "Venus"
+  },
+  "13.5": {
+   "exalted": "Neptune",
+   "detriment": "Jupiter"
+  },
+  "13.6": {
+   "exalted": "Mars",
+   "detriment": "Mercury"
+  },
+  "14.1": {
+   "exalted": "Jupiter",
+   "detriment": "Mercury"
+  },
+  "14.2": {
+   "exalted": "Jupiter",
+   "detriment": "Mars"
+  },
+  "14.3": {
+   "exalted": "Earth",
+   "detriment": "Neptune"
+  },
+  "14.4": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "14.5": {
+   "exalted": "Sun",
+   "detriment": "Venus"
+  },
+  "14.6": {
+   "exalted": "Sun",
+   "detriment": "Earth"
+  },
+  "15.1": {
+   "exalted": "Venus",
+   "detriment": "Mars"
+  },
+  "15.2": {
+   "exalted": "Sun",
+   "detriment": "Earth"
+  },
+  "15.3": {
+   "exalted": "Earth",
+   "detriment": "Mercury"
+  },
+  "15.4": {
+   "exalted": "Jupiter",
+   "detriment": "Saturn"
+  },
+  "15.5": {
+   "exalted": "Jupiter",
+   "detriment": "Pluto"
+  },
+  "15.6": {
+   "exalted": "Pluto",
+   "detriment": "Venus"
+  },
+  "16.1": {
+   "exalted": "Earth",
+   "detriment": "Mercury"
+  },
+  "16.2": {
+   "exalted": "Sun",
+   "detriment": "Mercury"
+  },
+  "16.3": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "16.4": {
+   "exalted": "Jupiter",
+   "detriment": "Mars"
+  },
+  "16.5": {
+   "exalted": "Pluto",
+   "detriment": "Moon"
+  },
+  "16.6": {
+   "exalted": "Neptune",
+   "detriment": "Jupiter"
+  },
+  "17.1": {
+   "exalted": "Mars",
+   "detriment": "Venus"
+  },
+  "17.2": {
+   "exalted": "Sun",
+   "detriment": "Moon"
+  },
+  "17.3": {
+   "exalted": "Pluto",
+   "detriment": "Earth"
+  },
+  "17.4": {
+   "exalted": "Pluto",
+   "detriment": "Jupiter"
+  },
+  "17.5": {
+   "exalted": "Uranus",
+   "detriment": "Mars"
+  },
+  "17.6": {
+   "exalted": "Moon",
+   "detriment": "Jupiter"
+  },
+  "18.1": {
+   "exalted": "Earth",
+   "detriment": "Jupiter"
+  },
+  "18.2": {
+   "exalted": "Pluto",
+   "detriment": "Moon"
+  },
+  "18.3": {
+   "exalted": "Neptune",
+   "detriment": "Jupiter"
+  },
+  "18.4": {
+   "exalted": "Earth",
+   "detriment": "Mercury"
+  },
+  "18.5": {
+   "exalted": "Saturn",
+   "detriment": "Uranus"
+  },
+  "18.6": {
+   "exalted": "Mars",
+   "detriment": "Moon"
+  },
+  "19.1": {
+   "exalted": "Sun",
+   "detriment": "Moon"
+  },
+  "19.2": {
+   "exalted": "Jupiter",
+   "detriment": "Mercury"
+  },
+  "19.3": {
+   "exalted": "Venus",
+   "detriment": "Moon"
+  },
+  "19.4": {
+   "exalted": "Mars",
+   "detriment": "Venus"
+  },
+  "19.5": {
+   "exalted": "Earth",
+   "detriment": "Jupiter"
+  },
+  "19.6": {
+   "exalted": "Jupiter",
+   "detriment": "Mars"
+  },
+  "20.1": {
+   "exalted": "Venus",
+   "detriment": "Moon"
+  },
+  "20.2": {
+   "exalted": "Venus",
+   "detriment": "Moon"
+  },
+  "20.3": {
+   "exalted": "Sun",
+   "detriment": "Earth"
+  },
+  "20.4": {
+   "exalted": "Jupiter",
+   "detriment": "Mercury"
+  },
+  "20.5": {
+   "exalted": "Saturn",
+   "detriment": "Uranus"
+  },
+  "20.6": {
+   "exalted": "Venus",
+   "detriment": "Mercury"
+  },
+  "21.1": {
+   "exalted": "Mars",
+   "detriment": "Moon"
+  },
+  "21.2": {
+   "exalted": "Mars",
+   "detriment": "Neptune"
+  },
+  "21.3": {
+   "exalted": "Neptune",
+   "detriment": "Jupiter"
+  },
+  "21.4": {
+   "exalted": "Jupiter",
+   "detriment": "Earth"
+  },
+  "21.5": {
+   "exalted": "Jupiter",
+   "detriment": "Pluto"
+  },
+  "21.6": {
+   "exalted": "Pluto",
+   "detriment": "Venus"
+  },
+  "22.1": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "22.2": {
+   "exalted": "Sun",
+   "detriment": "Jupiter"
+  },
+  "22.3": {
+   "exalted": "Saturn",
+   "detriment": "Mars"
+  },
+  "22.4": {
+   "exalted": "Neptune",
+   "detriment": "Mars"
+  },
+  "22.5": {
+   "exalted": "Jupiter",
+   "detriment": "Mars"
+  },
+  "22.6": {
+   "exalted": "Sun",
+   "detriment": "Mars"
+  },
+  "23.1": {
+   "exalted": "Jupiter",
+   "detriment": "Mars"
+  },
+  "23.2": {
+   "exalted": "Jupiter",
+   "detriment": "Moon"
+  },
+  "23.3": {
+   "exalted": "Sun",
+   "detriment": "Pluto"
+  },
+  "23.4": {
+   "exalted": "Sun",
+   "detriment": "Earth"
+  },
+  "23.5": {
+   "exalted": "Jupiter",
+   "detriment": "Moon"
+  },
+  "23.6": {
+   "exalted": "Mars",
+   "detriment": "Jupiter"
+  },
+  "24.1": {
+   "exalted": "Sun",
+   "detriment": "Neptune"
+  },
+  "24.2": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "24.3": {
+   "exalted": "Venus",
+   "detriment": "Jupiter"
+  },
+  "24.4": {
+   "exalted": "Saturn",
+   "detriment": "Neptune"
+  },
+  "24.5": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "24.6": {
+   "exalted": "Jupiter",
+   "detriment": "Pluto"
+  },
+  "25.1": {
+   "exalted": "Neptune",
+   "detriment": "Mercury"
+  },
+  "25.2": {
+   "exalted": "Mercury",
+   "detriment": "Mars"
+  },
+  "25.3": {
+   "exalted": "Mars",
+   "detriment": "Pluto"
+  },
+  "25.4": {
+   "exalted": "Venus"
+  },
+  "25.5": {
+   "exalted": "Venus",
+   "detriment": "Jupiter"
+  },
+  "25.6": {
+   "exalted": "Earth",
+   "detriment": "Uranus"
+  },
+  "26.1": {
+   "exalted": "Neptune",
+   "detriment": "Mars"
+  },
+  "26.2": {
+   "exalted": "Sun",
+   "detriment": "Pluto"
+  },
+  "26.3": {
+   "exalted": "Sun",
+   "detriment": "Saturn"
+  },
+  "26.4": {
+   "exalted": "Pluto",
+   "detriment": "Saturn"
+  },
+  "26.5": {
+   "exalted": "Mars",
+   "detriment": "Venus"
+  },
+  "26.6": {
+   "exalted": "Sun",
+   "detriment": "Moon"
+  },
+  "27.1": {
+   "exalted": "Sun",
+   "detriment": "Earth"
+  },
+  "27.2": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "27.3": {
+   "exalted": "Pluto",
+   "detriment": "Mars"
+  },
+  "27.4": {
+   "exalted": "Jupiter",
+   "detriment": "Mars"
+  },
+  "27.5": {
+   "exalted": "Jupiter",
+   "detriment": "Saturn"
+  },
+  "27.6": {
+   "exalted": "Moon",
+   "detriment": "Pluto"
+  },
+  "28.1": {
+   "exalted": "Mars",
+   "detriment": "Venus"
+  },
+  "28.2": {
+   "exalted": "Sun",
+   "detriment": "Jupiter"
+  },
+  "28.3": {
+   "exalted": "Saturn",
+   "detriment": "Jupiter"
+  },
+  "28.4": {
+   "exalted": "Jupiter",
+   "detriment": "Mercury"
+  },
+  "28.5": {
+   "exalted": "Pluto",
+   "detriment": "Sun"
+  },
+  "28.6": {
+   "exalted": "Pluto",
+   "detriment": "Neptune"
+  },
+  "29.1": {
+   "exalted": "Mars",
+   "detriment": "Neptune"
+  },
+  "29.2": {
+   "exalted": "Sun",
+   "detriment": "Venus"
+  },
+  "29.3": {
+   "exalted": "Mars",
+   "detriment": "Jupiter"
+  },
+  "29.4": {
+   "exalted": "Saturn",
+   "detriment": "Venus"
+  },
+  "29.5": {
+   "exalted": "Sun",
+   "detriment": "Earth"
+  },
+  "29.6": {
+   "exalted": "Mars",
+   "detriment": "Jupiter"
+  },
+  "30.1": {
+   "exalted": "Sun",
+   "detriment": "Jupiter"
+  },
+  "30.2": {
+   "exalted": "Sun",
+   "detriment": "Mars"
+  },
+  "30.3": {
+   "exalted": "Pluto",
+   "detriment": "Jupiter"
+  },
+  "30.4": {
+   "exalted": "Pluto",
+   "detriment": "Jupiter"
+  },
+  "30.5": {
+   "exalted": "Jupiter",
+   "detriment": "Pluto"
+  },
+  "30.6": {
+   "exalted": "Mars",
+   "detriment": "Moon"
+  },
+  "31.1": {
+   "exalted": "Sun",
+   "detriment": "Earth"
+  },
+  "31.2": {
+   "exalted": "Jupiter",
+   "detriment": "Mercury"
+  },
+  "31.3": {
+   "exalted": "Sun",
+   "detriment": "Jupiter"
+  },
+  "31.4": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "31.5": {
+   "exalted": "Pluto",
+   "detriment": "Moon"
+  },
+  "31.6": {
+   "exalted": "Sun",
+   "detriment": "Moon"
+  },
+  "33.1": {
+   "exalted": "Sun",
+   "detriment": "Mars"
+  },
+  "33.2": {
+   "exalted": "Jupiter",
+   "detriment": "Neptune"
+  },
+  "33.3": {
+   "exalted": "Jupiter",
+   "detriment": "Mars"
+  },
+  "33.4": {
+   "exalted": "Pluto",
+   "detriment": "Neptune"
+  },
+  "33.5": {
+   "exalted": "Pluto",
+   "detriment": "Jupiter"
+  },
+  "33.6": {
+   "exalted": "Sun",
+   "detriment": "Jupiter"
+  },
+  "34.1": {
+   "exalted": "Saturn",
+   "detriment": "Pluto"
+  },
+  "34.2": {
+   "exalted": "Mars",
+   "detriment": "Venus"
+  },
+  "34.3": {
+   "exalted": "Saturn",
+   "detriment": "Mercury"
+  },
+  "34.4": {
+   "exalted": "Pluto",
+   "detriment": "Mars"
+  },
+  "34.5": {
+   "exalted": "Mars",
+   "detriment": "Moon"
+  },
+  "34.6": {
+   "exalted": "Earth",
+   "detriment": "Jupiter"
+  },
+  "35.1": {
+   "exalted": "Venus",
+   "detriment": "Neptune"
+  },
+  "35.2": {
+   "exalted": "Venus",
+   "detriment": "Moon"
+  },
+  "35.3": {
+   "exalted": "Jupiter",
+   "detriment": "Sun"
+  },
+  "35.4": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "35.5": {
+   "exalted": "Mercury",
+   "detriment": "Jupiter"
+  },
+  "35.6": {
+   "exalted": "Saturn",
+   "detriment": "Mars"
+  },
+  "36.1": {
+   "exalted": "Mars",
+   "detriment": "Jupiter"
+  },
+  "36.2": {
+   "exalted": "Neptune",
+   "detriment": "Moon"
+  },
+  "36.3": {
+   "exalted": "Pluto",
+   "detriment": "Jupiter"
+  },
+  "36.4": {
+   "exalted": "Pluto",
+   "detriment": "Moon"
+  },
+  "36.5": {
+   "exalted": "Pluto",
+   "detriment": "Mercury"
+  },
+  "36.6": {
+   "exalted": "Jupiter",
+   "detriment": "Saturn"
+  },
+  "37.1": {
+   "exalted": "Venus"
+  },
+  "37.2": {
+   "exalted": "Jupiter",
+   "detriment": "Mercury"
+  },
+  "37.3": {
+   "exalted": "Jupiter",
+   "detriment": "Mars"
+  },
+  "37.4": {
+   "exalted": "Moon",
+   "detriment": "Saturn"
+  },
+  "37.5": {
+   "exalted": "Venus",
+   "detriment": "Mars"
+  },
+  "37.6": {
+   "exalted": "Venus",
+   "detriment": "Mercury"
+  },
+  "38.1": {
+   "exalted": "Neptune",
+   "detriment": "Mars"
+  },
+  "38.2": {
+   "exalted": "Pluto",
+   "detriment": "Moon"
+  },
+  "38.3": {
+   "exalted": "Sun",
+   "detriment": "Earth"
+  },
+  "38.4": {
+   "exalted": "Pluto",
+   "detriment": "Mars"
+  },
+  "38.5": {
+   "exalted": "Saturn",
+   "detriment": "Pluto"
+  },
+  "38.6": {
+   "exalted": "Saturn",
+   "detriment": "Earth"
+  },
+  "39.1": {
+   "exalted": "Mars",
+   "detriment": "Mercury"
+  },
+  "39.2": {
+   "exalted": "Moon",
+   "detriment": "Jupiter"
+  },
+  "39.3": {
+   "exalted": "Jupiter",
+   "detriment": "Earth"
+  },
+  "39.4": {
+   "exalted": "Moon",
+   "detriment": "Sun"
+  },
+  "39.5": {
+   "exalted": "Neptune",
+   "detriment": "Mars"
+  },
+  "39.6": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "40.1": {
+   "exalted": "Sun",
+   "detriment": "Moon"
+  },
+  "40.2": {
+   "exalted": "Sun",
+   "detriment": "Moon"
+  },
+  "40.3": {
+   "exalted": "Pluto",
+   "detriment": "Mars"
+  },
+  "40.4": {
+   "exalted": "Uranus",
+   "detriment": "Mars"
+  },
+  "40.5": {
+   "exalted": "Uranus",
+   "detriment": "Earth"
+  },
+  "40.6": {
+   "exalted": "Sun",
+   "detriment": "Earth"
+  },
+  "41.1": {
+   "exalted": "Neptune",
+   "detriment": "Mercury"
+  },
+  "41.2": {
+   "exalted": "Saturn",
+   "detriment": "Mars"
+  },
+  "41.3": {
+   "exalted": "Saturn",
+   "detriment": "Moon"
+  },
+  "41.4": {
+   "exalted": "Earth",
+   "detriment": "Venus"
+  },
+  "41.5": {
+   "exalted": "Mars",
+   "detriment": "Venus"
+  },
+  "41.6": {
+   "exalted": "Saturn",
+   "detriment": "Pluto"
+  },
+  "42.1": {
+   "exalted": "Sun",
+   "detriment": "Venus"
+  },
+  "42.2": {
+   "exalted": "Sun",
+   "detriment": "Venus"
+  },
+  "42.3": {
+   "exalted": "Mars",
+   "detriment": "Moon"
+  },
+  "42.4": {
+   "exalted": "Moon",
+   "detriment": "Venus"
+  },
+  "42.5": {
+   "exalted": "Sun",
+   "detriment": "Venus"
+  },
+  "42.6": {
+   "exalted": "Moon",
+   "detriment": "Saturn"
+  },
+  "43.1": {
+   "exalted": "Pluto",
+   "detriment": "Venus"
+  },
+  "43.2": {
+   "exalted": "Pluto",
+   "detriment": "Moon"
+  },
+  "43.3": {
+   "exalted": "Pluto",
+   "detriment": "Moon"
+  },
+  "43.4": {
+   "exalted": "Mercury",
+   "detriment": "Jupiter"
+  },
+  "43.5": {
+   "exalted": "Moon",
+   "detriment": "Venus"
+  },
+  "43.6": {
+   "exalted": "Sun",
+   "detriment": "Mars"
+  },
+  "44.1": {
+   "exalted": "Pluto",
+   "detriment": "Venus"
+  },
+  "44.2": {
+   "exalted": "Jupiter",
+   "detriment": "Mars"
+  },
+  "44.3": {
+   "exalted": "Mars",
+   "detriment": "Neptune"
+  },
+  "44.4": {
+   "exalted": "Pluto",
+   "detriment": "Sun"
+  },
+  "44.5": {
+   "exalted": "Uranus",
+   "detriment": "Mars"
+  },
+  "44.6": {
+   "exalted": "Pluto",
+   "detriment": "Earth"
+  },
+  "45.1": {
+   "exalted": "Jupiter",
+   "detriment": "Mars"
+  },
+  "45.2": {
+   "exalted": "Uranus",
+   "detriment": "Mars"
+  },
+  "45.3": {
+   "exalted": "Neptune",
+   "detriment": "Mars"
+  },
+  "45.4": {
+   "exalted": "Jupiter",
+   "detriment": "Mars"
+  },
+  "45.5": {
+   "exalted": "Uranus",
+   "detriment": "Jupiter"
+  },
+  "45.6": {
+   "exalted": "Uranus",
+   "detriment": "Jupiter"
+  },
+  "46.1": {
+   "exalted": "Neptune",
+   "detriment": "Jupiter"
+  },
+  "46.2": {
+   "exalted": "Sun",
+   "detriment": "Mars"
+  },
+  "46.3": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "46.4": {
+   "exalted": "Earth",
+   "detriment": "Pluto"
+  },
+  "46.5": {
+   "exalted": "Moon",
+   "detriment": "Neptune"
+  },
+  "46.6": {
+   "exalted": "Saturn",
+   "detriment": "Neptune"
+  },
+  "47.1": {
+   "exalted": "Saturn",
+   "detriment": "Neptune"
+  },
+  "47.2": {
+   "exalted": "Saturn",
+   "detriment": "Mercury"
+  },
+  "47.3": {
+   "exalted": "Jupiter",
+   "detriment": "Mars"
+  },
+  "47.4": {
+   "exalted": "Saturn",
+   "detriment": "Moon"
+  },
+  "47.5": {
+   "exalted": "Venus"
+  },
+  "47.6": {
+   "detriment": "Sun"
+  },
+  "48.1": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "48.2": {
+   "exalted": "Pluto",
+   "detriment": "Venus"
+  },
+  "48.3": {
+   "exalted": "Moon",
+   "detriment": "Mercury"
+  },
+  "48.4": {
+   "exalted": "Sun",
+   "detriment": "Earth"
+  },
+  "48.5": {
+   "exalted": "Mars",
+   "detriment": "Moon"
+  },
+  "48.6": {
+   "exalted": "Venus",
+   "detriment": "Moon"
+  },
+  "49.1": {
+   "exalted": "Jupiter",
+   "detriment": "Sun"
+  },
+  "49.2": {
+   "exalted": "Earth",
+   "detriment": "Pluto"
+  },
+  "49.3": {
+   "exalted": "Neptune",
+   "detriment": "Pluto"
+  },
+  "49.4": {
+   "exalted": "Jupiter",
+   "detriment": "Mars"
+  },
+  "49.5": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "49.6": {
+   "exalted": "Neptune",
+   "detriment": "Saturn"
+  },
+  "50.1": {
+   "exalted": "Mars",
+   "detriment": "Venus"
+  },
+  "50.2": {
+   "exalted": "Sun",
+   "detriment": "Venus"
+  },
+  "50.3": {
+   "exalted": "Moon",
+   "detriment": "Mercury"
+  },
+  "50.4": {
+   "exalted": "Saturn",
+   "detriment": "Mars"
+  },
+  "50.5": {
+   "exalted": "Saturn",
+   "detriment": "Mars"
+  },
+  "50.6": {
+   "exalted": "Venus",
+   "detriment": "Moon"
+  },
+  "51.1": {
+   "exalted": "Pluto",
+   "detriment": "Venus"
+  },
+  "51.2": {
+   "exalted": "Mars",
+   "detriment": "Mercury"
+  },
+  "51.3": {
+   "exalted": "Sun",
+   "detriment": "Jupiter"
+  },
+  "51.4": {
+   "exalted": "Uranus",
+   "detriment": "Mercury"
+  },
+  "51.5": {
+   "exalted": "Sun",
+   "detriment": "Mars"
+  },
+  "51.6": {
+   "exalted": "Sun",
+   "detriment": "Pluto"
+  },
+  "52.1": {
+   "exalted": "Earth",
+   "detriment": "Mars"
+  },
+  "52.2": {
+   "exalted": "Venus",
+   "detriment": "Mars"
+  },
+  "52.3": {
+   "exalted": "Saturn",
+   "detriment": "Venus"
+  },
+  "52.4": {
+   "exalted": "Saturn",
+   "detriment": "Jupiter"
+  },
+  "52.5": {
+   "exalted": "Earth",
+   "detriment": "Pluto"
+  },
+  "52.6": {
+   "exalted": "Venus",
+   "detriment": "Neptune"
+  },
+  "53.1": {
+   "exalted": "Neptune",
+   "detriment": "Venus"
+  },
+  "53.2": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "53.3": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "53.4": {
+   "exalted": "Moon",
+   "detriment": "Venus"
+  },
+  "53.5": {
+   "exalted": "Neptune",
+   "detriment": "Earth"
+  },
+  "53.6": {
+   "exalted": "Moon",
+   "detriment": "Pluto"
+  },
+  "54.1": {
+   "exalted": "Pluto",
+   "detriment": "Venus"
+  },
+  "54.2": {
+   "exalted": "Saturn",
+   "detriment": "Mars"
+  },
+  "54.3": {
+   "exalted": "Pluto",
+   "detriment": "Venus"
+  },
+  "54.5": {
+   "exalted": "Sun"
+  },
+  "54.6": {
+   "exalted": "Saturn",
+   "detriment": "Jupiter"
+  },
+  "55.1": {
+   "exalted": "Jupiter",
+   "detriment": "Venus"
+  },
+  "55.2": {
+   "exalted": "Venus",
+   "detriment": "Earth"
+  },
+  "55.3": {
+   "exalted": "Saturn",
+   "detriment": "Mars"
+  },
+  "55.4": {
+   "exalted": "Jupiter",
+   "detriment": "Mars"
+  },
+  "55.5": {
+   "exalted": "Uranus",
+   "detriment": "Sun"
+  },
+  "55.6": {
+   "exalted": "Saturn",
+   "detriment": "Moon"
+  },
+  "56.1": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "56.2": {
+   "exalted": "Uranus",
+   "detriment": "Moon"
+  },
+  "56.3": {
+   "exalted": "Sun",
+   "detriment": "Venus"
+  },
+  "56.4": {
+   "exalted": "Moon",
+   "detriment": "Mercury"
+  },
+  "56.5": {
+   "exalted": "Uranus",
+   "detriment": "Mars"
+  },
+  "56.6": {
+   "exalted": "Sun",
+   "detriment": "Pluto"
+  },
+  "57.1": {
+   "exalted": "Venus",
+   "detriment": "Moon"
+  },
+  "57.2": {
+   "exalted": "Venus",
+   "detriment": "Moon"
+  },
+  "57.3": {
+   "exalted": "Mercury"
+  },
+  "57.4": {
+   "exalted": "Venus",
+   "detriment": "Mars"
+  },
+  "57.5": {
+   "exalted": "Pluto",
+   "detriment": "Moon"
+  },
+  "57.6": {
+   "exalted": "Uranus",
+   "detriment": "Mars"
+  },
+  "58.1": {
+   "exalted": "Venus",
+   "detriment": "Moon"
+  },
+  "58.2": {
+   "detriment": "Uranus"
+  },
+  "58.3": {
+   "exalted": "Uranus",
+   "detriment": "Mars"
+  },
+  "58.4": {
+   "exalted": "Pluto",
+   "detriment": "Neptune"
+  },
+  "58.5": {
+   "exalted": "Moon",
+   "detriment": "Sun"
+  },
+  "58.6": {
+   "exalted": "Moon",
+   "detriment": "Mercury"
+  },
+  "59.1": {
+   "exalted": "Sun",
+   "detriment": "Mercury"
+  },
+  "59.2": {
+   "exalted": "Uranus",
+   "detriment": "Pluto"
+  },
+  "59.3": {
+   "exalted": "Saturn",
+   "detriment": "Mars"
+  },
+  "59.4": {
+   "exalted": "Venus",
+   "detriment": "Mercury"
+  },
+  "59.5": {
+   "exalted": "Sun",
+   "detriment": "Uranus"
+  },
+  "59.6": {
+   "exalted": "Venus",
+   "detriment": "Mercury"
+  },
+  "60.1": {
+   "exalted": "Venus",
+   "detriment": "Mercury"
+  },
+  "60.2": {
+   "exalted": "Saturn",
+   "detriment": "Earth"
+  },
+  "60.3": {
+   "exalted": "Saturn",
+   "detriment": "Mars"
+  },
+  "60.4": {
+   "exalted": "Mercury",
+   "detriment": "Venus"
+  },
+  "60.5": {
+   "exalted": "Neptune",
+   "detriment": "Jupiter"
+  },
+  "60.6": {
+   "exalted": "Uranus",
+   "detriment": "Mercury"
+  },
+  "61.1": {
+   "exalted": "Neptune",
+   "detriment": "Venus"
+  },
+  "61.2": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "61.3": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "61.4": {
+   "exalted": "Saturn",
+   "detriment": "Jupiter"
+  },
+  "61.5": {
+   "exalted": "Saturn",
+   "detriment": "Mars"
+  },
+  "61.6": {
+   "exalted": "Pluto",
+   "detriment": "Mars"
+  },
+  "62.1": {
+   "exalted": "Neptune",
+   "detriment": "Mars"
+  },
+  "62.2": {
+   "exalted": "Saturn",
+   "detriment": "Mercury"
+  },
+  "62.3": {
+   "exalted": "Uranus",
+   "detriment": "Venus"
+  },
+  "62.4": {
+   "exalted": "Venus",
+   "detriment": "Pluto"
+  },
+  "62.5": {
+   "exalted": "Moon",
+   "detriment": "Neptune"
+  },
+  "62.6": {
+   "exalted": "Saturn",
+   "detriment": "Mercury"
+  },
+  "63.1": {
+   "exalted": "Sun",
+   "detriment": "Mars"
+  },
+  "63.2": {
+   "exalted": "Jupiter",
+   "detriment": "Uranus"
+  },
+  "63.3": {
+   "exalted": "Jupiter",
+   "detriment": "Saturn"
+  },
+  "63.4": {
+   "exalted": "Mercury",
+   "detriment": "Mars"
+  },
+  "63.5": {
+   "exalted": "Sun",
+   "detriment": "Mars"
+  },
+  "63.6": {
+   "exalted": "Jupiter",
+   "detriment": "Pluto"
+  },
+  "64.1": {
+   "exalted": "Venus",
+   "detriment": "Mars"
+  },
+  "64.2": {
+   "exalted": "Venus",
+   "detriment": "Moon"
+  },
+  "64.3": {
+   "exalted": "Saturn",
+   "detriment": "Moon"
+  },
+  "64.4": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "64.5": {
+   "exalted": "Venus",
+   "detriment": "Jupiter"
+  },
+  "64.6": {
+   "exalted": "Mercury",
+   "detriment": "Venus"
+  },
+  "32.1": {
+   "exalted": "Sun",
+   "detriment": "Mars"
+  },
+  "32.2": {
+   "exalted": "Venus",
+   "detriment": "Jupiter"
+  },
+  "32.3": {
+   "exalted": "Mercury",
+   "detriment": "Jupiter"
+  },
+  "32.4": {
+   "exalted": "Jupiter",
+   "detriment": "Saturn"
+  },
+  "32.5": {
+   "exalted": "Moon",
+   "detriment": "Mars"
+  },
+  "32.6": {
+   "exalted": "Pluto",
+   "detriment": "Neptune"
+  }
+ }
+}

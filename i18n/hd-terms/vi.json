@@ -1,0 +1,74 @@
+{
+ "_note": "Thuật ngữ Human Design bằng TIẾNG VIỆT. Bản dịch của Hưng, dịch từ thuật ngữ chung của bộ môn — KHÔNG phải của Jovian Archive, nên không nằm sau cờ nội dung. Sửa tay thoải mái. Khoá `authorities.None` cố ý không có: authority \"None\" chỉ xuất hiện ở Reflector và mental projector, cả hai dùng chuỗi riêng trong i18n/ui.",
+ "_seed": "Gieo một lần từ thư viện dịch của Hưng (ghi chép nội bộ), 2026-09-22. `strategies` thêm 2026-10-04 (giao diện D) từ bảng Strategies cùng thư viện, bỏ phần ngoặc, viết hoa chữ đầu mỗi từ như các giá trị khác (thư viện viết thường \"Phản hồi\").",
+ "types": {
+  "Manifestor": "Người Khởi Xướng (Manifestor)",
+  "Generator": "Người Kiến Tạo (Generator)",
+  "ManifestingGenerator": "Người Kiến Tạo Nhanh (Manifesting Generator)",
+  "Projector": "Người Cố Vấn (Projector)",
+  "Reflector": "Người Phản Chiếu (Reflector)"
+ },
+ "authorities": {
+  "SolarPlexus": "Thẩm Quyền Cảm Xúc (Đám Rối Mặt Trời)",
+  "Sacral": "Thẩm Quyền Xương Cùng",
+  "Splenic": "Thẩm Quyền Lá Lách",
+  "Ego": "Thẩm Quyền Bản Ngã Hiển Lộ",
+  "EgoProjected": "Thẩm Quyền Bản Ngã Phóng Chiếu",
+  "G": "Thẩm Quyền Bản Thân Phóng Chiếu"
+ },
+ "strategies": {
+  "To Respond": "Phản Hồi",
+  "To Inform": "Thông Báo",
+  "Wait for the Invitation": "Chờ Lời Mời",
+  "Wait a Lunar Cycle": "Chờ Trọn Một Chu Kỳ Mặt Trăng"
+ },
+ "definitions": {
+  "None": "Dạng Không Xác Định",
+  "Single": "Dạng Xác Định Đơn",
+  "Split": "Dạng Chia Tách",
+  "TripleSplit": "Dạng Chia Tách Ba",
+  "QuadrupleSplit": "Dạng Chia Tách Bốn"
+ },
+ "centers": {
+  "0": "Trung tâm Gốc",
+  "1": "Trung tâm Xương Cùng",
+  "2": "Trung tâm Lá Lách",
+  "3": "Trung tâm Đám Rối Mặt Trời",
+  "4": "Trung tâm Tim",
+  "5": "Trung tâm G",
+  "6": "Trung tâm Cổ Họng",
+  "7": "Trung tâm Ajna",
+  "8": "Trung tâm Đầu"
+ },
+ "profiles": {
+  "13": "1/3 - Nhà Điều Tra / Người Tử Vì Đạo (Investigator / Martyr)",
+  "14": "1/4 - Nhà Điều Tra / Người Cơ Hội (Investigator / Opportunist)",
+  "24": "2/4 - Ẩn Sĩ / Người Cơ Hội (Hermit / Opportunist)",
+  "25": "2/5 - Ẩn Sĩ / Kẻ Dị Giáo (Hermit / Heretic)",
+  "35": "3/5 - Người Tử Vì Đạo / Kẻ Dị Giáo (Martyr / Heretic)",
+  "36": "3/6 - Người Tử Vì Đạo / Hình Mẫu (Martyr / Role Model)",
+  "41": "4/1 - Người Cơ Hội / Nhà Điều Tra (Opportunist / Investigator)",
+  "46": "4/6 - Người Cơ Hội / Hình Mẫu (Opportunist / Role Model)",
+  "51": "5/1 - Kẻ Dị Giáo / Nhà Điều Tra (Heretic / Investigator)",
+  "52": "5/2 - Kẻ Dị Giáo / Ẩn Sĩ (Heretic / Hermit)",
+  "62": "6/2 - Hình Mẫu / Ẩn Sĩ (Role Model / Hermit)",
+  "63": "6/3 - Hình Mẫu / Người Tử Vì Đạo (Role Model / Martyr)"
+ },
+ "planets": {
+  "0": "Mặt Trời",
+  "1": "Trái Đất",
+  "2": "Mặt Trăng",
+  "3": "Nút Bắc",
+  "4": "Nút Nam",
+  "5": "Sao Thuỷ",
+  "6": "Sao Kim",
+  "7": "Sao Hoả",
+  "8": "Sao Mộc",
+  "9": "Sao Thổ",
+  "10": "Sao Thiên Vương",
+  "11": "Sao Hải Vương",
+  "12": "Sao Diêm Vương",
+  "13": "Chiron"
+ },
+ "_why_no_en": "Không có file en.json. Tiếng Anh lấy thẳng từ calc-core (enum, CENTER_NAMES, authorityLabel, formatProfile) — đó cũng chính là thứ 10 golden ghi lại, nên giữ một nguồn duy nhất thì e2e so với golden không bao giờ lệch vì lý do dịch thuật."
+}

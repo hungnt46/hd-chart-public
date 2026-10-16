@@ -1,0 +1,16 @@
+// Bản CÔNG KHAI trên Cloudflare Workers (tài sản tĩnh, không mã chạy phía máy chủ) — STATUS §4 Đợt 9 · P7c.
+// `npm run deploy:public` = `build:public` (xuất `out/`, chép `_headers`, xoá `sw.js`) rồi `wrangler deploy`.
+// Workers static assets đọc `out/_headers` (cache bất biến, frame-ancestors, noindex).
+{
+  "$schema": "https://unpkg.com/wrangler@4/config-schema.json",
+  "name": "hd-chart-public",
+  "compatibility_date": "2026-10-01",
+  // Tên miền riêng (RG-2, STATUS §5 #63) — gắn ở dashboard 2026-10-14; ghi ở đây để mỗi lần build từ `main` giữ nguyên.
+  "routes": [{ "pattern": "chart.humandesign.vn", "custom_domain": true }],
+  // Có `routes` thì wrangler mặc định TẮT workers.dev — giữ bật: staging, trang thử nhúng và website staging dùng nó.
+  "workers_dev": true,
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}

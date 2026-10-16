@@ -1,0 +1,21 @@
+# Header của BẢN CÔNG KHAI trên host tĩnh Cloudflare (STATUS §4 Đợt 9 · P7b).
+# Xuất tĩnh bỏ qua `headers()` của next.config.mjs ⇒ khai ở đây. `npm run build:public`
+# chép tệp này vào `out/_headers`. KHÔNG để ở `public/`: bản đầy đủ sẽ phục vụ nó thành `/_headers`.
+
+# Bất biến — đổi nội dung thì ĐỔI TÊN tệp (xem next.config.mjs).
+/ephe/*
+  Cache-Control: public, max-age=31536000, immutable
+/wasm/*
+  Cache-Control: public, max-age=31536000, immutable
+/data/*
+  Cache-Control: public, max-age=31536000, immutable
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Mọi trang: chỉ website của Hưng được nhúng (iframe `/chart/`), không cho máy tìm kiếm lập chỉ mục
+# (trang `/chart/` của website giữ SEO). Tên workers.dev của staging chốt lúc P7c — kế hoạch §5.2.
+/*
+  Content-Security-Policy: frame-ancestors 'self' https://humandesign.vn https://*.hungnguyen-iu10.workers.dev
+  X-Robots-Tag: noindex
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin

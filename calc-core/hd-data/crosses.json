@@ -1,0 +1,2119 @@
+{
+  "_source": "Bảng chuỗi tham chiếu (ghi chép nội bộ)",
+  "_extractedAt": "2026-09-21",
+  "_note": "CHỈ dữ kiện cấu trúc. Văn bản diễn giải không nằm ở đây — xem SPEC.md §3.2.",
+  "crosses": [
+    {
+      "id": 0,
+      "angle": "Juxtaposition",
+      "gates": [
+        44,
+        24,
+        7,
+        13
+      ],
+      "name": "Juxtaposition Cross of Alertness"
+    },
+    {
+      "id": 1,
+      "angle": "Juxtaposition",
+      "gates": [
+        54,
+        53,
+        32,
+        42
+      ],
+      "name": "Juxtaposition Cross of Ambition"
+    },
+    {
+      "id": 2,
+      "angle": "Juxtaposition",
+      "gates": [
+        12,
+        11,
+        25,
+        46
+      ],
+      "name": "Juxtaposition Cross of Articulation"
+    },
+    {
+      "id": 3,
+      "angle": "Juxtaposition",
+      "gates": [
+        23,
+        43,
+        30,
+        29
+      ],
+      "name": "Juxtaposition Cross of Assimilation"
+    },
+    {
+      "id": 4,
+      "angle": "Juxtaposition",
+      "gates": [
+        37,
+        40,
+        5,
+        35
+      ],
+      "name": "Juxtaposition Cross of Bargains"
+    },
+    {
+      "id": 5,
+      "angle": "Juxtaposition",
+      "gates": [
+        53,
+        54,
+        42,
+        32
+      ],
+      "name": "Juxtaposition Cross of Beginnings"
+    },
+    {
+      "id": 6,
+      "angle": "Juxtaposition",
+      "gates": [
+        10,
+        15,
+        18,
+        17
+      ],
+      "name": "Juxtaposition Cross of Behavior"
+    },
+    {
+      "id": 7,
+      "angle": "Juxtaposition",
+      "gates": [
+        27,
+        28,
+        19,
+        33
+      ],
+      "name": "Juxtaposition Cross of Caring"
+    },
+    {
+      "id": 8,
+      "angle": "Juxtaposition",
+      "gates": [
+        29,
+        30,
+        20,
+        34
+      ],
+      "name": "Juxtaposition Cross of Commitment"
+    },
+    {
+      "id": 9,
+      "angle": "Juxtaposition",
+      "gates": [
+        42,
+        32,
+        60,
+        56
+      ],
+      "name": "Juxtaposition Cross of Completion"
+    },
+    {
+      "id": 10,
+      "angle": "Juxtaposition",
+      "gates": [
+        6,
+        36,
+        15,
+        10
+      ],
+      "name": "Juxtaposition Cross of Conflict"
+    },
+    {
+      "id": 11,
+      "angle": "Juxtaposition",
+      "gates": [
+        64,
+        63,
+        45,
+        26
+      ],
+      "name": "Juxtaposition Cross of Confusion"
+    },
+    {
+      "id": 12,
+      "angle": "Juxtaposition",
+      "gates": [
+        32,
+        42,
+        56,
+        60
+      ],
+      "name": "Juxtaposition Cross of Conservation"
+    },
+    {
+      "id": 13,
+      "angle": "Juxtaposition",
+      "gates": [
+        8,
+        14,
+        55,
+        59
+      ],
+      "name": "Juxtaposition Cross of Contribution"
+    },
+    {
+      "id": 14,
+      "angle": "Juxtaposition",
+      "gates": [
+        21,
+        48,
+        54,
+        53
+      ],
+      "name": "Juxtaposition Cross of Control"
+    },
+    {
+      "id": 15,
+      "angle": "Juxtaposition",
+      "gates": [
+        18,
+        17,
+        39,
+        38
+      ],
+      "name": "Juxtaposition Cross of Correction"
+    },
+    {
+      "id": 16,
+      "angle": "Juxtaposition",
+      "gates": [
+        36,
+        6,
+        10,
+        15
+      ],
+      "name": "Juxtaposition Cross of Crisis"
+    },
+    {
+      "id": 17,
+      "angle": "Juxtaposition",
+      "gates": [
+        40,
+        37,
+        35,
+        5
+      ],
+      "name": "Juxtaposition Cross of Denial"
+    },
+    {
+      "id": 18,
+      "angle": "Juxtaposition",
+      "gates": [
+        48,
+        21,
+        53,
+        54
+      ],
+      "name": "Juxtaposition Cross of Depth"
+    },
+    {
+      "id": 19,
+      "angle": "Juxtaposition",
+      "gates": [
+        62,
+        61,
+        3,
+        50
+      ],
+      "name": "Juxtaposition Cross of Detail"
+    },
+    {
+      "id": 20,
+      "angle": "Juxtaposition",
+      "gates": [
+        63,
+        64,
+        26,
+        45
+      ],
+      "name": "Juxtaposition Cross of Doubts"
+    },
+    {
+      "id": 21,
+      "angle": "Juxtaposition",
+      "gates": [
+        2,
+        1,
+        49,
+        4
+      ],
+      "name": "Juxtaposition Cross of The Driver"
+    },
+    {
+      "id": 22,
+      "angle": "Juxtaposition",
+      "gates": [
+        14,
+        8,
+        59,
+        55
+      ],
+      "name": "Juxtaposition Cross of Empowering"
+    },
+    {
+      "id": 23,
+      "angle": "Juxtaposition",
+      "gates": [
+        35,
+        5,
+        22,
+        47
+      ],
+      "name": "Juxtaposition Cross of Experience"
+    },
+    {
+      "id": 24,
+      "angle": "Juxtaposition",
+      "gates": [
+        16,
+        9,
+        63,
+        64
+      ],
+      "name": "Juxtaposition Cross of Experimentation"
+    },
+    {
+      "id": 25,
+      "angle": "Juxtaposition",
+      "gates": [
+        15,
+        10,
+        17,
+        18
+      ],
+      "name": "Juxtaposition Cross of Extremes"
+    },
+    {
+      "id": 26,
+      "angle": "Juxtaposition",
+      "gates": [
+        41,
+        31,
+        44,
+        24
+      ],
+      "name": "Juxtaposition Cross of Fantasy"
+    },
+    {
+      "id": 27,
+      "angle": "Juxtaposition",
+      "gates": [
+        30,
+        29,
+        34,
+        20
+      ],
+      "name": "Juxtaposition Cross of Fates"
+    },
+    {
+      "id": 28,
+      "angle": "Juxtaposition",
+      "gates": [
+        9,
+        16,
+        64,
+        63
+      ],
+      "name": "Juxtaposition Cross of Focus"
+    },
+    {
+      "id": 29,
+      "angle": "Juxtaposition",
+      "gates": [
+        4,
+        49,
+        8,
+        14
+      ],
+      "name": "Juxtaposition Cross of Formulization"
+    },
+    {
+      "id": 30,
+      "angle": "Juxtaposition",
+      "gates": [
+        22,
+        47,
+        11,
+        12
+      ],
+      "name": "Juxtaposition Cross of Grace"
+    },
+    {
+      "id": 31,
+      "angle": "Juxtaposition",
+      "gates": [
+        5,
+        35,
+        47,
+        22
+      ],
+      "name": "Juxtaposition Cross of Habits"
+    },
+    {
+      "id": 32,
+      "angle": "Juxtaposition",
+      "gates": [
+        11,
+        12,
+        46,
+        25
+      ],
+      "name": "Juxtaposition Cross of Ideas"
+    },
+    {
+      "id": 33,
+      "angle": "Juxtaposition",
+      "gates": [
+        31,
+        41,
+        24,
+        44
+      ],
+      "name": "Juxtaposition Cross of Influence"
+    },
+    {
+      "id": 34,
+      "angle": "Juxtaposition",
+      "gates": [
+        25,
+        46,
+        58,
+        52
+      ],
+      "name": "Juxtaposition Cross of Innocence"
+    },
+    {
+      "id": 35,
+      "angle": "Juxtaposition",
+      "gates": [
+        43,
+        23,
+        29,
+        30
+      ],
+      "name": "Juxtaposition Cross of Insight"
+    },
+    {
+      "id": 36,
+      "angle": "Juxtaposition",
+      "gates": [
+        7,
+        13,
+        23,
+        43
+      ],
+      "name": "Juxtaposition Cross of Interaction"
+    },
+    {
+      "id": 37,
+      "angle": "Juxtaposition",
+      "gates": [
+        57,
+        51,
+        62,
+        61
+      ],
+      "name": "Juxtaposition Cross of Intuition"
+    },
+    {
+      "id": 38,
+      "angle": "Juxtaposition",
+      "gates": [
+        60,
+        56,
+        28,
+        27
+      ],
+      "name": "Juxtaposition Cross of Limitation"
+    },
+    {
+      "id": 39,
+      "angle": "Juxtaposition",
+      "gates": [
+        13,
+        7,
+        43,
+        23
+      ],
+      "name": "Juxtaposition Cross of Listening"
+    },
+    {
+      "id": 40,
+      "angle": "Juxtaposition",
+      "gates": [
+        55,
+        59,
+        9,
+        16
+      ],
+      "name": "Juxtaposition Cross of Moods"
+    },
+    {
+      "id": 41,
+      "angle": "Juxtaposition",
+      "gates": [
+        3,
+        50,
+        41,
+        31
+      ],
+      "name": "Juxtaposition Cross of Mutation"
+    },
+    {
+      "id": 42,
+      "angle": "Juxtaposition",
+      "gates": [
+        19,
+        33,
+        1,
+        2
+      ],
+      "name": "Juxtaposition Cross of Need"
+    },
+    {
+      "id": 43,
+      "angle": "Juxtaposition",
+      "gates": [
+        20,
+        34,
+        37,
+        40
+      ],
+      "name": "Juxtaposition Cross of The Now"
+    },
+    {
+      "id": 44,
+      "angle": "Juxtaposition",
+      "gates": [
+        17,
+        18,
+        38,
+        39
+      ],
+      "name": "Juxtaposition Cross of Opinions"
+    },
+    {
+      "id": 45,
+      "angle": "Juxtaposition",
+      "gates": [
+        38,
+        39,
+        57,
+        51
+      ],
+      "name": "Juxtaposition Cross of Opposition"
+    },
+    {
+      "id": 46,
+      "angle": "Juxtaposition",
+      "gates": [
+        47,
+        22,
+        12,
+        11
+      ],
+      "name": "Juxtaposition Cross of Oppression"
+    },
+    {
+      "id": 47,
+      "angle": "Juxtaposition",
+      "gates": [
+        45,
+        26,
+        36,
+        6
+      ],
+      "name": "Juxtaposition Cross of Possession"
+    },
+    {
+      "id": 48,
+      "angle": "Juxtaposition",
+      "gates": [
+        34,
+        20,
+        40,
+        37
+      ],
+      "name": "Juxtaposition Cross of Power"
+    },
+    {
+      "id": 49,
+      "angle": "Juxtaposition",
+      "gates": [
+        49,
+        4,
+        14,
+        8
+      ],
+      "name": "Juxtaposition Cross of Principles"
+    },
+    {
+      "id": 50,
+      "angle": "Juxtaposition",
+      "gates": [
+        39,
+        38,
+        51,
+        57
+      ],
+      "name": "Juxtaposition Cross of Provocation"
+    },
+    {
+      "id": 51,
+      "angle": "Juxtaposition",
+      "gates": [
+        24,
+        44,
+        13,
+        7
+      ],
+      "name": "Juxtaposition Cross of Rationalization"
+    },
+    {
+      "id": 52,
+      "angle": "Juxtaposition",
+      "gates": [
+        33,
+        19,
+        2,
+        1
+      ],
+      "name": "Juxtaposition Cross of Retreat"
+    },
+    {
+      "id": 53,
+      "angle": "Juxtaposition",
+      "gates": [
+        28,
+        27,
+        33,
+        19
+      ],
+      "name": "Juxtaposition Cross of Risks"
+    },
+    {
+      "id": 54,
+      "angle": "Juxtaposition",
+      "gates": [
+        1,
+        2,
+        4,
+        49
+      ],
+      "name": "Juxtaposition Cross of Self-expression"
+    },
+    {
+      "id": 55,
+      "angle": "Juxtaposition",
+      "gates": [
+        46,
+        25,
+        52,
+        58
+      ],
+      "name": "Juxtaposition Cross of Serendipity"
+    },
+    {
+      "id": 56,
+      "angle": "Juxtaposition",
+      "gates": [
+        51,
+        57,
+        61,
+        62
+      ],
+      "name": "Juxtaposition Cross of Shock"
+    },
+    {
+      "id": 57,
+      "angle": "Juxtaposition",
+      "gates": [
+        52,
+        58,
+        21,
+        48
+      ],
+      "name": "Juxtaposition Cross of Stillness"
+    },
+    {
+      "id": 58,
+      "angle": "Juxtaposition",
+      "gates": [
+        56,
+        60,
+        27,
+        28
+      ],
+      "name": "Juxtaposition Cross of Stimulation"
+    },
+    {
+      "id": 59,
+      "angle": "Juxtaposition",
+      "gates": [
+        59,
+        55,
+        16,
+        9
+      ],
+      "name": "Juxtaposition Cross of Strategy"
+    },
+    {
+      "id": 60,
+      "angle": "Juxtaposition",
+      "gates": [
+        61,
+        62,
+        50,
+        3
+      ],
+      "name": "Juxtaposition Cross of Thinking"
+    },
+    {
+      "id": 61,
+      "angle": "Juxtaposition",
+      "gates": [
+        26,
+        45,
+        6,
+        36
+      ],
+      "name": "Juxtaposition Cross of The Trickster"
+    },
+    {
+      "id": 62,
+      "angle": "Juxtaposition",
+      "gates": [
+        50,
+        3,
+        31,
+        41
+      ],
+      "name": "Juxtaposition Cross of Values"
+    },
+    {
+      "id": 63,
+      "angle": "Juxtaposition",
+      "gates": [
+        58,
+        52,
+        48,
+        21
+      ],
+      "name": "Juxtaposition Cross of Vitality"
+    },
+    {
+      "id": 64,
+      "angle": "Left",
+      "gates": [
+        27,
+        28,
+        19,
+        33
+      ],
+      "name": "Left Angle Cross of Alignment"
+    },
+    {
+      "id": 65,
+      "angle": "Left",
+      "gates": [
+        28,
+        27,
+        33,
+        19
+      ],
+      "name": "Left Angle Cross of Alignment"
+    },
+    {
+      "id": 66,
+      "angle": "Left",
+      "gates": [
+        31,
+        41,
+        24,
+        44
+      ],
+      "name": "Left Angle Cross of The Alpha"
+    },
+    {
+      "id": 67,
+      "angle": "Left",
+      "gates": [
+        41,
+        31,
+        44,
+        24
+      ],
+      "name": "Left Angle Cross of The Alpha"
+    },
+    {
+      "id": 68,
+      "angle": "Left",
+      "gates": [
+        51,
+        57,
+        61,
+        62
+      ],
+      "name": "Left Angle Cross of The Clarion"
+    },
+    {
+      "id": 69,
+      "angle": "Left",
+      "gates": [
+        57,
+        51,
+        62,
+        61
+      ],
+      "name": "Left Angle Cross of The Clarion"
+    },
+    {
+      "id": 70,
+      "angle": "Left",
+      "gates": [
+        45,
+        26,
+        36,
+        6
+      ],
+      "name": "Left Angle Cross of Confrontation"
+    },
+    {
+      "id": 71,
+      "angle": "Left",
+      "gates": [
+        26,
+        45,
+        6,
+        36
+      ],
+      "name": "Left Angle Cross of Confrontation"
+    },
+    {
+      "id": 72,
+      "angle": "Left",
+      "gates": [
+        53,
+        54,
+        42,
+        32
+      ],
+      "name": "Left Angle Cross of Cycles"
+    },
+    {
+      "id": 73,
+      "angle": "Left",
+      "gates": [
+        54,
+        53,
+        32,
+        42
+      ],
+      "name": "Left Angle Cross of Cycles"
+    },
+    {
+      "id": 74,
+      "angle": "Left",
+      "gates": [
+        23,
+        43,
+        30,
+        29
+      ],
+      "name": "Left Angle Cross of Dedication"
+    },
+    {
+      "id": 75,
+      "angle": "Left",
+      "gates": [
+        43,
+        23,
+        29,
+        30
+      ],
+      "name": "Left Angle Cross of Dedication"
+    },
+    {
+      "id": 76,
+      "angle": "Left",
+      "gates": [
+        2,
+        1,
+        49,
+        4
+      ],
+      "name": "Left Angle Cross of Defiance"
+    },
+    {
+      "id": 77,
+      "angle": "Left",
+      "gates": [
+        1,
+        2,
+        4,
+        49
+      ],
+      "name": "Left Angle Cross of Defiance"
+    },
+    {
+      "id": 78,
+      "angle": "Left",
+      "gates": [
+        52,
+        58,
+        21,
+        48
+      ],
+      "name": "Left Angle Cross of Demands"
+    },
+    {
+      "id": 79,
+      "angle": "Left",
+      "gates": [
+        58,
+        52,
+        48,
+        21
+      ],
+      "name": "Left Angle Cross of Demands"
+    },
+    {
+      "id": 80,
+      "angle": "Left",
+      "gates": [
+        56,
+        60,
+        27,
+        28
+      ],
+      "name": "Left Angle Cross of Distraction"
+    },
+    {
+      "id": 81,
+      "angle": "Left",
+      "gates": [
+        60,
+        56,
+        28,
+        27
+      ],
+      "name": "Left Angle Cross of Distraction"
+    },
+    {
+      "id": 82,
+      "angle": "Left",
+      "gates": [
+        63,
+        64,
+        26,
+        45
+      ],
+      "name": "Left Angle Cross of Dominion"
+    },
+    {
+      "id": 83,
+      "angle": "Left",
+      "gates": [
+        64,
+        63,
+        45,
+        26
+      ],
+      "name": "Left Angle Cross of Dominion"
+    },
+    {
+      "id": 84,
+      "angle": "Left",
+      "gates": [
+        20,
+        34,
+        37,
+        40
+      ],
+      "name": "Left Angle Cross of Duality"
+    },
+    {
+      "id": 85,
+      "angle": "Left",
+      "gates": [
+        34,
+        20,
+        40,
+        37
+      ],
+      "name": "Left Angle Cross of Duality"
+    },
+    {
+      "id": 86,
+      "angle": "Left",
+      "gates": [
+        12,
+        11,
+        25,
+        46
+      ],
+      "name": "Left Angle Cross of Education"
+    },
+    {
+      "id": 87,
+      "angle": "Left",
+      "gates": [
+        11,
+        12,
+        46,
+        25
+      ],
+      "name": "Left Angle Cross of Education"
+    },
+    {
+      "id": 88,
+      "angle": "Left",
+      "gates": [
+        21,
+        48,
+        54,
+        53
+      ],
+      "name": "Left Angle Cross of Endeavor"
+    },
+    {
+      "id": 89,
+      "angle": "Left",
+      "gates": [
+        48,
+        21,
+        53,
+        54
+      ],
+      "name": "Left Angle Cross of Endeavor"
+    },
+    {
+      "id": 90,
+      "angle": "Left",
+      "gates": [
+        25,
+        46,
+        58,
+        52
+      ],
+      "name": "Left Angle Cross of Healing"
+    },
+    {
+      "id": 91,
+      "angle": "Left",
+      "gates": [
+        46,
+        25,
+        52,
+        58
+      ],
+      "name": "Left Angle Cross of Healing"
+    },
+    {
+      "id": 92,
+      "angle": "Left",
+      "gates": [
+        16,
+        9,
+        63,
+        64
+      ],
+      "name": "Left Angle Cross of Identification"
+    },
+    {
+      "id": 93,
+      "angle": "Left",
+      "gates": [
+        9,
+        16,
+        64,
+        63
+      ],
+      "name": "Left Angle Cross of Identification"
+    },
+    {
+      "id": 94,
+      "angle": "Left",
+      "gates": [
+        24,
+        44,
+        13,
+        7
+      ],
+      "name": "Left Angle Cross of Incarnation"
+    },
+    {
+      "id": 95,
+      "angle": "Left",
+      "gates": [
+        44,
+        24,
+        7,
+        13
+      ],
+      "name": "Left Angle Cross of Incarnation"
+    },
+    {
+      "id": 96,
+      "angle": "Left",
+      "gates": [
+        39,
+        38,
+        51,
+        57
+      ],
+      "name": "Left Angle Cross of Individualism"
+    },
+    {
+      "id": 97,
+      "angle": "Left",
+      "gates": [
+        38,
+        39,
+        57,
+        51
+      ],
+      "name": "Left Angle Cross of Individualism"
+    },
+    {
+      "id": 98,
+      "angle": "Left",
+      "gates": [
+        30,
+        29,
+        34,
+        20
+      ],
+      "name": "Left Angle Cross of Industry"
+    },
+    {
+      "id": 99,
+      "angle": "Left",
+      "gates": [
+        29,
+        30,
+        20,
+        34
+      ],
+      "name": "Left Angle Cross of Industry"
+    },
+    {
+      "id": 100,
+      "angle": "Left",
+      "gates": [
+        22,
+        47,
+        11,
+        12
+      ],
+      "name": "Left Angle Cross of Informing"
+    },
+    {
+      "id": 101,
+      "angle": "Left",
+      "gates": [
+        47,
+        22,
+        12,
+        11
+      ],
+      "name": "Left Angle Cross of Informing"
+    },
+    {
+      "id": 102,
+      "angle": "Left",
+      "gates": [
+        42,
+        32,
+        60,
+        56
+      ],
+      "name": "Left Angle Cross of Limitation"
+    },
+    {
+      "id": 103,
+      "angle": "Left",
+      "gates": [
+        32,
+        42,
+        56,
+        60
+      ],
+      "name": "Left Angle Cross of Limitation"
+    },
+    {
+      "id": 104,
+      "angle": "Left",
+      "gates": [
+        13,
+        7,
+        43,
+        23
+      ],
+      "name": "Left Angle Cross of Masks"
+    },
+    {
+      "id": 105,
+      "angle": "Left",
+      "gates": [
+        7,
+        13,
+        23,
+        43
+      ],
+      "name": "Left Angle Cross of Masks"
+    },
+    {
+      "id": 106,
+      "angle": "Left",
+      "gates": [
+        37,
+        40,
+        5,
+        35
+      ],
+      "name": "Left Angle Cross of Migration"
+    },
+    {
+      "id": 107,
+      "angle": "Left",
+      "gates": [
+        40,
+        37,
+        35,
+        5
+      ],
+      "name": "Left Angle Cross of Migration"
+    },
+    {
+      "id": 108,
+      "angle": "Left",
+      "gates": [
+        62,
+        61,
+        3,
+        50
+      ],
+      "name": "Left Angle Cross of Obscuration"
+    },
+    {
+      "id": 109,
+      "angle": "Left",
+      "gates": [
+        61,
+        62,
+        50,
+        3
+      ],
+      "name": "Left Angle Cross of Obscuration"
+    },
+    {
+      "id": 110,
+      "angle": "Left",
+      "gates": [
+        36,
+        6,
+        10,
+        15
+      ],
+      "name": "Left Angle Cross of The Plane"
+    },
+    {
+      "id": 111,
+      "angle": "Left",
+      "gates": [
+        6,
+        36,
+        15,
+        10
+      ],
+      "name": "Left Angle Cross of The Plane"
+    },
+    {
+      "id": 112,
+      "angle": "Left",
+      "gates": [
+        15,
+        10,
+        17,
+        18
+      ],
+      "name": "Left Angle Cross of Prevention"
+    },
+    {
+      "id": 113,
+      "angle": "Left",
+      "gates": [
+        10,
+        15,
+        18,
+        17
+      ],
+      "name": "Left Angle Cross of Prevention"
+    },
+    {
+      "id": 114,
+      "angle": "Left",
+      "gates": [
+        33,
+        19,
+        2,
+        1
+      ],
+      "name": "Left Angle Cross of Refinement"
+    },
+    {
+      "id": 115,
+      "angle": "Left",
+      "gates": [
+        19,
+        33,
+        1,
+        2
+      ],
+      "name": "Left Angle Cross of Refinement"
+    },
+    {
+      "id": 116,
+      "angle": "Left",
+      "gates": [
+        49,
+        4,
+        14,
+        8
+      ],
+      "name": "Left Angle Cross of Revolution"
+    },
+    {
+      "id": 117,
+      "angle": "Left",
+      "gates": [
+        4,
+        49,
+        8,
+        14
+      ],
+      "name": "Left Angle Cross of Revolution"
+    },
+    {
+      "id": 118,
+      "angle": "Left",
+      "gates": [
+        35,
+        5,
+        22,
+        47
+      ],
+      "name": "Left Angle Cross of Separation"
+    },
+    {
+      "id": 119,
+      "angle": "Left",
+      "gates": [
+        5,
+        35,
+        47,
+        22
+      ],
+      "name": "Left Angle Cross of Separation"
+    },
+    {
+      "id": 120,
+      "angle": "Left",
+      "gates": [
+        55,
+        59,
+        9,
+        16
+      ],
+      "name": "Left Angle Cross of Spirit"
+    },
+    {
+      "id": 121,
+      "angle": "Left",
+      "gates": [
+        59,
+        55,
+        16,
+        9
+      ],
+      "name": "Left Angle Cross of Spirit"
+    },
+    {
+      "id": 122,
+      "angle": "Left",
+      "gates": [
+        8,
+        14,
+        55,
+        59
+      ],
+      "name": "Left Angle Cross of Uncertainty"
+    },
+    {
+      "id": 123,
+      "angle": "Left",
+      "gates": [
+        14,
+        8,
+        59,
+        55
+      ],
+      "name": "Left Angle Cross of Uncertainty"
+    },
+    {
+      "id": 124,
+      "angle": "Left",
+      "gates": [
+        17,
+        18,
+        38,
+        39
+      ],
+      "name": "Left Angle Cross of Upheaval"
+    },
+    {
+      "id": 125,
+      "angle": "Left",
+      "gates": [
+        18,
+        17,
+        39,
+        38
+      ],
+      "name": "Left Angle Cross of Upheaval"
+    },
+    {
+      "id": 126,
+      "angle": "Left",
+      "gates": [
+        3,
+        50,
+        41,
+        31
+      ],
+      "name": "Left Angle Cross of Wishes"
+    },
+    {
+      "id": 127,
+      "angle": "Left",
+      "gates": [
+        50,
+        3,
+        31,
+        41
+      ],
+      "name": "Left Angle Cross of Wishes"
+    },
+    {
+      "id": 128,
+      "angle": "Right",
+      "gates": [
+        63,
+        64,
+        5,
+        35
+      ],
+      "name": "Right Angle Cross of Consciousness"
+    },
+    {
+      "id": 129,
+      "angle": "Right",
+      "gates": [
+        35,
+        5,
+        63,
+        64
+      ],
+      "name": "Right Angle Cross of Consciousness"
+    },
+    {
+      "id": 130,
+      "angle": "Right",
+      "gates": [
+        64,
+        63,
+        35,
+        5
+      ],
+      "name": "Right Angle Cross of Consciousness"
+    },
+    {
+      "id": 131,
+      "angle": "Right",
+      "gates": [
+        5,
+        35,
+        64,
+        63
+      ],
+      "name": "Right Angle Cross of Consciousness"
+    },
+    {
+      "id": 132,
+      "angle": "Right",
+      "gates": [
+        30,
+        29,
+        14,
+        8
+      ],
+      "name": "Right Angle Cross of Contagion"
+    },
+    {
+      "id": 133,
+      "angle": "Right",
+      "gates": [
+        8,
+        14,
+        30,
+        29
+      ],
+      "name": "Right Angle Cross of Contagion"
+    },
+    {
+      "id": 134,
+      "angle": "Right",
+      "gates": [
+        29,
+        30,
+        8,
+        14
+      ],
+      "name": "Right Angle Cross of Contagion"
+    },
+    {
+      "id": 135,
+      "angle": "Right",
+      "gates": [
+        14,
+        8,
+        29,
+        30
+      ],
+      "name": "Right Angle Cross of Contagion"
+    },
+    {
+      "id": 136,
+      "angle": "Right",
+      "gates": [
+        36,
+        6,
+        11,
+        12
+      ],
+      "name": "Right Angle Cross of Eden"
+    },
+    {
+      "id": 137,
+      "angle": "Right",
+      "gates": [
+        12,
+        11,
+        36,
+        6
+      ],
+      "name": "Right Angle Cross of Eden"
+    },
+    {
+      "id": 138,
+      "angle": "Right",
+      "gates": [
+        6,
+        36,
+        12,
+        11
+      ],
+      "name": "Right Angle Cross of Eden"
+    },
+    {
+      "id": 139,
+      "angle": "Right",
+      "gates": [
+        11,
+        12,
+        6,
+        36
+      ],
+      "name": "Right Angle Cross of Eden"
+    },
+    {
+      "id": 140,
+      "angle": "Right",
+      "gates": [
+        49,
+        4,
+        43,
+        23
+      ],
+      "name": "Right Angle Cross of Explanation"
+    },
+    {
+      "id": 141,
+      "angle": "Right",
+      "gates": [
+        23,
+        43,
+        49,
+        4
+      ],
+      "name": "Right Angle Cross of Explanation"
+    },
+    {
+      "id": 142,
+      "angle": "Right",
+      "gates": [
+        4,
+        49,
+        23,
+        43
+      ],
+      "name": "Right Angle Cross of Explanation"
+    },
+    {
+      "id": 143,
+      "angle": "Right",
+      "gates": [
+        43,
+        23,
+        4,
+        49
+      ],
+      "name": "Right Angle Cross of Explanation"
+    },
+    {
+      "id": 144,
+      "angle": "Right",
+      "gates": [
+        24,
+        44,
+        19,
+        33
+      ],
+      "name": "Right Angle Cross of The Four Ways"
+    },
+    {
+      "id": 145,
+      "angle": "Right",
+      "gates": [
+        33,
+        19,
+        24,
+        44
+      ],
+      "name": "Right Angle Cross of The Four Ways"
+    },
+    {
+      "id": 146,
+      "angle": "Right",
+      "gates": [
+        44,
+        24,
+        33,
+        19
+      ],
+      "name": "Right Angle Cross of The Four Ways"
+    },
+    {
+      "id": 147,
+      "angle": "Right",
+      "gates": [
+        19,
+        33,
+        44,
+        24
+      ],
+      "name": "Right Angle Cross of The Four Ways"
+    },
+    {
+      "id": 148,
+      "angle": "Right",
+      "gates": [
+        3,
+        50,
+        60,
+        56
+      ],
+      "name": "Right Angle Cross of Laws"
+    },
+    {
+      "id": 149,
+      "angle": "Right",
+      "gates": [
+        56,
+        60,
+        3,
+        50
+      ],
+      "name": "Right Angle Cross of Laws"
+    },
+    {
+      "id": 150,
+      "angle": "Right",
+      "gates": [
+        50,
+        3,
+        56,
+        60
+      ],
+      "name": "Right Angle Cross of Laws"
+    },
+    {
+      "id": 151,
+      "angle": "Right",
+      "gates": [
+        60,
+        56,
+        50,
+        3
+      ],
+      "name": "Right Angle Cross of Laws"
+    },
+    {
+      "id": 152,
+      "angle": "Right",
+      "gates": [
+        42,
+        32,
+        61,
+        62
+      ],
+      "name": "Right Angle Cross of Maya"
+    },
+    {
+      "id": 153,
+      "angle": "Right",
+      "gates": [
+        62,
+        61,
+        42,
+        32
+      ],
+      "name": "Right Angle Cross of Maya"
+    },
+    {
+      "id": 154,
+      "angle": "Right",
+      "gates": [
+        32,
+        42,
+        62,
+        61
+      ],
+      "name": "Right Angle Cross of Maya"
+    },
+    {
+      "id": 155,
+      "angle": "Right",
+      "gates": [
+        61,
+        62,
+        32,
+        42
+      ],
+      "name": "Right Angle Cross of Maya"
+    },
+    {
+      "id": 156,
+      "angle": "Right",
+      "gates": [
+        51,
+        57,
+        54,
+        53
+      ],
+      "name": "Right Angle Cross of Penetration"
+    },
+    {
+      "id": 157,
+      "angle": "Right",
+      "gates": [
+        53,
+        54,
+        51,
+        57
+      ],
+      "name": "Right Angle Cross of Penetration"
+    },
+    {
+      "id": 158,
+      "angle": "Right",
+      "gates": [
+        57,
+        51,
+        53,
+        54
+      ],
+      "name": "Right Angle Cross of Penetration"
+    },
+    {
+      "id": 159,
+      "angle": "Right",
+      "gates": [
+        54,
+        53,
+        57,
+        51
+      ],
+      "name": "Right Angle Cross of Penetration"
+    },
+    {
+      "id": 160,
+      "angle": "Right",
+      "gates": [
+        37,
+        40,
+        9,
+        16
+      ],
+      "name": "Right Angle Cross of Planning"
+    },
+    {
+      "id": 161,
+      "angle": "Right",
+      "gates": [
+        16,
+        9,
+        37,
+        40
+      ],
+      "name": "Right Angle Cross of Planning"
+    },
+    {
+      "id": 162,
+      "angle": "Right",
+      "gates": [
+        40,
+        37,
+        16,
+        9
+      ],
+      "name": "Right Angle Cross of Planning"
+    },
+    {
+      "id": 163,
+      "angle": "Right",
+      "gates": [
+        9,
+        16,
+        40,
+        37
+      ],
+      "name": "Right Angle Cross of Planning"
+    },
+    {
+      "id": 164,
+      "angle": "Right",
+      "gates": [
+        22,
+        47,
+        26,
+        45
+      ],
+      "name": "Right Angle Cross of Rulership"
+    },
+    {
+      "id": 165,
+      "angle": "Right",
+      "gates": [
+        45,
+        26,
+        22,
+        47
+      ],
+      "name": "Right Angle Cross of Rulership"
+    },
+    {
+      "id": 166,
+      "angle": "Right",
+      "gates": [
+        47,
+        22,
+        45,
+        26
+      ],
+      "name": "Right Angle Cross of Rulership"
+    },
+    {
+      "id": 167,
+      "angle": "Right",
+      "gates": [
+        26,
+        45,
+        47,
+        22
+      ],
+      "name": "Right Angle Cross of Rulership"
+    },
+    {
+      "id": 168,
+      "angle": "Right",
+      "gates": [
+        17,
+        18,
+        58,
+        52
+      ],
+      "name": "Right Angle Cross of Service"
+    },
+    {
+      "id": 169,
+      "angle": "Right",
+      "gates": [
+        52,
+        58,
+        17,
+        18
+      ],
+      "name": "Right Angle Cross of Service"
+    },
+    {
+      "id": 170,
+      "angle": "Right",
+      "gates": [
+        18,
+        17,
+        52,
+        58
+      ],
+      "name": "Right Angle Cross of Service"
+    },
+    {
+      "id": 171,
+      "angle": "Right",
+      "gates": [
+        58,
+        52,
+        18,
+        17
+      ],
+      "name": "Right Angle Cross of Service"
+    },
+    {
+      "id": 172,
+      "angle": "Right",
+      "gates": [
+        55,
+        59,
+        34,
+        20
+      ],
+      "name": "Right Angle Cross of The Sleeping Phoenix"
+    },
+    {
+      "id": 173,
+      "angle": "Right",
+      "gates": [
+        20,
+        34,
+        55,
+        59
+      ],
+      "name": "Right Angle Cross of The Sleeping Phoenix"
+    },
+    {
+      "id": 174,
+      "angle": "Right",
+      "gates": [
+        59,
+        55,
+        20,
+        34
+      ],
+      "name": "Right Angle Cross of The Sleeping Phoenix"
+    },
+    {
+      "id": 175,
+      "angle": "Right",
+      "gates": [
+        34,
+        20,
+        59,
+        55
+      ],
+      "name": "Right Angle Cross of The Sleeping Phoenix"
+    },
+    {
+      "id": 176,
+      "angle": "Right",
+      "gates": [
+        13,
+        7,
+        1,
+        2
+      ],
+      "name": "Right Angle Cross of The Sphinx"
+    },
+    {
+      "id": 177,
+      "angle": "Right",
+      "gates": [
+        2,
+        1,
+        13,
+        7
+      ],
+      "name": "Right Angle Cross of The Sphinx"
+    },
+    {
+      "id": 178,
+      "angle": "Right",
+      "gates": [
+        7,
+        13,
+        2,
+        1
+      ],
+      "name": "Right Angle Cross of The Sphinx"
+    },
+    {
+      "id": 179,
+      "angle": "Right",
+      "gates": [
+        1,
+        2,
+        7,
+        13
+      ],
+      "name": "Right Angle Cross of The Sphinx"
+    },
+    {
+      "id": 180,
+      "angle": "Right",
+      "gates": [
+        21,
+        48,
+        38,
+        39
+      ],
+      "name": "Right Angle Cross of Tension"
+    },
+    {
+      "id": 181,
+      "angle": "Right",
+      "gates": [
+        39,
+        38,
+        21,
+        48
+      ],
+      "name": "Right Angle Cross of Tension"
+    },
+    {
+      "id": 182,
+      "angle": "Right",
+      "gates": [
+        48,
+        21,
+        39,
+        38
+      ],
+      "name": "Right Angle Cross of Tension"
+    },
+    {
+      "id": 183,
+      "angle": "Right",
+      "gates": [
+        38,
+        39,
+        48,
+        21
+      ],
+      "name": "Right Angle Cross of Tension"
+    },
+    {
+      "id": 184,
+      "angle": "Right",
+      "gates": [
+        27,
+        28,
+        41,
+        31
+      ],
+      "name": "Right Angle Cross of The Unexpected"
+    },
+    {
+      "id": 185,
+      "angle": "Right",
+      "gates": [
+        31,
+        41,
+        27,
+        28
+      ],
+      "name": "Right Angle Cross of The Unexpected"
+    },
+    {
+      "id": 186,
+      "angle": "Right",
+      "gates": [
+        28,
+        27,
+        31,
+        41
+      ],
+      "name": "Right Angle Cross of The Unexpected"
+    },
+    {
+      "id": 187,
+      "angle": "Right",
+      "gates": [
+        41,
+        31,
+        28,
+        27
+      ],
+      "name": "Right Angle Cross of The Unexpected"
+    },
+    {
+      "id": 188,
+      "angle": "Right",
+      "gates": [
+        25,
+        46,
+        10,
+        15
+      ],
+      "name": "Right Angle Cross of The Vessel of Love"
+    },
+    {
+      "id": 189,
+      "angle": "Right",
+      "gates": [
+        15,
+        10,
+        25,
+        46
+      ],
+      "name": "Right Angle Cross of The Vessel of Love"
+    },
+    {
+      "id": 190,
+      "angle": "Right",
+      "gates": [
+        46,
+        25,
+        15,
+        10
+      ],
+      "name": "Right Angle Cross of The Vessel of Love"
+    },
+    {
+      "id": 191,
+      "angle": "Right",
+      "gates": [
+        10,
+        15,
+        46,
+        25
+      ],
+      "name": "Right Angle Cross of The Vessel of Love"
+    }
+  ]
+}

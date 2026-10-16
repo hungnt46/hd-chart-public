@@ -1,0 +1,63 @@
+{
+  "_source": "Bảng chuỗi tham chiếu (ghi chép nội bộ)",
+  "_extractedAt": "2026-09-21",
+  "_note": "CHỈ dữ kiện cấu trúc. Văn bản diễn giải không nằm ở đây — xem SPEC.md §3.2.",
+  "planets": [
+    {
+      "id": 0,
+      "name": "Sun"
+    },
+    {
+      "id": 1,
+      "name": "Earth"
+    },
+    {
+      "id": 2,
+      "name": "Moon"
+    },
+    {
+      "id": 3,
+      "name": "North Node"
+    },
+    {
+      "id": 4,
+      "name": "South Node"
+    },
+    {
+      "id": 5,
+      "name": "Mercury"
+    },
+    {
+      "id": 6,
+      "name": "Venus"
+    },
+    {
+      "id": 7,
+      "name": "Mars"
+    },
+    {
+      "id": 8,
+      "name": "Jupiter"
+    },
+    {
+      "id": 9,
+      "name": "Saturn"
+    },
+    {
+      "id": 10,
+      "name": "Uranus"
+    },
+    {
+      "id": 11,
+      "name": "Neptune"
+    },
+    {
+      "id": 12,
+      "name": "Pluto"
+    },
+    {
+      "id": 13,
+      "name": "Kiron"
+    }
+  ]
+}

@@ -23,6 +23,8 @@ import { resolveUT, type UTResolution } from '../../lib/time/resolveUT';
 import { useT } from '../../i18n/ui/LanguageProvider';
 import { deviceZone } from '../time-mode/format';
 import { PlaceSearch } from './PlaceSearch';
+import { DateField } from './DateField';
+import { parseTimeInput } from '../../lib/birth-input';
 import { Icon } from '../ui/Icon';
 import { Notice } from '../ui/Notice';
 import { useMedia } from '../workspace/ChartCanvas';
@@ -124,6 +126,8 @@ export function BirthForm({ initial, onResolved, onAmbiguous, busy, autoFocus, w
     ...(link?.errors.place ? { place: t(link.errors.place === 'pick' ? 'form.errPlacePick' : 'form.errPlaceMissing') } : {}),
   }));
   const dateRef = useRef<HTMLInputElement>(null);
+  /** Chữ trong ô giờ — `value.time` chỉ nhận khi đã thành `HH:MM`. */
+  const [timeText, setTimeText] = useState(value.time);
 
   useEffect(() => { if (autoFocus) dateRef.current?.focus(); }, [autoFocus]);
 
@@ -208,25 +212,29 @@ export function BirthForm({ initial, onResolved, onAmbiguous, busy, autoFocus, w
                onChange={e => setValue(prev => ({ ...prev, name: e.target.value }))} />
       </div>
       {/*
-        ★ iPhone (Hưng báo 2026-09-30, ảnh Safari iOS): ô ngày và ô giờ ĐÈ lên nhau, tràn
-          mép phải. Ô date/time GỐC của iOS tự đòi bề ngang tối thiểu lớn hơn nửa cột, còn
-          ô lưới mặc định `min-width: auto` nên không co ⇒ `min-w-0` cho ô lưới, và
-          `.field-dt` (globals.css) tắt dáng gốc của WebKit iOS. Giả lập WebKit trên máy
-          KHÔNG tái hiện được — phải thử trên máy thật.
+        ★ iPhone (Hưng báo 2026-09-30, ảnh Safari iOS): ô ngày và ô giờ từng ĐÈ lên nhau, tràn mép phải
+          (ô date/time GỐC của iOS tự đòi bề ngang tối thiểu) ⇒ `min-w-0` cho ô lưới.
+        ★ Từ 2026-10-20 (Hưng chốt, giống form trang chủ humandesign.vn) hai ô là ô CHỮ: ngày gõ `dd/mm/yyyy`
+          + lịch theo ngôn ngữ của APP (`DateField`), giờ MỘT ô `hh:mm` 24 giờ (nhận 5:30 / 5h30 / 0530).
+          Ô gốc của trình duyệt theo ngôn ngữ TRÌNH DUYỆT (máy tiếng Anh ⇒ "October", AM/PM).
+          `value.date` / `value.time` vẫn là `YYYY-MM-DD` / `HH:MM` (`''` khi chữ đang gõ chưa hợp lệ).
       */}
       <div className={`grid gap-3 ${compact ? 'grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]' : 'grid-cols-2'}`}>
         <div className="min-w-0">
           <label className="label" htmlFor={`${uid}-date`}>{t('form.birthDate')}</label>
-          <input id={`${uid}-date`} ref={dateRef} type="date" value={value.date}
-                 onChange={e => set('date', e.target.value)} className="field field-dt tabular-nums" data-testid="input-date"
-                 aria-invalid={!!err.date} aria-describedby={err.date ? `${uid}-date-err` : undefined} />
+          <DateField id={`${uid}-date`} inputRef={dateRef} value={value.date} onChange={iso => set('date', iso)}
+                     invalid={!!err.date} describedBy={err.date ? `${uid}-date-err` : undefined} />
           {errText(`${uid}-date-err`, err.date)}
         </div>
         <div className="min-w-0">
           <label className="label" htmlFor={`${uid}-time`}>{t(compact ? 'form.birthTimeShort' : 'form.birthTime')}</label>
-          <input id={`${uid}-time`} type="time" value={value.time}
-                 onChange={e => set('time', e.target.value)} className="field field-dt tabular-nums" data-testid="input-time"
-                 aria-invalid={!!err.time} aria-describedby={err.time ? `${uid}-time-err` : undefined} />
+          <input id={`${uid}-time`} type="text" inputMode="numeric" maxLength={5} value={timeText}
+                 placeholder={t('form.timePlaceholder')} title={t('form.timeHint')}
+                 onChange={e => { setTimeText(e.target.value); set('time', parseTimeInput(e.target.value) ?? ''); }}
+                 onBlur={() => { const v = parseTimeInput(timeText); if (v) setTimeText(v); }}
+                 className="field tabular-nums" data-testid="input-time"
+                 aria-invalid={!!err.time} aria-describedby={err.time ? `${uid}-time-err` : `${uid}-time-hint`} />
+          <span id={`${uid}-time-hint`} hidden>{t('form.timeHint')}</span>
           {errText(`${uid}-time-err`, err.time)}
         </div>
       </div>

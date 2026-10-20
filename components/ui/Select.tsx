@@ -10,10 +10,12 @@
 import type { JSX } from 'react';
 import { Icon } from './Icon.js';
 
-export function Select({ children, className = '', ...rest }: JSX.IntrinsicElements['select']): JSX.Element {
+/** `selectClassName` thêm vào chính `<select>` (lề trong gọn hơn — ô Tháng/Năm của lịch ngày sinh). */
+export function Select({ children, className = '', selectClassName = '', ...rest }:
+  JSX.IntrinsicElements['select'] & { selectClassName?: string }): JSX.Element {
   return (
     <span className={`relative inline-block ${className}`}>
-      <select {...rest} className="field select">{children}</select>
+      <select {...rest} className={selectClassName ? `field select ${selectClassName}` : 'field select'}>{children}</select>
       <Icon name="chevronDown" size={16}
             className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-ink-2" />
     </span>

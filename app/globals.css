@@ -354,10 +354,6 @@ html { -webkit-text-size-adjust: 100%; }
   .field:disabled { background: var(--color-sunken); color: var(--color-ink-3); }
   /* Chữ gợi ý: `ink-3` (5.7:1 trên trắng) thay mặc định Tailwind (mực 50% ≈ 3.25:1 < 4.5). */
   .field::placeholder { color: var(--color-ink-3); opacity: 1; }
-  /* iOS Safari (Hưng 2026-09-30): ô date/time GỐC tự đòi bề ngang tối thiểu riêng ⇒ ô ngày
-     và ô giờ đè nhau, tràn mép phải. Tắt dáng gốc + cho co về bề ngang cột. */
-  .field-dt { -webkit-appearance: none; appearance: none; min-width: 0; width: 100%; display: block; text-align: left; }
-  .field-dt::-webkit-date-and-time-value { text-align: left; }
   .field[aria-invalid="true"] { border-color: var(--color-danger); }
   .label { display: block; margin-bottom: .25rem; font-size: var(--text-ui); font-weight: 500; color: var(--color-ink-2); }
   .hint { font-size: var(--text-caption); color: var(--color-ink-3); }

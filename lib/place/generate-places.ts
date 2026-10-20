@@ -128,6 +128,10 @@ function main(): void {
   writeFileSync(MANIFEST,
     `// Sinh bởi \`npm run gen:places\` — đừng sửa tay.\n` +
     `export const PLACES_URL = '/data/${file}';\nexport const PLACES_COUNT = ${rows.length};\n`);
+  // Tệp CHỈ ĐƯỜNG cố định cho ô nơi sinh của website humandesign.vn (docs/CHART-INTEGRATION.md, "Tệp địa danh"):
+  // tên tệp dữ liệu đổi theo ngày và tệp cũ bị xoá ở trên ⇒ website đọc `/places.json` (không cache lâu) để biết tệp mới.
+  writeFileSync('public/places.json',
+    JSON.stringify({ format: 'places-tsv-1', url: `/data/${file}`, count: rows.length, generated: meta.generated }) + '\n');
   process.stdout.write(`${out}: ${rows.length} địa danh · ${zones.length} múi giờ · ${admins.length} vùng · sửa múi giờ ${fixed}\n`);
   if (badZones.size) console.warn(`Bỏ qua vì múi giờ không hợp lệ: ${[...badZones].join(', ')}`);
 }

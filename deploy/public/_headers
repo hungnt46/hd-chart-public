@@ -9,8 +9,15 @@
   Cache-Control: public, max-age=31536000, immutable
 /data/*
   Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Tệp chỉ đường tới tệp địa danh hiện hành — ô nơi sinh ở trang chủ website đọc nó (docs/CHART-INTEGRATION.md,
+# "Tệp địa danh"). Dữ liệu GeoNames công khai (CC-BY) ⇒ cho mọi origin đọc (`/data/*` ở trên cũng vậy).
+/places.json
+  Cache-Control: public, max-age=300
+  Access-Control-Allow-Origin: *
 
 # Mọi trang: chỉ website của Hưng được nhúng (iframe `/chart/`), không cho máy tìm kiếm lập chỉ mục
 # (trang `/chart/` của website giữ SEO). Tên workers.dev của staging chốt lúc P7c — kế hoạch §5.2.

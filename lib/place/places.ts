@@ -107,12 +107,10 @@ export const MIN_QUERY_LENGTH = 2;
  * Tìm. Phần sau dấu phẩy đầu tiên là BỘ LỌC theo tỉnh/bang hoặc nước:
  * "springfield, illinois", "hue, vn", "paris, texas".
  */
-export function searchPlaces(idx: PlaceIndex, query: string, limit = 8): PlaceCandidate[] {
+function splitQuery(idx: PlaceIndex, query: string): { q: string; qualOk: (i: number) => boolean } {
   const comma = query.indexOf(',');
   const q = foldName(comma < 0 ? query : query.slice(0, comma));
   const qual = comma < 0 ? '' : foldName(query.slice(comma + 1));
-  if (q.length < MIN_QUERY_LENGTH) return [];
-
   const qualOk = (i: number): boolean => {
     if (!qual) return true;
     const cc = idx.cc[i]!;
@@ -121,6 +119,15 @@ export function searchPlaces(idx: PlaceIndex, query: string, limit = 8): PlaceCa
     const a = idx.admin[i]!;
     return a >= 0 && foldName(idx.meta.admins[a]!).startsWith(qual);
   };
+  return { q, qualOk };
+}
+
+/** Khoá phân biệt hai dòng: cùng khoá thì người dùng không phân biệt được (xem `searchPlaces`). */
+const placeKey = (c: PlaceCandidate) => `${c.name}|${c.admin}|${c.countryCode}|${c.ianaZone}`;
+
+export function searchPlaces(idx: PlaceIndex, query: string, limit = 8): PlaceCandidate[] {
+  const { q, qualOk } = splitQuery(idx, query);
+  if (q.length < MIN_QUERY_LENGTH) return [];
 
   const buckets: number[][] = [[], [], [], [], [], []];
   for (let i = 0; i < idx.names.length; i++) {
@@ -137,7 +144,7 @@ export function searchPlaces(idx: PlaceIndex, query: string, limit = 8): PlaceCa
       const c = candidateAt(idx, i);
       // Cùng tên + tỉnh + nước + múi giờ thì người dùng không phân biệt được —
       // giữ dòng đông dân nhất (đứng trước).
-      const k = `${c.name}|${c.admin}|${c.countryCode}|${c.ianaZone}`;
+      const k = placeKey(c);
       if (seen.has(k)) continue;
       seen.add(k);
       out.push(c);
@@ -145,4 +152,30 @@ export function searchPlaces(idx: PlaceIndex, query: string, limit = 8): PlaceCa
     }
   }
   return out;
+}
+
+/**
+ * Nơi sinh GÕ TỰ DO từ link (`lib/birth-link.ts`, docs/CHART-INTEGRATION.md): chọn hộ người dùng
+ * CHỈ khi không còn gì để chọn — không đoán bừa.
+ *   · `pick` = nơi duy nhất trùng TÊN HẲN (tên chính hoặc tên khác, sau bộ lọc dấu phẩy), quét CẢ
+ *     chỉ mục chứ không chỉ 8 dòng đầu ("Huế" khớp đầu 8 nơi nhưng trùng hẳn chỉ một; "London",
+ *     "Paris" trùng hẳn nhiều nơi ⇒ không chọn);
+ *   · không nơi nào trùng hẳn mà danh sách chỉ có MỘT dòng ⇒ chọn dòng đó;
+ *   · còn lại `pick = null`, `candidates` là danh sách để người dùng chọn (rỗng = không tìm thấy).
+ */
+export interface PlaceResolution { pick: PlaceCandidate | null; candidates: PlaceCandidate[] }
+
+export function resolvePlace(idx: PlaceIndex, query: string): PlaceResolution {
+  const candidates = searchPlaces(idx, query);
+  const { q, qualOk } = splitQuery(idx, query);
+  if (q.length < MIN_QUERY_LENGTH) return { pick: null, candidates };
+  const exact = new Map<string, PlaceCandidate>();
+  for (let i = 0; i < idx.names.length && exact.size < 2; i++) {
+    if (rankOf(q, idx.folded[i]!, idx.keys[i]!) > Rank.AltExact || !qualOk(i)) continue;
+    const c = candidateAt(idx, i);
+    exact.set(placeKey(c), c);
+  }
+  if (exact.size === 1) return { pick: [...exact.values()][0]!, candidates };
+  if (exact.size === 0 && candidates.length === 1) return { pick: candidates[0]!, candidates };
+  return { pick: null, candidates };
 }

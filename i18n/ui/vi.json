@@ -58,6 +58,8 @@
   "form.again": "Tạo chart khác",
   "form.errDate": "Ngày sinh chưa hợp lệ.",
   "form.errTime": "Giờ sinh chưa hợp lệ.",
+  "form.errPlaceMissing": "Nhập nơi sinh rồi chọn trong danh sách.",
+  "form.errPlacePick": "Có nhiều nơi trùng tên — chọn đúng nơi sinh trong danh sách.",
   "form.submit": "Lập biểu đồ",
   "form.submitBusy": "Đang tính…",
   "amb.titleRepeated": "Giờ sinh này xảy ra hai lần",

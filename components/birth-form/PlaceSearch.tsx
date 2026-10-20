@@ -20,6 +20,13 @@ export interface PlaceSearchProps {
   className: string;
   /** Gợi ý ngắn (màn chào điện thoại, mockup M1). */
   short?: boolean;
+  /** Chữ điền sẵn (nơi sinh gõ tự do từ link, `lib/birth-link.ts`). */
+  initialQuery?: string;
+  /**
+   * Mở sẵn danh sách khi hiện (link có nơi sinh nhưng chưa chọn được một nơi chắc chắn): tải chỉ mục,
+   * hiện các nơi khớp, hoặc "không tìm thấy". KHÔNG focus — trên điện thoại focus là bật bàn phím.
+   */
+  initialOpen?: boolean;
 }
 
 type Status = 'idle' | 'loading' | 'ready' | 'error';
@@ -38,17 +45,23 @@ function useCountryName(lang: string): (c: PlaceCandidate) => string {
   }, [lang]);
 }
 
+/** Tên nước theo ngôn ngữ, ngoài React (link nơi sinh ở `app/page.tsx`) — cùng cách với `useCountryName`. */
+export function countryNameOf(c: PlaceCandidate, lang: string): string {
+  try { return new Intl.DisplayNames([lang], { type: 'region' }).of(c.countryCode) ?? c.country; } catch { return c.country; }
+}
+
 export function placeLabel(c: PlaceCandidate, country: string): string {
   return [c.name, c.admin && c.admin !== c.name ? c.admin : '', country].filter(Boolean).join(', ');
 }
 
-export function PlaceSearch({ onPick, className, short = false }: PlaceSearchProps): JSX.Element {
+export function PlaceSearch({ onPick, className, short = false, initialQuery = '', initialOpen = false }: PlaceSearchProps): JSX.Element {
   const { lang, t } = useLanguage();
   const countryName = useCountryName(lang);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(initialQuery);
   const [status, setStatus] = useState<Status>('idle');
   const [results, setResults] = useState<PlaceCandidate[]>([]);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(initialOpen);
+  const box = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const mounted = useRef(true);
   // Đặt lại `true` trong thân effect — Strict Mode gắn lại thì ref không kẹt `false`.
@@ -74,6 +87,17 @@ export function PlaceSearch({ onPick, className, short = false }: PlaceSearchPro
     );
   }, [query, status]);
   const showList = open && results.length > 0;
+
+  // Mở sẵn từ link: tải ngay (chỉ lúc mount — `initialOpen` đổi thì form được dựng lại bằng `key`).
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { if (initialOpen) ensureLoaded(); }, []);
+  /* Danh sách mở sẵn không đi kèm focus ⇒ không có `blur` để đóng: bấm ra ngoài thì đóng. */
+  useEffect(() => {
+    if (!open) return;
+    const away = (e: PointerEvent) => { if (!box.current?.contains(e.target as Node)) setOpen(false); };
+    document.addEventListener('pointerdown', away);
+    return () => document.removeEventListener('pointerdown', away);
+  }, [open]);
 
   const pick = (c: PlaceCandidate) => {
     const label = placeLabel(c, countryName(c));
@@ -105,7 +129,7 @@ export function PlaceSearch({ onPick, className, short = false }: PlaceSearchPro
     : '';
 
   return (
-    <div className="relative" data-testid="place-search" data-status={status}>
+    <div ref={box} className="relative" data-testid="place-search" data-status={status}>
       {/* Kính lúp trong ô (giao diện D) — `top` theo nửa chiều cao ô, ô cao 44 hay 36px đều đúng. */}
       <span className="pointer-events-none absolute left-3 top-[1.375rem] -translate-y-1/2 text-ink-3 mouse:top-[1.125rem]">
         <Icon name="search" size={18} />

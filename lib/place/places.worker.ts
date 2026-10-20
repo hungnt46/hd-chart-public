@@ -4,15 +4,15 @@
  * luồng chính — ô nhập, form, thẻ "Bầu trời lúc này" vẫn mượt.
  *
  * Giao thức: { id, type: 'load' } ⇒ { id, ok } · { id, type: 'search', query } ⇒
- * { id, ok, results }. Lỗi ⇒ { id, ok: false, error }, và lần sau tải lại từ đầu.
+ * { id, ok, results } · { id, type: 'resolve', query } ⇒ { id, ok, resolution }. Lỗi ⇒ { id, ok: false, error }, và lần sau tải lại từ đầu.
  * Tệp đi qua service worker như cũ (worker là client của trang) nên vẫn offline.
  */
 import { PLACES_URL } from './places-manifest';
-import { parsePlaces, searchPlaces, type PlaceIndex } from './places';
+import { parsePlaces, resolvePlace, searchPlaces, type PlaceIndex, type PlaceResolution } from './places';
 
 interface Ctx { onmessage: ((e: MessageEvent<Req>) => void) | null; postMessage: (m: Res) => void }
-type Req = { id: number; type: 'load' } | { id: number; type: 'search'; query: string };
-type Res = { id: number; ok: true; results?: ReturnType<typeof searchPlaces> } | { id: number; ok: false; error: string };
+type Req = { id: number; type: 'load' } | { id: number; type: 'search' | 'resolve'; query: string };
+type Res = { id: number; ok: true; results?: ReturnType<typeof searchPlaces>; resolution?: PlaceResolution } | { id: number; ok: false; error: string };
 
 const ctx = self as unknown as Ctx;
 let index: Promise<PlaceIndex> | null = null;
@@ -28,7 +28,10 @@ const load = () => {
 ctx.onmessage = e => {
   const req = e.data;
   load().then(
-    idx => ctx.postMessage(req.type === 'search' ? { id: req.id, ok: true, results: searchPlaces(idx, req.query) } : { id: req.id, ok: true }),
+    idx => ctx.postMessage(
+      req.type === 'search' ? { id: req.id, ok: true, results: searchPlaces(idx, req.query) }
+      : req.type === 'resolve' ? { id: req.id, ok: true, resolution: resolvePlace(idx, req.query) }
+      : { id: req.id, ok: true }),
     (err: unknown) => ctx.postMessage({ id: req.id, ok: false, error: err instanceof Error ? err.message : String(err) }),
   );
 };

@@ -67,6 +67,18 @@ export interface BirthFormProps {
    * "Lập biểu đồ" 54px GHIM đáy màn. Form trong ngăn kéo (đã có chart) giữ kiểu thường.
    */
   welcome?: boolean;
+  /**
+   * Điền sẵn từ LINK (`lib/birth-link.ts`, `app/page.tsx`) khi chưa đủ để lập ngay: ô nào sai thì báo
+   * dưới ô đó; nơi sinh gõ tự do hiện trong ô tra. `submit` = ngày giờ đã đúng ⇒
+   * chọn nơi xong là lập luôn (người dùng đã bấm lập ở website rồi).
+   */
+  link?: {
+    placeQuery?: string;
+    /** Mở sẵn danh sách nơi khớp `placeQuery` (chưa chọn được một nơi chắc chắn). */
+    placeOpen: boolean;
+    errors: { date?: true; time?: true; place?: 'missing' | 'pick' };
+    submit: boolean;
+  };
 }
 
 const parse = (v: BirthFormValue) => {
@@ -75,9 +87,9 @@ const parse = (v: BirthFormValue) => {
   return { year: y!, month: mo!, day: d!, hour: h!, minute: mi! };
 };
 
-interface FieldErr { date?: string; time?: string; zone?: string }
+interface FieldErr { date?: string; time?: string; zone?: string; place?: string }
 
-export function BirthForm({ initial, onResolved, onAmbiguous, busy, autoFocus, welcome = false }: BirthFormProps): JSX.Element {
+export function BirthForm({ initial, onResolved, onAmbiguous, busy, autoFocus, welcome = false, link }: BirthFormProps): JSX.Element {
   const t = useT();
   const compact = useMedia('(max-width: 639.98px)') && welcome;
   const uid = useId();
@@ -106,7 +118,11 @@ export function BirthForm({ initial, onResolved, onAmbiguous, busy, autoFocus, w
   const [placeCountry, setPlaceCountry] = useState<string | null>(null);
   const [zoneQuery, setZoneQuery] = useState('');
   const [zoneOpen, setZoneOpen] = useState(false);
-  const [err, setErr] = useState<FieldErr>({});
+  const [err, setErr] = useState<FieldErr>(() => ({
+    ...(link?.errors.date ? { date: t('form.errDate') } : {}),
+    ...(link?.errors.time ? { time: t('form.errTime') } : {}),
+    ...(link?.errors.place ? { place: t(link.errors.place === 'pick' ? 'form.errPlacePick' : 'form.errPlaceMissing') } : {}),
+  }));
   const dateRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => { if (autoFocus) dateRef.current?.focus(); }, [autoFocus]);
@@ -155,6 +171,10 @@ export function BirthForm({ initial, onResolved, onAmbiguous, busy, autoFocus, w
 
   function submit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
+    trySubmit(value);
+  }
+
+  function trySubmit(value: BirthFormValue) {
     const next: FieldErr = {};
     if (!/^\d{4}-\d{2}-\d{2}$/.test(value.date)) next.date = t('form.errDate');
     if (!/^\d{2}:\d{2}$/.test(value.time)) next.time = t('form.errTime');
@@ -214,13 +234,17 @@ export function BirthForm({ initial, onResolved, onAmbiguous, busy, autoFocus, w
       <div>
         <span className="label">{t('form.place')}</span>
         <PlaceSearch className="field" short={compact}
+          initialQuery={link?.placeQuery} initialOpen={!!link?.placeOpen}
           onPick={(p, label) => {
-            setValue(prev => ({ ...prev, zone: p.ianaZone, place: label }));
+            const next = { ...value, zone: p.ianaZone, place: label };
+            setValue(next);
             setZoneSource('place');
             setPlaceCountry(p.countryCode);
             setZoneQuery('');
             setErr({});
+            if (link?.submit) trySubmit(next);
           }} />
+        {errText(`${uid}-place-err`, err.place)}
         {/* Bản công khai bỏ đoạn giải thích múi giờ VN (Hưng 2026-10-15, STATUS §5 #68) — chỉ CHỮ;
             luật gán vùng `lib/place/zone-fixes.ts` giữ nguyên. */}
         {!PUBLIC_EDITION && placeCountry === 'VN' && (

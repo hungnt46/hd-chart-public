@@ -20,7 +20,10 @@
  *   trong Kho chart…" (`pickForIllu`): khi đó chart được nạp vào bản vẽ.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { BirthForm, type BirthFormValue } from '../components/birth-form/BirthForm';
+import { BirthForm, type BirthFormProps, type BirthFormValue } from '../components/birth-form/BirthForm';
+import { countryNameOf, placeLabel as placeLabelOf } from '../components/birth-form/PlaceSearch';
+import { parseBirthLink, type BirthLink } from '../lib/birth-link';
+import { resolvePlaceQuery } from '../lib/place/place-client';
 import { AmbiguityDialog } from '../components/birth-form/AmbiguityDialog';
 import { ChartLibrary } from '../components/chart-library/ChartLibrary';
 import { reopen } from '../lib/storage/reopen';
@@ -30,7 +33,7 @@ import { calculateRaveChart, type RaveChart } from '../calc-core/rave/chart';
 import { formatProfile } from '../calc-core/rave/derive/type-authority';
 import { resolveUT, type UTResolution } from '../lib/time/resolveUT';
 import { useLanguage } from '../i18n/ui/LanguageProvider';
-import { zoneCityName } from '../lib/place/timezones';
+import { canonicalZone, isValidZone, zoneCityName } from '../lib/place/timezones';
 import { typeName } from '../i18n/terms';
 import { momentLabel } from '../components/time-mode/format';
 import { useTimeMode } from '../components/time-mode/TimeModeProvider';
@@ -101,6 +104,10 @@ export default function Page() {
   /** Chart sắp mở từ kho là để NẠP vào bản vẽ ("Nạp từ chart › Chọn trong Kho chart…"). */
   const pickForIllu = useRef(false);
   const updateIllu = illu.update;
+  /** Form điền sẵn từ link khi chưa đủ để lập ngay; `n` đổi ⇒ dựng lại form (`key`). */
+  const [linkForm, setLinkForm] = useState<{ n: number; value: Partial<BirthFormValue>; link: NonNullable<BirthFormProps['link']> } | null>(null);
+  const langRef = useRef(lang);
+  langRef.current = lang;
 
   const compute = useCallback(async (utcDate: Date, value: BirthFormValue, resolution: UTResolution, from: 'form' | 'library') => {
     setBusy(true); setError(null);
@@ -108,6 +115,7 @@ export default function Page() {
       const eph = await getBrowserEphemeris();
       const chart = calculateRaveChart(eph, dateUTToJd(utcDate));
       setResult({ chart, utcDate, value, resolution });
+      setLinkForm(null);
       setNowOn(false);
       if (pickForIllu.current && from === 'library') {
         pickForIllu.current = false;
@@ -170,6 +178,74 @@ export default function Page() {
     void compute(r.utcDate, value, r.resolution, 'library');
   }, [compute]);
 
+  /**
+   * ★ Dữ liệu sinh qua LINK `#ngay=…&gio=…&noi=…[&tz=…]` (Hưng duyệt 2026-10-20, hợp đồng ở
+   *   `docs/CHART-INTEGRATION.md`; bộ đọc thuần `lib/birth-link.ts`). Website humandesign.vn mở/nhúng
+   *   chart sau khi người dùng nhập ở trang chủ. Đủ và chắc ⇒ lập ngay như bấm "Lập biểu đồ" (giờ mơ hồ
+   *   vẫn qua hộp thoại); thiếu/sai/nơi sinh chưa chọn được ⇒ form điền sẵn phần đúng.
+   *   Nơi sinh gõ tự do: chỉ chọn hộ khi CHẮC (`resolvePlace`), không đoán bừa.
+   *   Đọc xong XOÁ `#…` khỏi thanh địa chỉ. Không ghi log, không gửi đi đâu — phần sau `#` cũng không
+   *   lên máy chủ. Nghe `hashchange`: website đổi `src` của iframe chỉ ở phần `#` thì trang không tải lại.
+   */
+  const openLink = useCallback(async (link: BirthLink) => {
+    let zone: string | undefined;
+    let place = link.place;
+    let placeErr: 'missing' | 'pick' | undefined;
+    const tz = link.zone ? canonicalZone(link.zone) : '';
+    if (tz && isValidZone(tz)) zone = tz;
+    else if (!place) placeErr = 'missing';
+    else {
+      setBusy(true);
+      try {
+        const r = await resolvePlaceQuery(place);
+        if (r.pick) {
+          zone = r.pick.ianaZone;
+          place = placeLabelOf(r.pick, countryNameOf(r.pick, langRef.current));
+        } else if (r.candidates.length > 0) placeErr = 'pick';
+        // Không nơi nào khớp / tải hỏng: ô tra tự báo ("Không tìm thấy…" / lỗi tải).
+      } catch { /* như trên */ } finally { setBusy(false); }
+    }
+
+    if (zone && link.date && link.time) {
+      const [y, mo, d] = link.date.split('-').map(Number);
+      const [h, mi] = link.time.split(':').map(Number);
+      const value: BirthFormValue = { date: link.date, time: link.time, zone, ...(place ? { place } : {}) };
+      try {
+        const r = resolveUT({ localDateTime: { year: y!, month: mo!, day: d!, hour: h!, minute: mi! }, ianaZone: zone });
+        setLinkForm(null);
+        if (r.ambiguity !== 'none') setPending({ resolution: r, value });
+        else await compute(r.utcDate, value, r, 'form');
+        return;
+      } catch { /* giờ không giải được ⇒ xuống form, nút "Lập biểu đồ" sẽ báo lỗi múi giờ */ }
+    }
+
+    setLinkForm(prev => ({
+      n: (prev?.n ?? 0) + 1,
+      // Ngày/giờ sai hay thiếu ⇒ ô TRỐNG (không để mặc định 1985-06-15 trông như dữ liệu thật).
+      value: { date: link.date ?? '', time: link.time ?? '', ...(zone ? { zone, ...(place ? { place } : {}) } : {}) },
+      link: {
+        ...(place ? { placeQuery: place } : {}),
+        placeOpen: !zone && !!place,
+        errors: { ...link.bad, ...(placeErr ? { place: placeErr } : {}) },
+        submit: !!(link.date && link.time),
+      },
+    }));
+    setIlluOn(false); setNowOn(false);
+    if (result) setDrawer({ open: true, newOpen: true });
+  }, [compute, result]);
+
+  useEffect(() => {
+    const take = () => {
+      const link = parseBirthLink(window.location.hash);
+      if (!link) return;
+      window.history.replaceState(window.history.state, '', window.location.pathname + window.location.search);
+      void openLink(link);
+    };
+    take();
+    window.addEventListener('hashchange', take);
+    return () => window.removeEventListener('hashchange', take);
+  }, [openLink]);
+
   const chooseOffset = (offsetMinutes: number) => {
     if (!pending) return;
     const [y, mo, d] = pending.value.date.split('-').map(Number);
@@ -186,8 +262,8 @@ export default function Page() {
 
   const form = (
     <>
-      <BirthForm key={formKey} busy={busy} autoFocus={formKey > 0}
-                 initial={result?.value} welcome={!result && !illuOn}
+      <BirthForm key={`${formKey}-${linkForm?.n ?? 0}`} busy={busy} autoFocus={formKey > 0 && !linkForm}
+                 initial={linkForm?.value ?? result?.value} welcome={!result && !illuOn} link={linkForm?.link}
                  onResolved={(utc, v, r) => void compute(utc, v, r, 'form')}
                  onAmbiguous={(r, v) => setPending({ resolution: r, value: v })} />
       {error && <Notice tone="danger" className="mt-4" testId="calc-error">{error}</Notice>}

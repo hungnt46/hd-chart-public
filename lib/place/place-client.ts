@@ -5,9 +5,9 @@
  * quả y hệt, chỉ chậm tay hơn.
  */
 import { loadPlaces } from './load-places';
-import { searchPlaces, type PlaceCandidate } from './places';
+import { resolvePlace, searchPlaces, type PlaceCandidate, type PlaceResolution } from './places';
 
-type Res = { id: number; ok: true; results?: PlaceCandidate[] } | { id: number; ok: false; error: string };
+type Res = { id: number; ok: true; results?: PlaceCandidate[]; resolution?: PlaceResolution } | { id: number; ok: false; error: string };
 
 let worker: Worker | null | undefined;
 let seq = 0;
@@ -25,7 +25,7 @@ function getWorker(): Worker | null {
   return worker;
 }
 
-function ask(msg: { type: 'load' } | { type: 'search'; query: string }): Promise<Res> {
+function ask(msg: { type: 'load' } | { type: 'search' | 'resolve'; query: string }): Promise<Res> {
   const w = getWorker()!;
   const id = ++seq;
   return new Promise(resolve => { waiting.set(id, { resolve }); w.postMessage({ id, ...msg }); });
@@ -44,4 +44,12 @@ export async function findPlaces(query: string): Promise<PlaceCandidate[]> {
   const r = await ask({ type: 'search', query });
   if (!r.ok) throw new Error(r.error);
   return r.results ?? [];
+}
+
+/** Nơi sinh gõ tự do từ link: chọn hộ chỉ khi chắc (xem `resolvePlace`). */
+export async function resolvePlaceQuery(query: string): Promise<PlaceResolution> {
+  if (!getWorker()) return resolvePlace(await loadPlaces(), query);
+  const r = await ask({ type: 'resolve', query });
+  if (!r.ok) throw new Error(r.error);
+  return r.resolution ?? { pick: null, candidates: [] };
 }

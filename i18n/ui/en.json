@@ -58,6 +58,8 @@
   "form.again": "Create another chart",
   "form.errDate": "Birth date is not valid.",
   "form.errTime": "Birth time is not valid.",
+  "form.errPlaceMissing": "Enter the birth place, then pick it from the list.",
+  "form.errPlacePick": "Several places share this name — pick the right one from the list.",
   "form.submit": "Create chart",
   "form.submitBusy": "Calculating…",
   "amb.titleRepeated": "This birth time happens twice",

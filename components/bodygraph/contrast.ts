@@ -33,9 +33,9 @@ export function contrastRatio(a: string, b: string): number {
   return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
 }
 
-/** Chữ trên nền màu tuỳ ý: trắng hay gần đen — cái nào tương phản hơn. */
-export const textOnFill = (fill: string): string =>
-  contrastRatio(fill, '#ffffff') >= contrastRatio(fill, '#111111') ? '#ffffff' : '#111111';
+/** Chữ trên nền màu tuỳ ý: trắng hay `dark` (mặc định gần đen) — cái nào tương phản hơn. */
+export const textOnFill = (fill: string, dark = '#111111'): string =>
+  contrastRatio(fill, '#ffffff') >= contrastRatio(fill, dark) ? '#ffffff' : dark;
 
 /**
  * Chữ `current` trên nền một hay NHIỀU màu (đĩa sọc "Cả hai" = hai màu phía):

@@ -9,7 +9,7 @@ import { momentLabel } from '../time-mode/format';
 import { useTimeMode } from '../time-mode/TimeModeProvider';
 import { planetName } from '../../i18n/terms';
 import type { ActivationSet } from '../../calc-core/rave/activations.js';
-import { COMPOSITE_OTHER } from '../bodygraph/theme';
+import { COMPOSITE_OTHER, THEMES } from '../bodygraph/theme';
 import { contrastRatio } from '../bodygraph/contrast';
 import { useCompositePalette } from '../bodygraph/CompositePaletteProvider';
 import { useId, useLayoutEffect, useRef, useState } from 'react';
@@ -121,9 +121,11 @@ const LAYOUT = {
  * ★ Đổi 2026-09-23 từ xanh ngọc #41816d sang xanh dương của bộ Classic tham chiếu #3535c4
  *   (Hưng chốt bộ màu chart ghép, xem `compositeTheme`). Màu cũ mượn sắc của
  *   một ứng dụng tham chiếu và hỏng khi đem lên bodygraph ghép: sọc đỏ–ngọc hoà thành nâu.
+ * ★ Aura A (2026-10-21): đỏ / ink đọc THẲNG từ bảng màu bodygraph (#c63a2b / #172033) để
+ *   cột và thanh không bao giờ lệch nhau; transit theo `COMPOSITE_OTHER` mới #28309e.
  */
 const COLOUR: Record<ColumnSide, string> = {
-  design: '#ce4140', personality: '#2f2f2f', transit: COMPOSITE_OTHER,
+  design: THEMES.classic.design, personality: THEMES.classic.personality, transit: COMPOSITE_OTHER,
 };
 const HEADING: Record<ColumnSide, string> = {
   design: 'DESIGN', personality: 'PERSONALITY', transit: 'TRANSIT',
@@ -135,15 +137,16 @@ const HEADING: Record<ColumnSide, string> = {
  *   số và hệ tỉ lệ tham chiếu không xê dịch. Ba kiểu nền:
  *     · Design: nền TRẮNG viền nhạt cùng sắc, chữ đỏ — luật "chữ đỏ chỉ trên
  *       trắng". Mockup D vẽ chữ đỏ trên hồng #fbeceb = 4.11:1 — SAI luật, không theo;
- *     · Personality: nền `sunken`, chữ mực (#2f2f2f trên #eeedea = 11.8:1);
+ *     · Personality: nền `sunken`, chữ mực (Aura A: ink #172033 trên mist #eef2ef = 14.40:1);
  *     · màu BÊN của chart ghép (Transit, "Chart của tôi", chu kỳ): nền NHẠT 10% của
- *       màu bên, chữ màu bên SẪM dần tới ≥ 5.5:1 (`pillInk`) — Classic ra #006c00
- *       trên #e6f2e6 (mockup F: #006b00, 5.87:1), lam #3535c4 giữ nguyên (7.2:1).
+ *       màu bên, chữ màu bên SẪM dần tới ≥ 5.5:1 (`pillInk`) — Aura A: lục #1f7a3a ra
+ *       #1a6731 trên #e9f2eb (6.06:1), lam #28309e giữ nguyên trên #eaeaf5 (8.76:1).
  */
 const PILL_TEXT: Record<ColumnSide, string> = {
   design: 'Design', personality: 'Personality', transit: 'Transit',
 };
-const PILL_SUNKEN = '#eeedea';
+/** Aura A (2026-10-21): `mist` #eef2ef — trước là `sunken` ấm #eeedea. */
+const PILL_SUNKEN = '#eef2ef';
 interface PillGeom { y: number; h: number; padX: number; size: number }
 /** Viên của cột CHUẨN (đơn vị khung tham chiếu) và của cột GỌN điện thoại (đơn vị = px). */
 const PILL: PillGeom = { y: -2, h: 66, padX: 30, size: 32 };
@@ -197,8 +200,9 @@ function HeadPill({ x, anchor, text, colour, style, g = PILL }: {
  * Xám dòng ngày giờ dưới nhãn. Trước 2026-09-25 là #7a7a7a — chỉ 4.29:1 trên
  * trắng, hụt 4.5:1 cho chữ nhỏ (WCAG AA). #767676 là xám nhạt nhất đạt (4.54:1),
  * mắt thường không phân biệt được với màu cũ.
+ * Aura A (2026-10-21): `ink-2` #4a5266 — 7.81:1 trên trắng, 7.53:1 trên `paper`.
  */
-const DATE_GREY = '#767676';
+const DATE_GREY = '#4a5266';
 
 export function PlanetColumn({
   set, chartSets, otherSets = [], otherColour, side, className, showDate, zone,
@@ -351,7 +355,7 @@ export function columnWidthPercent(chartAspect: number, columns = 2): number {
  */
 const PAIR_VB = { x: 0, y: -70, w: 560, h: 2070 };
 const PAIR = { x: 20, w: 520, markD: 34, dVal: 222, glyph: 280, pVal: 338, markP: 526 };
-const TEXT_DARK = '#2f2f2f';
+const TEXT_DARK = THEMES.classic.personality;   // ink #172033 (Aura A)
 
 export interface PairPlanetColumnProps {
   design: ActivationSet;

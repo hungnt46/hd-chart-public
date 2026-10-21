@@ -13,7 +13,7 @@
 import type { JSX } from 'react';
 import { CenterId, GATE_TO_CENTER, CHANNELS, type ChannelDef } from '../../calc-core/rave/derive/tables.js';
 import { combineSources, type DisplaySource, type LayerKey, type LayerSetting } from './display-source.js';
-import { THEMES, type BodygraphTheme, type ThemeName } from './theme.js';
+import { THEMES, openGateText, type BodygraphTheme, type ThemeName } from './theme.js';
 import { pathPoints, type Pt } from './svg-path.js';
 import { SIDE_OF_SLOT } from './composite.js';
 import { readableOn, textOnFill as textOn } from './contrast.js';
@@ -267,6 +267,19 @@ export function BodygraphArtwork(props: BodygraphArtworkProps): JSX.Element {
   };
   /** Giữ tên cũ cho những chỗ không có hình (huy hiệu số cổng). */
   const colorOf = (s: DisplaySource) => paintOf(s);
+  /** Bán kính đĩa — mọi đĩa của một bản vẽ cùng cỡ (hdkit 12.3, alternate 18.42). */
+  const badgeR = art.badges[1]?.r ?? 0;
+  const dotId = `${pid}-dot`;
+  /**
+   * ★ Đĩa cổng CẢ HAI phía, kiểu `'stripes'` (Aura A, 2026-10-21): sọc chéo −45°,
+   *   chu kỳ ≈ 0.62 × bán kính, tỉ lệ `mixedBandDuty` (0.7 chart đơn · 0.5 chart
+   *   ghép). Số trắng đạt với cả hai sọc — `contrast.spec.ts`.
+   */
+  const usesDot = t.mixedBadge === 'stripes' && Object.keys(art.badges).length === 64
+    && ALL_GATES.some(g => gateSources.get(g) === 'both' && !props.gateColors?.has(g));
+  const badgeFillOf = (s: DisplaySource) =>
+    s === 'both' && t.mixedBadge === 'stripes' ? `url(#${dotId})` : colorOf(s);
+  const bare = t.gateBadge === 'bare';
 
   const hasHalves = Object.keys(art.halves).length === 64;
   const stroked = art.mode === 'stroke';
@@ -387,7 +400,9 @@ export function BodygraphArtwork(props: BodygraphArtworkProps): JSX.Element {
       <defs>
         {/*
           ★ Cổng "kích hoạt kép" (cả design lẫn personality) — CHIA ĐÔI DỨT KHOÁT
-          theo chiều dọc, nửa trên design, nửa dưới personality.
+          theo chiều dọc, nửa trên design, nửa dưới personality. Từ Aura A
+          (2026-10-21) gradient này chỉ còn cho kiểu đĩa `mixedBadge: 'split'`;
+          chủ đề mặc định dùng đĩa SỌC `${pid}-dot` bên dưới.
 
           Đây là cách bản tham chiếu làm, đọc trực tiếp từ `<defs>` của họ (2026-09-21):
             <linearGradient id="triple-activation-l" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -438,6 +453,17 @@ export function BodygraphArtwork(props: BodygraphArtworkProps): JSX.Element {
             </pattern>
           );
         })}
+        {usesDot && (() => {
+          const period = badgeR * 0.62;
+          const duty = t.mixedBandDuty ?? 0.5;
+          return (
+            <pattern id={dotId} width={period} height={period} patternUnits="userSpaceOnUse"
+                     patternTransform="rotate(-45)">
+              <rect x="0" y="0" width={period} height={period * duty} fill={t.design} />
+              <rect x="0" y={period * duty} width={period} height={period * (1 - duty)} fill={t.personality} />
+            </pattern>
+          );
+        })()}
       </defs>
 
       {/*
@@ -458,11 +484,10 @@ export function BodygraphArtwork(props: BodygraphArtworkProps): JSX.Element {
       )}
 
       {/*
-        1. Lưới kênh ở trạng thái mở. `channelOpenStroke` bỏ trống ⇒ KHÔNG viền,
-        Hưng chốt 2026-09-22 sau khi so bốn hướng (không viền / viền nhạt / viền
-        đậm / không viền + nền đậm). Đánh đổi đã biết: ruột kênh chỉ tách nền
-        1.14:1, dưới ngưỡng 3:1. Ghi rõ ở `__tests__/contrast.spec.ts`.
-        Đặt lại `channelOpenStroke` là có viền ngay, renderer không cần sửa.
+        1. Lưới kênh ở trạng thái mở. Có viền khi chủ đề khai `channelOpenStroke` —
+        Aura A (Hưng chốt 2026-10-21) bật CHỈ cho Classic (`#7d8592`, ≥ 3:1 với ruột
+        kênh và mọi lớp nền, `__tests__/contrast.spec.ts`); Modern giữ không viền
+        (lệch đã biết 1.21:1, khoá ở đó). Trước đó (2026-09-22) cả hai không viền.
       */}
       {shown('lattice') && <g data-layer="lattice" {...dim('lattice')}>
         {/* ray kênh đầy đủ (bản nào có) — vẽ trước để nửa dải nằm đè lên */}
@@ -538,20 +563,29 @@ export function BodygraphArtwork(props: BodygraphArtworkProps): JSX.Element {
           {ALL_GATES.map(g => {
             const b = art.badges[g]!;
             const src = gateSources.get(g);
-            const inDefined = definedCenters.has(GATE_TO_CENTER[g]!);
+            const center = GATE_TO_CENTER[g]!;
+            const inDefined = definedCenters.has(center);
             // `plain` là đĩa sáng (mặc định trắng) ⇒ giữ vành và chữ tối như cổng chưa bật.
             const custom = src ? props.gateColors?.get(g) : undefined;
             const coloured = custom !== undefined || (src !== undefined && src !== 'plain');
-            const text = custom ? textOn(custom) : coloured ? t.gateTextActive : (inDefined ? t.gateTextOnFill : t.gateText);
+            /*
+             * ★ Aura A (`gateBadge: 'bare'`): cổng chưa bật KHÔNG còn đĩa — `<circle>` trong
+             *   suốt giữ vùng bấm + `data-gate`; số nằm thẳng trên trung tâm nên màu số theo
+             *   màu trung tâm (`openGateText`). Đĩa `plain` của Illustrator vẫn trắng đục ⇒
+             *   số trên nó tính như trên đĩa trắng.
+             */
+            const naked = bare && src === undefined;
+            const text = custom ? textOn(custom) : coloured ? t.gateTextActive
+              : openGateText(t, inDefined && (naked || !bare) ? t.centerFill[center] : null);
             return (
               <g key={g} data-gate={g} data-activated={src ? label(src) : 'none'}
                  {...(custom ? { 'data-color': custom } : {})}>
                 {shown('gates') && <circle cx={b.cx} cy={b.cy} r={b.r}
-                        fill={custom ?? (src ? colorOf(src) : t.centerOpenFill)}
-                        stroke={coloured ? 'none' : t.badgeOpenStroke} strokeWidth={vb.w / 800}
+                        fill={custom ?? (src ? badgeFillOf(src) : naked ? 'transparent' : t.centerOpenFill)}
+                        stroke={coloured || naked ? 'none' : t.badgeOpenStroke} strokeWidth={vb.w / 800}
                         {...dim('gates')} />}
                 {shown('gateNumbers') && <text x={b.cx} y={b.cy + b.r * 0.36} textAnchor="middle" fontSize={b.r * 1.08}
-                      fontWeight={src ? 700 : 400} {...dim('gateNumbers')}
+                      fontWeight={src ? 700 : bare ? 500 : 400} {...dim('gateNumbers')}
                       // ★ `t.gateTextActive`, KHÔNG ghim '#ffffff' (sửa 2026-09-24, G2): cổng
                       //   kiểm tương phản đo trường này, màn hình phải vẽ đúng nó. Bảng
                       //   Modern cần số TỐI trên đĩa ngọc; Classic vẫn trắng như cũ.

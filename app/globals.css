@@ -38,6 +38,8 @@
      sunken #eef0f3 · line #e1e4e8 · control #d0d5db · field #858d97. */
   --color-page: #f2f1ee;
   --color-surface: #ffffff;
+  /* Nền KHUNG BIỂU ĐỒ — Aura `paper` (bodygraph hướng A, 2026-10-21, `docs/PLAN-bodygraph-aura.md` §1). */
+  --color-paper: #fbfbf8;
   --color-subtle: #f7f6f3;
   --color-sunken: #eeedea;
   --color-line: #e6e3dd;

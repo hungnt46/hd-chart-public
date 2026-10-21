@@ -16,7 +16,7 @@
  *   bảng màu, khác nhau ở BẢN VẼ chứ không ở màu.
  */
 import { CenterId } from '../../calc-core/rave/derive/tables.js';
-import { PUBLIC_EDITION } from '../../lib/edition.js';
+import { textOnFill } from './contrast.js';
 
 export type ThemeName = 'classic' | 'modern';
 
@@ -90,9 +90,26 @@ export interface BodygraphTheme {
    * diện tích màu tối.
    */
   mixedBandDuty?: number;
+  /**
+   * Đĩa của cổng CHƯA kích hoạt. `'disc'` (mặc định, kiểu cũ) = đĩa đục
+   * `centerOpenFill` có vành · `'bare'` (Aura A, 2026-10-21) = chỉ còn con số:
+   * `<circle>` vẫn vẽ nhưng `fill="transparent"`, không viền — giữ vùng bấm cho
+   * Illustrator và `data-gate` cho e2e. KHÔNG `fill="none"`: nó làm mất sự kiện chuột.
+   */
+  gateBadge?: 'disc' | 'bare';
+  /**
+   * Đĩa của cổng CẢ HAI phía. `'split'` (mặc định, kiểu cũ) = gradient chia
+   * đôi trên/dưới · `'stripes'` (Aura A) = sọc chéo −45°, tỉ lệ `mixedBandDuty`.
+   */
+  mixedBadge?: 'split' | 'stripes';
+  /** Số cổng chưa kích hoạt trên trung tâm TRỐNG. */
   gateText: string;
-  /** Màu số cổng khi trung tâm đã tô màu (cần tương phản với nền tô). */
-  gateTextOnFill: string;
+  /**
+   * Số cổng chưa kích hoạt trong trung tâm ĐÃ TÔ. Bỏ trống ⇒ chọn theo màu thật
+   * của trung tâm (`openGateText`). Bắt buộc khi `gateBadge` là `'disc'`, vì khi
+   * đó số nằm trên ĐĨA TRẮNG chứ không trên màu trung tâm.
+   */
+  gateTextOnFill?: string;
   gateTextActive: string;
   gateFontSize: number;
 }
@@ -122,16 +139,24 @@ export interface BodygraphTheme {
  * Lệch so với bản đo được: nâu +21° sắc / +20% sáng · đỏ +2° / −4% ·
  * vàng +10° / −6% · xanh +9° / +2%. Chỉ nâu đổi thật.
  */
+/*
+ * ★ Ánh Sáng Aura hướng A — Hưng chốt 2026-10-21 (`docs/PLAN-bodygraph-aura.md` §1).
+ *   Tông hd-* của Aura, chỉnh cho số cổng TRẦN (không còn đĩa trắng, xem
+ *   `gateTextOn`) đạt 4.5:1 ngay trên màu trung tâm: Ajna 4.83 · nâu 4.70 ·
+ *   đỏ 5.04 với chữ trắng. Nâu vẫn cách đỏ ~28° sắc như P2+. Vàng 1.49:1 với
+ *   trắng — vẫn là miễn trừ G/Head có sẵn.
+ *   Bản P2+ trước đó: vàng #f0d98a · xanh #6f9c8a · nâu #9a7f63 · đỏ #bc4f4a.
+ */
 const CENTER_FILL: Record<CenterId, string> = {
-  [CenterId.Head]: '#f0d98a',
-  [CenterId.Ajna]: '#6f9c8a',
-  [CenterId.Throat]: '#9a7f63',
-  [CenterId.G]: '#f0d98a',
-  [CenterId.Heart]: '#bc4f4a',
-  [CenterId.Sacral]: '#bc4f4a',
-  [CenterId.Spleen]: '#9a7f63',
-  [CenterId.SolarPlexus]: '#9a7f63',
-  [CenterId.Root]: '#9a7f63',
+  [CenterId.Head]: '#efd34e',
+  [CenterId.Ajna]: '#37804a',
+  [CenterId.Throat]: '#9a6a2c',
+  [CenterId.G]: '#efd34e',
+  [CenterId.Heart]: '#c4422f',
+  [CenterId.Sacral]: '#c4422f',
+  [CenterId.Spleen]: '#9a6a2c',
+  [CenterId.SolarPlexus]: '#9a6a2c',
+  [CenterId.Root]: '#9a6a2c',
 };
 /**
  * Màu nguồn kích hoạt — `#gates g.defined.c1/.c2` trong CSS của bản tham chiếu.
@@ -149,19 +174,25 @@ export const DESIGN_MEASURED = '#d04948';
  * Hạ độ sáng HLS đi 2%, giữ NGUYÊN sắc (0.4°) và bão hoà (59.1%) ⇒ `#ce4140`,
  * đạt 4.714:1. Mắt không phân biệt được, nhưng qua ngưỡng có dư.
  *
- * Đổi màu personality thì không cần: `#2f2f2f` đã đạt 13.39:1.
+ * ★ Aura hướng A (2026-10-21): đỏ `#c63a2b` (số trắng 5.20:1) và "đen" là
+ *   xanh đêm ink `#172033` (16.27:1); hai sọc của cổng cả-hai-phía cách nhau
+ *   3.13:1. Bản trước: `#ce4140` / `#2f2f2f`.
  * Cổng kiểm: `__tests__/contrast.spec.ts`.
  */
-const DESIGN = '#ce4140';
-const PERSONALITY_LIGHT = '#2f2f2f';
+const DESIGN = '#c63a2b';
+const PERSONALITY_LIGHT = '#172033';
+/** Viền mọi nét (trung tâm, lưới, đĩa) — token `control` của Aura. */
+const OUTLINE = '#7d8592';
+/** Số cổng chưa kích hoạt trên trung tâm TRỐNG — `ink-2` của Aura, 7.81:1. */
+const GATE_TEXT_OPEN = '#4a5266';
 
 export const CLASSIC: BodygraphTheme = {
   name: 'classic',
   artwork: 'hdkit',
   centerFill: CENTER_FILL,
   centerOpenFill: '#ffffff',
-  figureFill: '#e4e4e4',
-  triangleFill: '#f0f0f0',
+  figureFill: '#e6ebe7',
+  triangleFill: '#f1f3ef',
   mixedBandDuty: 0.7,
   // ★ Viền mảnh và ĐỒNG NHẤT cho cả trung tâm lẫn kênh — đo từ mẫu chuẩn:
   //   ở đó mọi nét đều là hairline cùng màu, nên hình đọc ra như MỘT mạng lưới
@@ -170,15 +201,23 @@ export const CLASSIC: BodygraphTheme = {
   // Bản tham chiếu để `.theme-light #centers .shape { stroke-width: 0 }` — trung tâm KHÔNG
   // có viền, hình đọc ra nhờ tương phản màu tô. Giữ một nét rất mảnh cho trung
   // tâm chưa defined để nó không biến mất trên nền trắng.
-  centerStroke: '#807c7c',
+  centerStroke: OUTLINE,
   centerStrokeWidth: 1.5,
   centerRadius: 0,
   // ★ Ruột kênh KHÔNG để trắng: sơ đồ chuẩn có nền thân người màu xám phía sau
   //   nên dải trắng nổi lên thành khối đặc. Bỏ nền đó mà vẫn tô trắng thì chỉ
   //   còn thấy viền — hình biến thành mớ khung dây mảnh, rối hơn hẳn.
-  // ★ Bản công khai KHÔNG có nền (STATUS §5 #66, Hưng chọn C) ⇒ kênh trống trắng sẽ chìm vào nền trắng:
-  //   tô xám nhạt như mockup C. Bản đầy đủ giữ trắng-trên-nền-xám.
-  channelOpenFill: PUBLIC_EDITION ? '#e4e4e4' : '#ffffff',
+  // ★ Bản công khai KHÔNG có nền (STATUS §5 #66; chỉ Classic). Trước Aura nó tô kênh trống xám
+  //   nhạt `#e4e4e4` cho khỏi chìm vào nền trắng; từ khi lưới Classic có VIỀN (Aura A,
+  //   2026-10-21) thì trắng + viền là đủ, nên hai bản như nhau.
+  channelOpenFill: '#ffffff',
+  /*
+   * ★ Viền LƯỚI bật lại — Aura hướng A, Hưng chốt 2026-10-21, CHỈ Classic (Modern
+   *   giữ không viền: viền trên kênh cong thành một mớ đường). `#7d8592` đạt 3.72:1
+   *   với ruột kênh trắng, 3.08:1 với bóng người, 3.33:1 với tam giác ⇒ lệch đã biết
+   *   "ruột kênh 1.14:1" của Classic không còn. Trước đó (2026-09-22) Hưng chọn không viền.
+   */
+  channelOpenStroke: OUTLINE,
   /*
    * ★ Vành huy hiệu đổi #d4d4d4 → #807c7c ngày 2026-09-22 vì TƯƠNG PHẢN.
    *
@@ -195,18 +234,19 @@ export const CLASSIC: BodygraphTheme = {
    * `__tests__/contrast.spec.ts`. Muốn nhạt lại thì phải sửa ngưỡng trước, mà
    * ngưỡng thì không hạ.
    *
-   * LƯỚI kênh thì KHÔNG viền — Hưng chốt 2026-09-22 sau khi so bốn hướng.
-   * `channelOpenStroke` vì thế bỏ trống ở cả hai chủ đề. Xem ghi chú "lệch đã
-   * biết" trong `contrast.spec.ts`: cặp ruột-kênh/nền chỉ đạt 1.14:1.
+   * Aura A (2026-10-21): `#7d8592` (control) — 3.72:1 với trắng, 3.08:1 với
+   * bóng người. Đĩa cổng chưa kích hoạt nay TRONG SUỐT (xem `gateBadge`), vành
+   * này chỉ còn cho đĩa `plain` của Illustrator.
    */
-  badgeOpenStroke: '#807c7c',
+  badgeOpenStroke: OUTLINE,
   // Dải kênh chuẩn rộng 9–10px trên ảnh 1352px; hệ số quy đổi ×2.0 → 20 đơn vị.
   channelWidth: 20,
   personality: PERSONALITY_LIGHT,
   design: DESIGN,
   mixedStyle: 'bands',
-  // đủ đậm để đọc được TRÊN NỀN TÔ MÀU của trung tâm defined, không chỉ trên nền trắng
-  gateText: '#000000',
+  gateBadge: 'bare',
+  mixedBadge: 'stripes',
+  gateText: GATE_TEXT_OPEN,
   /**
    * ★ SỬA LỖI 2026-09-22: giá trị này từng là `#ffffff` và làm MỌI số cổng chưa
    * kích hoạt trong một trung tâm ĐÃ TÔ trở nên VÔ HÌNH.
@@ -222,7 +262,12 @@ export const CLASSIC: BodygraphTheme = {
    * `#centers g.defined .nums g.defined text { fill: rgb(51,59,66) }` — màu họ
    * dùng cho chữ NẰM TRÊN ĐĨA TRẮNG.
    */
-  gateTextOnFill: '#333b42',
+  /*
+   * ★ Aura A (2026-10-21): đĩa chưa kích hoạt TRONG SUỐT (`gateBadge: 'bare'`) ⇒ số nằm
+   *   thẳng trên màu trung tâm như ở bản tham chiếu, nên `gateTextOnFill` bỏ trống và
+   *   `openGateText` chọn trắng / ink theo màu trung tâm. Giá trị `#333b42` ở trên chỉ
+   *   còn đúng cho kiểu `'disc'`.
+   */
   gateTextActive: '#ffffff',
   gateFontSize: 26,
 };
@@ -233,26 +278,45 @@ export const MODERN: BodygraphTheme = {
   artwork: 'alternate',
   centerFill: CENTER_FILL,
   centerOpenFill: '#ffffff',
-  figureFill: '#e4e4e4',
-  triangleFill: '#f0f0f0',
+  figureFill: '#e6ebe7',
+  triangleFill: '#f1f3ef',
   mixedBandDuty: 0.7,
-  centerStroke: '#807c7c',
+  centerStroke: OUTLINE,
   centerStrokeWidth: 1.5,
   centerRadius: 16,
   channelOpenFill: '#ffffff',
-  badgeOpenStroke: '#807c7c',   // xem ghi chú ở CLASSIC — ngưỡng tương phản
+  // KHÔNG viền lưới — Hưng chốt 2026-10-21: Aura A chỉ bật viền cho Classic. Lệch đã biết
+  // (ruột kênh vs bóng người 1.21:1) khoá trong `contrast.spec.ts`.
+  badgeOpenStroke: OUTLINE,     // xem ghi chú ở CLASSIC — ngưỡng tương phản
   channelWidth: 20,
   personality: PERSONALITY_LIGHT,
   design: DESIGN,
   mixedStyle: 'bands',
-  gateText: '#000000',
-  gateTextOnFill: '#333b42',   // xem ghi chú ở CLASSIC — chữ nằm trên ĐĨA TRẮNG
+  gateBadge: 'bare',
+  mixedBadge: 'stripes',
+  gateText: GATE_TEXT_OPEN,
   gateTextActive: '#ffffff',
   gateFontSize: 24,
 };
 
 export const THEMES: Readonly<Record<ThemeName, BodygraphTheme>> =
   Object.freeze({ classic: CLASSIC, modern: MODERN });
+
+/**
+ * Màu số của cổng CHƯA kích hoạt — chọn theo NỀN THẬT dưới con số.
+ *  - trung tâm trống ⇒ `gateText`;
+ *  - trung tâm đã tô, kiểu `'disc'` ⇒ `gateTextOnFill` (số nằm trên đĩa trắng);
+ *  - trung tâm đã tô, kiểu `'bare'` ⇒ `gateTextOnFill` nếu khai, không thì trắng
+ *    hay ink `#172033`, cái nào tương phản hơn với màu trung tâm (Aura A §3a:
+ *    vàng ⇒ ink 10.92:1 · xanh / nâu / đỏ ⇒ trắng ≥ 4.70:1).
+ * Dùng chung cho renderer và `contrast.spec.ts` — một luật, một chỗ.
+ */
+export function openGateText(t: BodygraphTheme, definedCenterFill: string | null): string {
+  if (definedCenterFill === null) return t.gateText;
+  if (t.gateTextOnFill) return t.gateTextOnFill;
+  if (t.gateBadge !== 'bare') return t.gateText;
+  return textOnFill(definedCenterFill, PERSONALITY_LIGHT);
+}
 
 /* ══════════════════════════════════════════════════════════════════════════
  * CHART GHÉP — transit hoặc chu kỳ chồng lên chart cá nhân
@@ -281,8 +345,14 @@ export const THEMES: Readonly<Record<ThemeName, BodygraphTheme>> =
  *   tâm Ajna (ΔE2000 ≈ 8). Chữ trắng vẫn đạt: 5.14:1 và 8.54:1.
  *   Công cụ so: `tools/transit-overlay-preview.tsx … complete`.
  */
-export const COMPOSITE_BASE = '#008000';
-export const COMPOSITE_OTHER = '#3535c4';
+/*
+ * ★ Aura hướng A (Hưng chốt 2026-10-21, `docs/PLAN-bodygraph-aura.md` §1): giữ
+ *   xanh lá / xanh dương nhưng sẫm và dịu hơn — `#1f7a3a` (số trắng 5.38:1) ·
+ *   `#28309e` (10.46:1). Hai bên cách nhau 1.95:1 về độ sáng, không chỉ sắc.
+ *   Bản đo trên: `#008000` / `#3535c4`.
+ */
+export const COMPOSITE_BASE = '#1f7a3a';
+export const COMPOSITE_OTHER = '#28309e';
 /**
  * Dấu fixing do CẢ HAI chart gây ra (cột chart ghép) — Hưng chốt phương án B
  * 2026-09-23 (STATUS §5 #16). Bản tham chiếu dùng hồng `#ff48fc` cho đúng nghĩa này (lớp
@@ -290,7 +360,8 @@ export const COMPOSITE_OTHER = '#3535c4';
  * bão hoà, tới vừa 3:1 ⇒ `#ff29fb`. Dấu do MỘT bên kia gây ra thì dùng thẳng
  * màu BÊN ở trên — không cần màu mới.
  */
-export const COMPOSITE_BOTH = '#ff29fb';
+/* Aura A (2026-10-21): `#c4269f` — 4.91:1 trên nền `paper`. Bản trước `#ff29fb`. */
+export const COMPOSITE_BOTH = '#c4269f';
 
 /**
  * Bảng màu cho chart ghép. Renderer vẫn chỉ biết ba "khe" nguồn kích hoạt,
@@ -317,7 +388,9 @@ export function compositeTheme(t: BodygraphTheme, p: CompositePalette = COMPOSIT
  *   rằng ngọc chỉ ~1.88:1 trên nền trắng. Các chỗ hụt được KHOÁ là lệch đã biết
  *   trong `contrast.spec.ts` — đừng hạ ngưỡng chung, đừng "sửa" màu mà không hỏi.
  *   Riêng SỐ CỔNG trên đĩa Modern để màu TỐI (`gateText`): chữ trắng trên ngọc
- *   chỉ 1.88:1, chữ tối thì 9.4:1 — màu nền giữ đúng như Hưng chọn.
+ *   chỉ 1.88:1, chữ tối thì 9.4:1 — màu nền giữ đúng như Hưng chọn. *
+ * ★ Aura A (2026-10-21): Hưng chọn dùng CHUNG bảng A cho cả hai chủ đề ⇒ hai khoá
+ *   nay cùng giá trị, lệch ngọc ở trên là lịch sử.
  */
 export interface CompositePalette {
   /** Bên người (chart nền). */
@@ -332,5 +405,8 @@ export interface CompositePalette {
 export type CompositePaletteName = 'classic' | 'modern';
 export const COMPOSITE_PALETTES: Readonly<Record<CompositePaletteName, CompositePalette>> = {
   classic: { base: COMPOSITE_BASE, other: COMPOSITE_OTHER, both: COMPOSITE_BOTH, gateText: '#ffffff' },
-  modern: { base: '#6a8bb5', other: '#83cbb4', both: COMPOSITE_BOTH, gateText: '#1a1a1a' },
+  // ★ Aura A (Hưng chốt 2026-10-21): Modern dùng CHUNG bảng A với Classic — lệch "ngọc hụt
+  //   3:1" của bảng Modern tham chiếu (#6a8bb5 / #83cbb4, chữ tối #1a1a1a) không còn.
+  //   Vẫn giữ hai khoá để bảng đi theo chủ đề như cũ (`useCompositePalette`).
+  modern: { base: COMPOSITE_BASE, other: COMPOSITE_OTHER, both: COMPOSITE_BOTH, gateText: '#ffffff' },
 };

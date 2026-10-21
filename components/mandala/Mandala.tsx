@@ -13,7 +13,8 @@
  *     Phía nào kích hoạt thì đọc ở ký hiệu đỏ/đen trong nhánh — bản M3 đầu tô ô
  *     theo phía (hồng/xám/sọc) đã bỏ;
  *   · chữ số trên ô màu chọn TRẮNG hoặc `#111` theo tương phản (≥ 4.5:1, có test);
- *   · đỏ / đen đúng màu xuất xưởng của app (#ce4140 / #2f2f2f);
+ *   · đỏ / đen đúng màu của bodygraph — đọc từ `THEMES`, không giữ cặp hằng riêng
+ *     (Aura A 2026-10-21: #c63a2b / ink #172033);
  *   · vành 12 cung hoàng đạo ngoài cùng (tuỳ chọn `zodiac`);
  *   · bodygraph ở tâm (con `children`, xem `HubBodygraph`) — thu vừa vòng trong.
  *   Hình học bánh xe (`geometry.ts`: `MANDALA_ZERO_SCREEN_DEG`, vành cổng
@@ -57,12 +58,16 @@ export interface MandalaProps {
   colors?: { design?: string; personality?: string; centerFill?: Readonly<Record<CenterId, string>> };
 }
 
+/*
+ * ★ Aura A (Hưng chốt 2026-10-21, `docs/PLAN-bodygraph-aura.md` §2): vòng `ring`
+ *   #e8c48e mượn từ hướng B (1.60:1, chỉ trang trí — vẫn đúng BA vòng), số cổng
+ *   `ink-2` #4a5266 (7.81:1 trên trắng), hoàng đạo `dawn` #9a4e12 (6.05:1).
+ *   Bản trước: #d4d4d8 · #3f3f46 · #5f6873.
+ */
 const COLOR = {
-  personality: '#2f2f2f',
-  design: '#ce4140',
-  stroke: '#d4d4d8',
-  gateText: '#3f3f46',
-  zodiac: '#5f6873',
+  stroke: '#e8c48e',
+  gateText: '#4a5266',
+  zodiac: '#9a4e12',
 } as const;
 /** Độ đậm màu trung tâm nhuốm lên nhánh quạt của cổng được kích hoạt. */
 const WEDGE_TINT = 0.16;
@@ -117,7 +122,8 @@ function Planets({ side, set, bodies, colour }: { side: Side; set: ActivationSet
 export function Mandala(props: MandalaProps): JSX.Element {
   const { personality, design, activatedGates, gateSources, zodiac = false, className, title, children } = props;
   const bodies = props.bodies ?? DEFINING_BODIES_STANDARD;
-  const centerFill = props.colors?.centerFill ?? THEMES[props.theme ?? 'classic'].centerFill;
+  const th = THEMES[props.theme ?? 'classic'];
+  const centerFill = props.colors?.centerFill ?? th.centerFill;
   const pad = zodiac ? ZODIAC_PAD : 0;
   const s = VIEWBOX.size + 2 * pad;
 
@@ -208,8 +214,8 @@ export function Mandala(props: MandalaProps): JSX.Element {
         thì không — hai hình cạnh nhau, đếm ra hai con số khác nhau. Chiron không
         xuất hiện trên chart, xem ghi chú CHIRON ở `calc-core/ephemeris/bodies.ts`.
       */}
-      <Planets side="design" set={design} bodies={bodies} colour={props.colors?.design ?? COLOR.design} />
-      <Planets side="personality" set={personality} bodies={bodies} colour={props.colors?.personality ?? COLOR.personality} />
+      <Planets side="design" set={design} bodies={bodies} colour={props.colors?.design ?? th.design} />
+      <Planets side="personality" set={personality} bodies={bodies} colour={props.colors?.personality ?? th.personality} />
 
       {children && <g data-layer="hub">{children}</g>}
     </svg>

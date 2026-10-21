@@ -50,14 +50,19 @@ export interface HubBodygraphProps {
  *   mandala nền TRẮNG, bỏ ĐĨA XÁM. Mỗi chủ đề giữ trung tâm trống / kênh mở khỏi
  *   chìm vào nền trắng bằng cách hợp với nó nhất:
  *   · Classic — VIỀN MẢNH quanh lưới kênh (`channelOpenStroke`, cùng màu viền
- *     trung tâm `#807c7c`); không nền.
+ *     trung tâm `#7d8592`); không nền.
  *   · Modern — giữ BÓNG NGƯỜI xám của bản vẽ `alternate` như bản tham chiếu, không viền:
  *     kênh Modern là đường cong, viền hai bên từng kênh thành một mớ đường mảnh
  *     (đã thử trên mockup, Hưng thấy). Bóng người cắt gọn trong vòng trong.
- *   Viền chỉ bật cho bodygraph Ở TÂM mandala — bodygraph chính vẫn KHÔNG viền lưới
- *   (STATUS §5 #3).
+ *   Hồi đó viền chỉ bật cho bodygraph Ở TÂM; từ Aura A (2026-10-21) bodygraph chính
+ *   Classic cũng có viền lưới, Modern thì không (cả chính lẫn ở tâm).
  */
-const HUB_OUTLINE = '#807c7c';
+/*
+ * Aura A (2026-10-21): `#7d8592` — cùng viền với bodygraph chính, nay bodygraph chính
+ * Classic cũng có viền lưới. Modern ở tâm vẫn KHÔNG viền (luật trên) — Modern chính
+ * cũng không (Hưng chốt 2026-10-21); vẫn tắt tường minh cho chắc.
+ */
+const HUB_OUTLINE = '#7d8592';
 
 export function HubBodygraph({ theme, zodiac, ...rest }: HubBodygraphProps): JSX.Element {
   const art = ARTWORKS[THEMES[theme].artwork];
@@ -68,7 +73,7 @@ export function HubBodygraph({ theme, zodiac, ...rest }: HubBodygraphProps): JSX
   /* Nền = màu Illustrator tự chọn (nếu có) rồi mới thêm viền — thống nhất với Phase 3. */
   const base = rest.themeOverride;
   const themeOverride = useMemo(
-    () => (withFigure ? base : { ...(base ?? THEMES[theme]), channelOpenStroke: HUB_OUTLINE }), [base, theme, withFigure]);
+    () => ({ ...(base ?? THEMES[theme]), channelOpenStroke: withFigure ? undefined : HUB_OUTLINE }), [base, theme, withFigure]);
   const clipId = `hub-clip-${useId().replace(/:/g, '')}`;
 
   const side = mandalaSide(zodiac);
@@ -86,7 +91,7 @@ export function HubBodygraph({ theme, zodiac, ...rest }: HubBodygraphProps): JSX
       <g clipPath={`url(#${clipId})`} data-hub-style={withFigure ? 'figure' : 'outline'}>
         <g transform={`translate(${CENTER.x} ${CENTER.y}) scale(${k.toFixed(5)}) translate(${(-px).toFixed(3)} ${(-py).toFixed(3)})`}
            data-hub-bodygraph={art.id}>
-          <BodygraphArtwork art={bare} theme={theme} {...rest} {...(themeOverride ? { themeOverride } : {})} />
+          <BodygraphArtwork art={bare} theme={theme} {...rest} themeOverride={themeOverride} />
         </g>
       </g>
     </>

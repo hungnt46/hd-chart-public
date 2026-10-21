@@ -64,12 +64,31 @@ export const BACKZONES: Readonly<Record<string, TimeZoneLike>> = {
   ]),
 };
 
+/**
+ * Formatter tên viết tắt theo vùng, dựng MỘT lần. `IANAZone.offsetName` của luxon tạo `Intl.DateTimeFormat` mới mỗi lần gọi
+ * (~3 ms) — nhập tệp nghìn chart mất vài giây chỉ vì nó. Cùng đúng tham số luxon 3.7 (`parseZoneInfo`) ⇒ cùng kết quả.
+ */
+const SHORT_NAME = new Map<string, Intl.DateTimeFormat>();
+function shortNameFormat(zone: string): Intl.DateTimeFormat {
+  let f = SHORT_NAME.get(zone);
+  if (!f) {
+    f = new Intl.DateTimeFormat(undefined, {
+      timeZoneName: 'short', hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit',
+      timeZone: zone,
+    });
+    SHORT_NAME.set(zone, f);
+  }
+  return f;
+}
+
 class IcuZone implements TimeZoneLike {
   constructor(private readonly z: IANAZone) {}
   get name() { return this.z.name; }
   offset(ms: number) { return this.z.offset(ms); }
   offsetName(ms: number) {
-    try { return this.z.offsetName(ms, { format: 'short' }) ?? ''; } catch { return ''; }
+    try {
+      return shortNameFormat(this.z.name).formatToParts(new Date(ms)).find(p => p.type.toLowerCase() === 'timezonename')?.value ?? '';
+    } catch { return ''; }
   }
 }
 
@@ -77,7 +96,14 @@ class IcuZone implements TimeZoneLike {
 export function getZone(name: string): TimeZoneLike | null {
   const bz = BACKZONES[name];
   if (bz) return bz;
-  return IANAZone.isValidZone(name) ? new IcuZone(IANAZone.create(name)) : null;
+  // `IANAZone.isValidZone` dựng một `Intl.DateTimeFormat` mỗi lần gọi ⇒ nhớ kết quả theo tên (vùng không đổi trong phiên).
+  let z = ICU_ZONES.get(name);
+  if (z === undefined) {
+    z = IANAZone.isValidZone(name) ? new IcuZone(IANAZone.create(name)) : null;
+    ICU_ZONES.set(name, z);
+  }
+  return z;
 }
+const ICU_ZONES = new Map<string, TimeZoneLike | null>();
 
 export const isKnownZone = (name: string): boolean => getZone(name) !== null;

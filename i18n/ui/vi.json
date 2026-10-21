@@ -286,7 +286,7 @@
   "now.title": "Bầu trời lúc này",
   "now.auto": "tự cập nhật",
   "now.hint": "Chỉ transit · lập biểu đồ để ghép với chart của bạn",
-  "now.open": "Mở transit đầy đủ",
+  "now.open": "Xem transit đầy đủ",
   "now.channels": "Kênh transit",
   "now.centers": "Trung tâm xác định: {list}",
   "now.noChannels": "Lúc này không có kênh nào được xác định.",

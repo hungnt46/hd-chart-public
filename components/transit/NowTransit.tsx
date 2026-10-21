@@ -201,17 +201,18 @@ function NowCardFrame({ onOpen, day, err, row, fit }: {
           ? <Notice tone="danger">{err}</Notice>
           : <div aria-hidden="true" className="h-[var(--now-h)] w-full animate-pulse rounded-xl bg-sunken" />)}
       </div>
-      {/* Bản công khai (Hưng 2026-10-13, STATUS §5 #64): KHÔNG dòng gợi ý và KHÔNG lối vào transit đầy đủ —
-          thẻ chỉ là "bầu trời lúc này". Bản đầy đủ giữ nguyên. */}
-      {!PUBLIC_EDITION && (
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
-          <p className="text-ui text-on-dark-2" data-testid="now-hint">{t('now.hint')}</p>
-          <button type="button" onClick={onOpen} data-testid="now-open"
-                  className="btn border-on-dark bg-on-dark text-ink hover:bg-sunken focus-visible:outline-glow max-sm:w-full">
-            {t('now.open')} <span aria-hidden="true">→</span>
-          </button>
-        </div>
-      )}
+      {/*
+        Lối vào transit đầy đủ (artboard `Chart-Welcome`: nút "Xem transit đầy đủ →", điện thoại trải ngang). Bản công khai
+        có nút từ 2026-10-21 (Hưng, STATUS §5 #88 — đổi #64), vẫn KHÔNG dòng gợi ý "Chỉ transit · lập biểu đồ…"; bản
+        đầy đủ giữ dòng gợi ý.
+      */}
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+        {!PUBLIC_EDITION && <p className="text-ui text-on-dark-2" data-testid="now-hint">{t('now.hint')}</p>}
+        <button type="button" onClick={onOpen} data-testid="now-open"
+                className="btn min-h-11 border-on-dark bg-on-dark px-5 text-ink hover:bg-sunken focus-visible:outline-glow max-sm:min-h-12 max-sm:w-full">
+          {t('now.open')} <span aria-hidden="true">→</span>
+        </button>
+      </div>
     </section>
   );
 }
@@ -268,7 +269,8 @@ export function NowTransitWorkspace(): JSX.Element {
           </ChartCanvas>
         </section>
       </div>
-      {s.ut && (
+      {/* Bản công khai: không Theo dõi kích hoạt / Thay đổi sắp tới — như tab Transit (STATUS §5 #74, #88). */}
+      {s.ut && !PUBLIC_EDITION && (
         <div className="grid gap-3 xl:grid-cols-2">
           <div className="card min-w-0 scroll-mt-[calc(var(--topbar-h)+.5rem)] p-4" id="watch"><ActivationWatch jdRef={dateUTToJd(s.ut)} /></div>
           <div className="card min-w-0 scroll-mt-[calc(var(--topbar-h)+.5rem)] p-4" id="changes"><ChangesTable jdRef={dateUTToJd(s.ut)} zone={deviceZone()} /></div>

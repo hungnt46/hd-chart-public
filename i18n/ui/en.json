@@ -286,7 +286,7 @@
   "now.title": "The sky right now",
   "now.auto": "updates live",
   "now.hint": "Transit only · make a chart to overlay it on yours",
-  "now.open": "Open full transit",
+  "now.open": "View full transit",
   "now.channels": "Transit channels",
   "now.centers": "Defined centers: {list}",
   "now.noChannels": "No channel is defined right now.",

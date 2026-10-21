@@ -37,7 +37,7 @@ import { canonicalZone, isValidZone, zoneCityName } from '../lib/place/timezones
 import { typeName } from '../i18n/terms';
 import { momentLabel } from '../components/time-mode/format';
 import { useTimeMode } from '../components/time-mode/TimeModeProvider';
-import { TopBar } from '../components/shell/TopBar';
+import { IdentityCard, SettingsButton, TopBar } from '../components/shell/TopBar';
 import { ChartDrawer } from '../components/shell/ChartDrawer';
 import { ChartWorkspace } from '../components/workspace/ChartWorkspace';
 import { ViewTabs, type View } from '../components/shell/ViewTabs';
@@ -51,7 +51,6 @@ import dynamic from 'next/dynamic';
 import { fromChart, fromJson, hasPlanets, isEmpty, toJson, toRenderSets } from '../lib/illustrator/model';
 import type { SavedIllustration } from '../lib/storage/types';
 import { dateUTToJd } from '../calc-core/time/julian';
-import { PUBLIC_EDITION } from '../lib/edition';
 import { useEmbed } from '../components/embed/useEmbed';
 
 /*
@@ -314,6 +313,18 @@ export default function Page() {
   };
   const openIllustrator = () => { setIlluOn(true); setDrawer({ open: false, newOpen: false }); window.scrollTo({ top: 0 }); };
   const closeDrawer = () => { pickForIllu.current = false; setDrawer({ open: false, newOpen: false }); };
+  const onLibrary = () => {
+    // Chưa có chart thì kho nằm ngay trên màn chào — cuộn tới đó thay vì mở ngăn kéo.
+    pickForIllu.current = false;
+    if (!result && !illuOn) {
+      // Đang ở transit-lúc-này (chưa có chart): về màn chào trước — Kho nằm ở đó.
+      setNowOn(false);
+      requestAnimationFrame(() => { document.getElementById('library-h')?.scrollIntoView({ block: 'start' }); document.getElementById('library-h')?.focus(); });
+      return;
+    }
+    setDrawer(d => ({ open: !d.open || d.newOpen, newOpen: false }));
+  };
+  const onSave = () => { setDrawer({ open: true, newOpen: false }); setSaveReq(n => n + 1); };
 
   return (
     <>
@@ -335,19 +346,9 @@ export default function Page() {
               } : undefined}
               nav={result ? <ViewTabs view={view} setView={setView} /> : undefined}
               now={!result && !illuOn && nowOn ? { onExit: () => setNowOn(false) } : undefined}
-              onLibrary={() => {
-                // Chưa có chart thì kho nằm ngay trên màn chào — cuộn tới đó thay vì mở ngăn kéo.
-                pickForIllu.current = false;
-                if (!result && !illuOn) {
-                  // Đang ở transit-lúc-này (chưa có chart): về màn chào trước — Kho nằm ở đó.
-                  setNowOn(false);
-                  requestAnimationFrame(() => { document.getElementById('library-h')?.scrollIntoView({ block: 'start' }); document.getElementById('library-h')?.focus(); });
-                  return;
-                }
-                setDrawer(d => ({ open: !d.open || d.newOpen, newOpen: false }));
-              }}
+              onLibrary={onLibrary}
               onNewChart={() => { setFormKey(k => k + 1); setDrawer({ open: true, newOpen: true }); }}
-              onSave={() => { setDrawer({ open: true, newOpen: false }); setSaveReq(n => n + 1); }} />
+              onSave={onSave} />
 
       <p role="status" aria-live="polite" className="sr-only">{busy ? t('app.computing') : announce}</p>
 
@@ -358,9 +359,14 @@ export default function Page() {
                      form={form} library={library} />
       )}
 
-      {/* Có thanh đáy thì chừa đáy trang: 49px + vùng an toàn + một khoảng thở. */}
-      <main className={`mx-auto max-w-[120rem] px-2 pt-2.5 sm:px-3 ${bottomNav ? 'pb-[calc(3.0625rem+env(safe-area-inset-bottom)+1.5rem)]'
-        : phone && !result && !illuOn && !embed ? 'pb-[calc(5.25rem+env(safe-area-inset-bottom))]' : embed ? 'pb-2' : 'pb-10'}`}>
+      {/* Có thanh đáy thì chừa đáy trang: ~62px + vùng an toàn + một khoảng thở. */}
+      {/*
+        ★ Lề trang. Màn chào: rộng tối đa 1376px, lề 32px như artboard. Trang CHART điện thoại 20px / tablet 24px
+          như artboard; từ 1024px lề 16px, rộng tới 120rem, lề trên 12px — luật 8px (ui.spec): ở 1440×900 với header 72px, số cổng chỉ ≥ 8px khi khung biểu đồ
+          rộng ≥ ~1166px VÀ cao ≥ ~804px; lề 32px + gờ 20px của artboard cho 7.32px (đo 2026-10-21).
+      */}
+      <main className={`mx-auto ${result || illuOn || nowOn ? 'max-w-[120rem] px-5 pt-4 sm:px-6 sm:pt-5 lg:px-4 lg:pt-3' : 'max-w-[86rem] px-5 pt-4 sm:px-6 sm:pt-5 lg:px-8'} ${bottomNav ? 'pb-[calc(4rem+env(safe-area-inset-bottom)+1.5rem)]'
+        : embed ? 'pb-2' : 'pb-10'}`}>
         {/* Đang tính lại khi đã có chart (mở từ kho, chart mới): vạch chạy ở đỉnh — audit F11. */}
         {busy && result && (
           <div className="fixed inset-x-0 top-[calc(var(--topbar-h)+env(safe-area-inset-top))] z-40 h-1 overflow-hidden bg-sunken"
@@ -373,27 +379,38 @@ export default function Page() {
         {illuOn ? (
           <IllustratorWorkspace api={illu} load={illuLoad} />
         ) : result ? (
-          <ChartWorkspace {...result} view={view} setView={setView} />
+          <ChartWorkspace {...result} view={view} setView={setView}
+                          identity={identity && !phone ? <IdentityCard identity={identity} drawerOpen={drawer.open} onOpen={onLibrary} onSave={onSave} /> : undefined} />
         ) : nowOn ? (
           <NowTransitWorkspace />
         ) : (
           /*
-           * Giao diện D (Hưng duyệt 2026-10-04) + "Bầu trời lúc này" (phương án D, 2026-10-05,
-           * theo human-design-system.com): máy tính — cột trái form rồi Kho chart, cột phải
-           * transit hiện tại; điện thoại — form, transit, Kho (thứ tự DOM).
+           * ★ Màn chào — Aura (Hưng duyệt 2026-10-21, artboard `Chart-Welcome` / `-Mobile`): cột trái nhãn
+           *   "TẠO CHART" + Kho chart → + cài đặt, tiêu đề Newsreader, lời dẫn, form trong thẻ, rồi Kho chart;
+           *   cột phải thẻ "Bầu trời lúc này" nền tối. Điện thoại: form, Bầu trời, Kho, cài đặt (thứ tự DOM).
+           *   Thẻ "Chart gần đây" của artboard là Đợt 2 — tới đó Kho chart đầy đủ đứng dưới form.
            */
-          <div className="mx-auto grid max-w-5xl items-start justify-center gap-4 py-2 lg:grid-cols-[30rem_31.25rem] lg:grid-rows-[auto_1fr] lg:gap-6 lg:py-10">
-            {/* Điện thoại (mockup M1): tiêu đề nằm trên NỀN trang, các ô trong thẻ trắng riêng (BirthForm `welcome`). */}
-            <section className={`lg:col-start-1 lg:row-start-1 ${phone ? 'px-2 pt-2' : 'card p-5 sm:p-8'}`} aria-labelledby="welcome-h">
-              <h2 id="welcome-h" className="text-3xl font-bold leading-tight tracking-tight max-sm:text-[length:var(--text-title-phone)]">{t('welcome.heading')}</h2>
-              {/* Bản công khai bỏ dòng "Tính ngay trên máy bạn…" (Hưng 2026-10-15, STATUS §5 #68). */}
-              {!PUBLIC_EDITION && <p className="mt-1.5 text-base text-ink-3" data-testid="welcome-tagline">{t('app.tagline')}</p>}
-              <div className="mt-5 max-sm:mt-4">{form}</div>
+          <div className="mx-auto grid max-w-[71rem] items-start gap-5 pb-4 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-10 lg:pt-9">
+            <section className="flex flex-col gap-5 lg:col-start-1 lg:row-start-1" aria-labelledby="welcome-h">
+              <div className="flex items-center justify-between gap-4 max-sm:pt-2">
+                <p className="card-heading">{t('welcome.kicker')}</p>
+                <div className="flex items-center gap-1 text-sm">
+                  <button type="button" onClick={onLibrary} className="btn btn-ghost" data-testid="welcome-library">
+                    {t('shell.library')} <span aria-hidden="true">→</span>
+                  </button>
+                  {!phone && <SettingsButton long className="btn btn-ghost gap-1 px-3" />}
+                </div>
+              </div>
+              <h2 id="welcome-h" className="display text-4xl leading-[1.05] [text-wrap:balance] sm:text-[length:var(--text-welcome)]">{t('welcome.heading')}</h2>
+              <p className="max-w-[35rem] text-[length:var(--text-lead)] leading-relaxed text-ink-2">{t('welcome.lead')}</p>
+              {/* Dòng "Tính ngay trên máy bạn…" dưới tiêu đề đã BỎ (Aura): artboard đặt câu tương tự DƯỚI nút
+                  "Lập biểu đồ" (`welcome-note` trong `BirthForm`). */}
+              <div className="card p-5 sm:p-7">{form}</div>
               {/* Lối vào Illustrator ở màn chào đã BỎ (Hưng 2026-10-05): Illustrator là công cụ vẽ
                   minh hoạ cho người dạy, không phải lối cho người "không có ngày sinh". Vào từ
                   menu "Chart mới ▾" khi đã có chart, hoặc mở bản vẽ đã lưu từ Kho chart. */}
             </section>
-            <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
+            <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:mt-16">
               <NowTransitCard onOpen={() => { setNowOn(true); window.scrollTo({ top: 0 }); }} />
             </div>
             <section className="card p-5 sm:p-7 lg:col-start-1 lg:row-start-2">
@@ -405,6 +422,12 @@ export default function Page() {
                 </div>
               ) : library}
             </section>
+            {phone && (
+              <div className="flex items-center justify-between gap-3 text-sm">
+                <span className="text-ink-2">{t('app.language')} · {t('time.group')}</span>
+                <SettingsButton long className="btn gap-1 px-3.5" align="end" />
+              </div>
+            )}
           </div>
         )}
         {/* Ghi công GeoNames + "Mã nguồn (AGPL-3.0)" đã chuyển từ chân trang vào menu (Hưng 2026-10-15, STATUS §5 #69)

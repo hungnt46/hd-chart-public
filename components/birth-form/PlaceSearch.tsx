@@ -146,8 +146,13 @@ export function PlaceSearch({ onPick, className, short = false, initialQuery = '
              onKeyDown={onKeyDown}
              className={`${className} pl-10`} data-testid="place-input" />
       {showList && (
-        <ul id="place-listbox" role="listbox" aria-label={t('form.place')}
-            className="absolute z-20 mt-1 max-h-80 w-full overflow-y-auto rounded-lg border border-field bg-surface shadow-lg">
+        /*
+         * ★ Ghi công GeoNames (CC-BY 4.0) ở CUỐI danh sách gợi ý — Aura "cách 2" (Hưng 2026-10-21): thay dòng
+         *   ở chân trang / trong menu. Nằm NGOÀI `listbox` (chỉ chứa `option`); mousedown không cướp focus.
+         */
+        <div className="absolute z-20 mt-1 w-full overflow-hidden rounded-[.875rem] border border-line bg-surface shadow-[var(--shadow-pop)]"
+             onMouseDown={e => e.preventDefault()}>
+        <ul id="place-listbox" role="listbox" aria-label={t('form.place')} className="max-h-80 overflow-y-auto">
           {results.map((c, i) => (
             <li key={`${c.name}|${c.admin}|${c.countryCode}|${c.ianaZone}|${i}`} id={`place-opt-${i}`}
                 role="option" aria-selected={i === active}
@@ -155,7 +160,7 @@ export function PlaceSearch({ onPick, className, short = false, initialQuery = '
                 // mousedown chứ không click: click đến SAU blur, lúc đó danh sách đã đóng.
                 onMouseDown={e => { e.preventDefault(); pick(c); }}
                 onMouseEnter={() => setActive(i)}
-                className={`min-h-11 cursor-pointer px-3 py-2 text-sm ${i === active ? 'bg-sunken' : ''}`}>
+                className={`min-h-12 cursor-pointer px-3.5 py-2 text-sm ${i > 0 ? 'border-t border-line' : ''} ${i === active ? 'bg-sunken' : ''}`}>
               <span className="font-medium">{c.name}</span>
               <span className="block text-xs text-ink-2">
                 {[c.admin && c.admin !== c.name ? c.admin : '', countryName(c)].filter(Boolean).join(', ')}
@@ -164,6 +169,11 @@ export function PlaceSearch({ onPick, className, short = false, initialQuery = '
             </li>
           ))}
         </ul>
+        <p className="border-t border-line px-3.5 py-1.5 text-right text-overline text-ink-2" data-testid="place-credit">
+          {t('credit.places')}: <a href="https://www.geonames.org/" target="_blank" rel="noopener noreferrer"
+                                   className="text-ink-2 underline">GeoNames</a> (CC-BY 4.0)
+        </p>
+        </div>
       )}
       <span id="place-status" role="status" aria-live="polite" className="hint mt-1 block empty:hidden"
             data-testid="place-status">

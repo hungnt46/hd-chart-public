@@ -124,6 +124,11 @@ const LAYOUT = {
  * ★ Aura A (2026-10-21): đỏ / ink đọc THẲNG từ bảng màu bodygraph (#c63a2b / #172033) để
  *   cột và thanh không bao giờ lệch nhau; transit theo `COMPOSITE_OTHER` mới #28309e.
  */
+/*
+ * ★ Aura (Hưng chốt 2026-10-21): chữ số cột ĐỌC màu của bodygraph (`THEMES.classic`) — đỏ Design `#c63a2b`,
+ *   Personality mực `#172033` — để cột và thanh cùng MỘT đỏ (canvas vẽ #b3302f khi đỏ bodygraph còn cũ; Hưng chọn
+ *   dùng chung sau khi so cạnh thanh đỏ mới). Không ghim mã màu ở đây.
+ */
 const COLOUR: Record<ColumnSide, string> = {
   design: THEMES.classic.design, personality: THEMES.classic.personality, transit: COMPOSITE_OTHER,
 };
@@ -142,17 +147,21 @@ const HEADING: Record<ColumnSide, string> = {
  *       màu bên, chữ màu bên SẪM dần tới ≥ 5.5:1 (`pillInk`) — Aura A: lục #1f7a3a ra
  *       #1a6731 trên #e9f2eb (6.06:1), lam #28309e giữ nguyên trên #eaeaf5 (8.76:1).
  */
+/* Aura (artboard `Chart-HeaderC`): chữ HOA 600 giãn .08em. Cột gọn hẹp ⇒ "PERS." như artboard `Chart-Mobile`. */
 const PILL_TEXT: Record<ColumnSide, string> = {
-  design: 'Design', personality: 'Personality', transit: 'Transit',
+  design: 'DESIGN', personality: 'PERSONALITY', transit: 'TRANSIT',
 };
+const PILL_SHORT: Record<ColumnSide, string> = { ...PILL_TEXT, personality: 'PERS.' };
+/* Viền viên Design và nền viên Personality — số của artboard (`#E8C4C4`, Aura `mist`). */
+const PILL_DESIGN_LINE = '#e8c4c4';
 /** Aura A (2026-10-21): `mist` #eef2ef — trước là `sunken` ấm #eeedea. */
 const PILL_SUNKEN = '#eef2ef';
 interface PillGeom { y: number; h: number; padX: number; size: number }
 /** Viên của cột CHUẨN (đơn vị khung tham chiếu) và của cột GỌN điện thoại (đơn vị = px). */
-const PILL: PillGeom = { y: -2, h: 66, padX: 30, size: 32 };
+const PILL: PillGeom = { y: -2, h: 62, padX: 31, size: 31 };
 const PILL_COMPACT: PillGeom = { y: 0.5, h: 14, padX: 5, size: 7.5 };
 /** Bề ngang viên ƯỚC theo số ký tự (SVG không tự co hộp theo chữ; dựng trên máy chủ nên không đo được). */
-const pillWidth = (text: string, g: PillGeom) => Math.round(text.length * g.size * 0.6) + 2 * g.padX;
+const pillWidth = (text: string, g: PillGeom) => Math.round(text.length * g.size * 0.76) + 2 * g.padX;
 
 const rgb = (h: string) => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)) as [number, number, number];
 const toHex = (c: readonly number[]) => `#${c.map(v => Math.round(v).toString(16).padStart(2, '0')).join('')}`;
@@ -170,18 +179,10 @@ function HeadPill({ x, anchor, text, colour, style, g = PILL }: {
   x: number; anchor: 'start' | 'end' | 'middle'; text: string; colour: string; style: PillStyle; g?: PillGeom;
 }) {
   /*
-   * ★ BẢN CÔNG KHAI (Hưng 2026-10-15, STATUS §5 #73): nhãn CHỈ CÒN CHỮ, không viên bo tròn (Hưng: "không cần
-   *   shape bo tròn"). Màu chữ như trong viên.
+   * Bản công khai từng chỉ in CHỮ, không viên (STATUS §5 #73). Aura (Hưng 2026-10-21, mục B3): VIÊN trở lại ở
+   * cả hai bản, đúng artboard.
    */
-  if (PUBLIC_EDITION) {
-    const ink = style === 'tint' ? pillInk(colour, '#ffffff') : colour;
-    return (
-      <g data-head-pill="text">
-        <text x={x} y={g.y + g.h / 2} dominantBaseline="central" textAnchor={anchor}
-              fontSize={g.size * 1.1} fontWeight={700} fill={ink}>{text}</text>
-      </g>
-    );
-  }
+  text = text.toLocaleUpperCase();
   const w = pillWidth(text, g);
   const x0 = anchor === 'start' ? x : anchor === 'end' ? x - w : x - w / 2;
   const fill = style === 'white' ? '#ffffff' : style === 'sunken' ? PILL_SUNKEN : pillTint(colour);
@@ -189,9 +190,9 @@ function HeadPill({ x, anchor, text, colour, style, g = PILL }: {
   return (
     <g data-head-pill={style}>
       <rect x={x0} y={g.y} width={w} height={g.h} rx={g.h / 2}
-            fill={fill} stroke={style === 'white' ? colour : 'none'} strokeOpacity={0.35} strokeWidth={g.size / 10.7} />
+            fill={fill} stroke={style === 'white' ? PILL_DESIGN_LINE : 'none'} strokeWidth={g.size / 12} />
       <text x={x0 + w / 2} y={g.y + g.h / 2} dominantBaseline="central" textAnchor="middle"
-            fontSize={g.size} fontWeight={700} fill={ink}>{text}</text>
+            fontSize={g.size} fontWeight={600} letterSpacing="0.08em" fill={ink}>{text}</text>
     </g>
   );
 }
@@ -470,7 +471,9 @@ const COMPACT = { w: 60, head: 20, headWithDate: 31, date: 8.5, value: 12.5, gly
  *   Bố cục ở `data-mobile="sides"` (`app/globals.css`), CHỈ Classic. Bản đầy đủ + Modern giữ `COMPACT` ở góc.
  */
 /* #73 (Hưng 2026-10-15): chữ nhỏ lại 15 → 13.5px, cột hẹp 66 → 60px để bodygraph to hơn. */
-const COMPACT_SIDE = { w: 60, head: 22, headWithDate: 36, date: 9, value: 13.5, glyph: 13, minPitch: 15 };
+/* Aura (Hưng 2026-10-21): bước dòng tối thiểu 15 → 14 — lề trang điện thoại 20px + đệm khung 12px làm tab Transit
+   "Ghép" chỉ còn bước 13.5px ⇒ chữ co về 12.2px (< 13, luật #73); với 14 chữ ~13.1px, dòng sát hơn một chút. */
+const COMPACT_SIDE = { w: 60, head: 22, headWithDate: 36, date: 9, value: 13.5, glyph: 13, minPitch: 14 };
 const PILL_SIDE: PillGeom = { y: 0.5, h: 16, padX: 5, size: 8.5 };
 
 export function CompactPlanetColumn({
@@ -525,7 +528,7 @@ export function CompactPlanetColumn({
             </filter>
           </defs>
           {/* Viên đầu cột như cột chuẩn (giao diện D) — có nền riêng nên đứng NGOÀI lớp viền trắng. */}
-          <HeadPill x={x.head} anchor={onLeft ? 'start' : 'end'} text={PILL_TEXT[side]} colour={colour}
+          <HeadPill x={x.head} anchor={onLeft ? 'start' : 'end'} text={PILL_SHORT[side]} colour={colour}
                     style={side === 'design' ? 'white' : side === 'personality' ? 'sunken' : 'tint'}
                     g={sideLayout ? PILL_SIDE : PILL_COMPACT} />
           <g filter={`url(#${haloId})`}>

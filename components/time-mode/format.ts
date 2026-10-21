@@ -44,7 +44,8 @@ export function deviceZone(): string {
  *    #418 đúng một lần trong dự án này (`app/__tests__/ssr-hydration.spec.tsx`).
  *    Offset thì lấy từ luxon — nó chỉ trả về SỐ phút, không phải chữ.
  *
- * Thứ tự ngày theo ngôn ngữ: `vi` dùng DD-MM-YYYY, `en` dùng YYYY-MM-DD.
+ * Thứ tự ngày theo ngôn ngữ: `vi` dùng DD/MM/YYYY (Aura, Hưng chốt 2026-10-21, mục B8 — cùng kiểu ô nhập
+ * ngày; trước là DD-MM-YYYY), `en` dùng YYYY-MM-DD.
  */
 export function localLabel(jdUT: number, zone: string | undefined, lang: string): string {
   const ms = Math.round(msOfJd(jdUT) / 60000) * 60000;
@@ -53,7 +54,7 @@ export function localLabel(jdUT: number, zone: string | undefined, lang: string)
   const d = new Date(ms + offset * 60000);
   const p = (n: number) => String(n).padStart(2, '0');
   const [Y, M, D] = [d.getUTCFullYear(), p(d.getUTCMonth() + 1), p(d.getUTCDate())];
-  const day = lang === 'vi' ? `${D}-${M}-${Y}` : `${Y}-${M}-${D}`;
+  const day = lang === 'vi' ? `${D}/${M}/${Y}` : `${Y}-${M}-${D}`;
   return `${day} ${p(d.getUTCHours())}:${p(d.getUTCMinutes())}`;
 }
 

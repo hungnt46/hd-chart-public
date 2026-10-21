@@ -1,26 +1,27 @@
 @import "tailwindcss";
 
 /*
- * ★ HỆ THỐNG GIAO DIỆN — hướng A "Bàn đo" (Hưng chốt 2026-09-25), làm mới theo
- *   hướng D "Studio sáng" (Hưng duyệt 2026-10-04, docs/PLAN-giao-dien-D.md): nền
- *   xám ẤM, thẻ không viền mà nổi bằng bóng `shadow-card`, bo góc rộng hơn.
+ * ★ HỆ THỐNG GIAO DIỆN — bố cục hướng A "Bàn đo" (Hưng chốt 2026-09-25), VỎ theo
+ *   "Ánh Sáng Aura" (Hưng duyệt 2026-10-21, docs/PLAN-giao-dien-aura.md — token lấy từ
+ *   Design System "Human Design Vietnam" của website): nền `paper` trắng ấm, thẻ trắng
+ *   viền `line` bo 22px gần như KHÔNG bóng, nút / tab dạng viên.
  *
- * Vỏ giao diện TRUNG TÍNH: màu bão hoà duy nhất trên màn hình phải là
- * màu mang nghĩa Human Design (đỏ Design, đen Personality, lục/lam chart ghép,
- * màu trung tâm). Vì thế KHÔNG có màu nhấn trang trí — nút chính dùng mực đen.
- * Đừng thêm một màu "thương hiệu" vào đây: nó sẽ đứng cạnh màu HD và bị đọc
- * thành một nghĩa.
+ * Màu bão hoà trên màn hình vẫn chủ yếu là màu mang nghĩa Human Design (đỏ Design,
+ * đen Personality, lục/lam chart ghép, màu trung tâm). Aura thêm ĐÚNG MỘT màu nhấn
+ * CHO CHỮ — `dawn` (nhãn chữ hoa đầu thẻ) — và một nền ấm `sun` cho thẻ Type ("phần
+ * của bạn"). `dawn` không làm nền nút, không làm đường nét: nó là chữ nhỏ, không đứng
+ * cạnh màu HD mà bị đọc thành một nghĩa.
  *
- * Tương phản (WCAG 2.2, tính trên nền trắng · nền trang #f2f1ee), có cổng kiểm
- * ở `components/ui/__tests__/tokens.spec.ts`:
- *   ink   #1b1f24  16.6 · 14.7      chữ chính, nút chính
- *   ink-2 #4b535c   7.8 ·  6.9      chữ phụ
- *   ink-3 #5f6873   5.7 ·  5.0      chú thích — thấp nhất được phép cho chữ
- *   field #8a857c   3.7 ·  3.3      viền ô nhập (ranh giới đồ hoạ ≥ 3:1)
- *   line  #e6e3dd   trang trí — KHÔNG dùng làm ranh giới duy nhất của ô nhập
- * ⚠ Mockup D vẽ viền ô nhập #b9b4ab — chỉ 2.06:1, sai luật; dùng `field`.
- * Đỏ Design #ce4140 chỉ đạt 4.17:1 trên nền trang ⇒ chữ đỏ luôn đặt trên
- * nền TRẮNG (khung biểu đồ, thẻ), không đặt thẳng trên nền trang.
+ * Tương phản (WCAG 2.2, trên nền thẻ trắng · nền trang `paper`), có cổng kiểm ở
+ * `components/ui/__tests__/tokens.spec.ts`:
+ *   ink   #172033  16.3 · 15.7      chữ chính, nút chính
+ *   ink-2 #4a5266   7.8 ·  7.5      chữ phụ
+ *   ink-3 #596174   6.2 ·  6.0      chú thích — thấp nhất được phép cho chữ
+ *   dawn  #9a4e12   6.1 ·  5.8      nhãn chữ hoa (4.95 trên `sun`)
+ *   field #7d8592   3.7 ·  3.6      viền ô nhập VÀ nút phụ (Aura `control`, ranh giới ≥ 3:1)
+ *   line  #dce1dd   trang trí — KHÔNG dùng làm ranh giới duy nhất của ô nhập
+ * Đỏ Design #ce4140 đạt 4.55:1 trên `paper` nhưng 4.17 trên `sunken` ⇒ chữ đỏ vẫn đặt
+ * trên nền TRẮNG (khung biểu đồ, thẻ).
  */
 
 /*
@@ -34,23 +35,39 @@
 /* Chế độ NHÚNG (`?embed=1`, chỉ bản công khai — `components/embed/EmbedBridge.tsx`). Bản đầy đủ không bao giờ có `data-embed`. */
 @custom-variant embed (&:where(html[data-embed], html[data-embed] *));
 @theme {
-  /* Nền ấm hướng D (2026-10-04). Số cũ (hướng A, lạnh): page #f3f4f6 · subtle #f6f7f9 ·
-     sunken #eef0f3 · line #e1e4e8 · control #d0d5db · field #858d97. */
-  --color-page: #f2f1ee;
-  --color-surface: #ffffff;
-  /* Nền KHUNG BIỂU ĐỒ — Aura `paper` (bodygraph hướng A, 2026-10-21, `docs/PLAN-bodygraph-aura.md` §1). */
+  /* Ánh Sáng Aura (2026-10-21). Số cũ (hướng D, ấm-xám): page #f2f1ee · subtle #f7f6f3 ·
+     sunken #eeedea · line #e6e3dd · control #dcd8d0 · field #8a857c · ink #1b1f24. */
+  --color-page: #fbfbf8;        /* Aura `paper` */
+  --color-surface: #ffffff;     /* Aura `card` */
+  /* Nền KHUNG BIỂU ĐỒ — Aura `paper` (bodygraph hướng A, 2026-10-21, `docs/PLAN-bodygraph-aura.md` §1). Trùng số với
+     `page` từ khi vỏ theo Aura — giữ CẢ HAI token: một là nền trang, một là nền biểu đồ. */
   --color-paper: #fbfbf8;
-  --color-subtle: #f7f6f3;
-  --color-sunken: #eeedea;
-  --color-line: #e6e3dd;
-  --color-field: #8a857c;
-  /* Viền NÚT (không phải ô nhập): nhạt như proposal — nút có chữ nên không cần ranh giới 3:1. */
-  --color-control: #dcd8d0;
-  --color-ink: #1b1f24;
+  --color-subtle: #f5f7f5;      /* rê chuột trên nền trắng */
+  --color-sunken: #eef2ef;      /* Aura `mist` — nền khối phụ, chip kênh, viên Personality */
+  --color-line: #dce1dd;
+  /* Viền tab / chip CHƯA chọn (1.57:1 — trang trí; tab còn phân biệt bằng chữ). */
+  --color-line-strong: #c9d0cb;
+  --color-field: #7d8592;
+  /* Viền NÚT phụ — Aura vẽ nút viền `control` #7d8592 (3.7:1), cùng màu viền ô nhập. */
+  --color-control: #7d8592;
+  --color-ink: #172033;
   /* Nền nút chính khi rê chuột — trước viết cứng trong `.btn-primary:hover`. */
-  --color-ink-hover: #343a42;
-  --color-ink-2: #4b535c;
-  --color-ink-3: #5f6873;
+  --color-ink-hover: #2b3550;
+  --color-ink-2: #4a5266;
+  --color-ink-3: #596174;
+  /* Màu nhấn DUY NHẤT cho chữ (Aura `dawn`): nhãn chữ hoa giãn chữ đầu thẻ, rê link. */
+  --color-dawn: #9a4e12;
+  /* Nền ấm "phần của bạn" — thẻ Type. Chữ trên đó: ink 13.3:1, dawn 4.95:1. */
+  --color-sun: #fbe6c2;
+  /* Trên nền tối `ink` (thẻ "Bầu trời lúc này"): nhấn `glow` 9.9:1, chữ phụ `on-dark-2` 10:1. */
+  --color-glow: #f2c27a;
+  --color-on-dark: #fbfbf8;
+  --color-on-dark-2: #c5cbd8;
+  /*
+   * Nét MỜ của nút "i" ghi công (Hưng 2026-10-21, cách 2): cố ý khó thấy, 2.6:1 —
+   * Hưng chốt nút này KHÔNG theo WCAG. Chỉ dùng cho nút đó; tokens.spec không kiểm.
+   */
+  --color-faint: #9aa1ac;
   --color-danger: #b42318;
   --color-danger-bg: #fdecea;
   /* Viền hộp báo lỗi / cảnh báo — trước là `border-[#f3b8b1]`, `border-[#f0c890]` rải ở ba tệp. */
@@ -67,8 +84,8 @@
    *   --color-live: #9f1c1c;  --color-live-hover: #861717;
    * (hai số dưới đây), không cần sửa chỗ nào khác.
    */
-  --color-live: #1b1f24;
-  --color-live-hover: #343a42;
+  --color-live: #172033;        /* = ink (Aura) */
+  --color-live-hover: #2b3550;  /* = ink-hover */
   --color-live-red: #9f1c1c;
   --color-live-red-hover: #861717;
   /*
@@ -85,7 +102,7 @@
   --text-overline: .6875rem;   /* 11px   tiêu đề thẻ chữ hoa, nhãn nhỏ (tag) */
   --text-caption: .71875rem;   /* 11.5px chú thích, nhãn trường thuộc tính */
   --text-ui: .8125rem;         /* 13px   chữ trong thẻ, nhãn ô nhập, liên kết hành động */
-  --text-control: .84375rem;   /* 13.5px chữ trên nút */
+  --text-control: .875rem;     /* 14px   chữ trên nút (Aura 14/500; trước 13.5/400) */
   /* Hướng D (2026-10-04). Tiêu đề Type dùng thang sẵn của Tailwind: text-4xl 36px
      (bảng ≥ 1600px) · text-2xl 24px (bảng 14rem) · text-3xl 30px (điện thoại). */
   --text-prop: .90625rem;      /* 14.5px nhãn + giá trị ô thuộc tính */
@@ -93,20 +110,64 @@
   --text-card: .9375rem;       /* 15px   tiêu đề thẻ bảng phải (`.card-heading`) */
   --text-input: .9375rem;      /* 15px   ô nhập máy tính (điện thoại 17px — `--text-input-touch`) */
   --text-input-touch: 1.0625rem; /* 17px ô nhập < 640px (iOS tự phóng khi < 16px) */
+  /* Aura (2026-10-21). */
+  --text-brand: 1.375rem;      /* 22px   "Human Design" của chữ hiệu trên header */
+  --text-site-menu: 1.75rem;   /* 28px   link trong bảng menu website (Newsreader) */
+  --text-type: 2.125rem;       /* 34px   tiêu đề Type ở thẻ `sun` (bảng ≥ 20rem) */
+  --text-type-md: 2rem;        /* 32px   tiêu đề Type khi bảng ≥ 40rem (tablet, artboard `Tablet`) */
+  --text-now: 1.75rem;         /* 28px   tiêu đề thẻ "Bầu trời lúc này" */
+  --text-lead: 1.125rem;       /* 18px   lời dẫn dưới tiêu đề màn chào */
+  --text-welcome: 3rem;        /* 48px   tiêu đề màn chào máy tính (điện thoại 34px — text-4xl gần nhất: 36) */
 
-  /* Thẻ nổi bằng BÓNG thay cho viền `line` (hướng D). */
-  --shadow-card: 0 1px 2px rgb(20 18 15 / .06), 0 10px 30px -12px rgb(20 18 15 / .12);
+  /* Aura: thẻ VIỀN `line`, gần như không bóng. Biến giữ tên để bảng nổi (menu, ngăn kéo) dùng chung. */
+  --shadow-card: none;
+  --shadow-pop: 0 1px 2px rgb(23 32 51 / .06), 0 12px 32px -12px rgb(23 32 51 / .18);
 
   /*
-   * Phông HỆ THỐNG (SF / Segoe / Roboto) — đúng proposal hướng A mà Hưng duyệt:
-   * "không thêm gì, đọc tiếng Việt tốt". Be Vietnam Pro tự host đã thử
-   * (2026-09-25) và BỎ khi Hưng phục hồi bố cục proposal cùng ngày.
+   * Phông (Aura, Hưng chốt 2026-10-21): giao diện Plus Jakarta Sans, tiêu đề Newsreader —
+   * TỰ HOST (`app/fonts/`, OFL, chỉ latin + vietnamese, bản biến thiên trục `wght`).
+   * Không bao giờ nạp Google Fonts lúc chạy (app offline). Hai ngoại lệ GIỮ phông HỆ THỐNG:
+   *   · chữ TRONG biểu đồ (`--font-chart`, luật `svg` dưới) — số cổng, cột hành tinh,
+   *     mandala; đổi phông là đổi bề ngang chữ trong huy hiệu và mọi ảnh tham chiếu.
+   *     Thiết kế lại biểu đồ là việc của phiên "Visual Bodygraph" riêng;
+   *   · ảnh xuất (SVG → PNG không mang theo phông web) — `compose-svg` đọc `--font-chart`.
+   * (Be Vietnam Pro tự host đã thử 2026-09-25 và bỏ — đừng thêm lại.)
    */
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Noto Sans", sans-serif;
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Noto Sans", sans-serif;
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-chart: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Noto Sans", sans-serif;
 
   /* Bảng bên phải nằm CẠNH khung biểu đồ từ 1400px. Dưới đó nó rơi xuống dưới:
      số cổng ≥ 8px cần khung biểu đồ Classic rộng ≥ 1166px (xem ChartCanvas). */
   --breakpoint-wide: 87.5rem;
+}
+
+/*
+ * ★ Phông tự host (Aura). Tệp nằm ở `app/fonts/` để bộ dựng CSS của Next BĂM TÊN và đưa
+ *   vào `/_next/static/media/` — tự có cache bất biến, service worker tự giữ cho offline,
+ *   bản công khai không cần thêm luật `_headers`. Bản biến thiên trục `wght` (fontsource
+ *   5.3.0); chỉ khai đúng độ đậm dùng: Jakarta 400–600, Newsreader 400. Không có tệp
+ *   nghiêng — nút "i" dùng nghiêng TỔNG HỢP (Hưng chốt 2026-10-21, tiết kiệm ~150KB).
+ */
+@font-face {
+  font-family: "Plus Jakarta Sans"; font-style: normal; font-display: swap; font-weight: 400 600;
+  src: url("./fonts/plus-jakarta-sans-vietnamese-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;
+}
+@font-face {
+  font-family: "Plus Jakarta Sans"; font-style: normal; font-display: swap; font-weight: 400 600;
+  src: url("./fonts/plus-jakarta-sans-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "Newsreader"; font-style: normal; font-display: swap; font-weight: 400;
+  src: url("./fonts/newsreader-vietnamese-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;
+}
+@font-face {
+  font-family: "Newsreader"; font-style: normal; font-display: swap; font-weight: 400;
+  src: url("./fonts/newsreader-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
 }
 
 /*
@@ -138,13 +199,16 @@ html[data-embed] body { min-height: 0; }
  */
 html[data-embed] dialog:modal { position: absolute; bottom: auto; max-height: calc(var(--vh100) - 2rem); }
 html[data-embed] dialog.sheet:modal { top: calc(var(--embed-top, 0px) + var(--vh100)); transform: translateY(-100%); max-height: var(--vh100); }
-html[data-embed] dialog:modal:not(.sheet) { top: calc(var(--embed-top, 0px) + var(--vh100) / 2); transform: translateY(-50%); }
+html[data-embed] dialog.side:modal { top: var(--embed-top, 0px); height: var(--vh100); max-height: var(--vh100); }
+html[data-embed] dialog:modal:not(.sheet):not(.side) { top: calc(var(--embed-top, 0px) + var(--vh100) / 2); transform: translateY(-50%); }
 
 @keyframes hd-progress { from { transform: translateX(-100%); } to { transform: translateX(300%); } }
 @keyframes hd-blink { 50% { opacity: .5; } }
 @keyframes hd-spin { to { transform: rotate(360deg); } }
 
 html { -webkit-text-size-adjust: 100%; }
+/* Chữ TRONG biểu đồ giữ phông hệ thống (xem `--font-chart`). Icon không có chữ nên không bị ảnh hưởng. */
+svg { font-family: var(--font-chart); }
 
 /* Focus: một kiểu cho mọi thứ bấm được — viền mực 2px, cách 2px. */
 :where(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
@@ -155,16 +219,17 @@ html { -webkit-text-size-adjust: 100%; }
 @layer components {
   /* ── Nút ─────────────────────────────────────────────────────────────── */
   /*
-   * Nút — cỡ chữ, viền theo proposal hướng A (13.5px); góc 10px từ hướng D.
+   * Nút — Aura (2026-10-21): VIÊN bo tròn, viền `control`, chữ 14px/500. Trước: góc 10px
+   * (hướng D), chữ 13.5px/400 (proposal hướng A).
    * Cao 44px mặc định (cảm ứng, < 640px); chuột thì 36px như proposal — khối
    * media `pointer: fine` bên dưới (điểm 1b).
    */
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: .375rem;
     min-height: 2.75rem; min-width: 2.75rem; padding-inline: .75rem;
-    border-radius: .625rem; border: 1px solid var(--color-control);
-    background: var(--color-surface); color: var(--color-ink);
-    font-size: var(--text-control); font-weight: 400; line-height: 1.2; white-space: nowrap;
+    border-radius: 999px; border: 1px solid var(--color-control);
+    background: transparent; color: var(--color-ink);
+    font-size: var(--text-control); font-weight: 500; line-height: 1.2; white-space: nowrap;
     transition: background-color .12s, border-color .12s, color .12s;
     cursor: pointer;
   }
@@ -172,7 +237,7 @@ html { -webkit-text-size-adjust: 100%; }
   .btn:disabled { cursor: not-allowed; opacity: .45; }
   /* Nút mở một bảng (menu Xuất, cài đặt, hướng dẫn, Chỉnh múi giờ) — đang mở thì lún xuống. */
   .btn[aria-expanded="true"] { background: var(--color-sunken); }
-  .btn-primary { background: var(--color-ink); border-color: var(--color-ink); color: #fff; }
+  .btn-primary { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-on-dark); }
   .btn-primary:hover { background: var(--color-ink-hover); border-color: var(--color-ink-hover); }
   .btn-ghost { border-color: transparent; background: transparent; }
   .btn-ghost:hover { background: var(--color-sunken); }
@@ -216,20 +281,20 @@ html { -webkit-text-size-adjust: 100%; }
   .seg { position: relative; isolation: isolate; display: inline-flex; flex-wrap: nowrap; gap: 2px; padding-inline: 3px; }
   .seg::before {
     content: ""; position: absolute; inset: .25rem 0; z-index: -1;
-    border-radius: .75rem; background: var(--color-sunken);
+    border-radius: 999px; background: var(--color-sunken);
   }
   .seg > button {
     position: relative; min-height: 2.75rem; min-width: 2.75rem; padding-inline: .625rem;
     font-size: var(--text-ui); color: var(--color-ink-2); white-space: nowrap; cursor: pointer;
   }
   .seg > button::before {
-    content: ""; position: absolute; inset: .4375rem 0; z-index: -1; border-radius: .5625rem;
+    content: ""; position: absolute; inset: .4375rem 0; z-index: -1; border-radius: 999px;
     transition: background-color .12s, box-shadow .12s;
   }
   .seg > button:hover { color: var(--color-ink); }
   .seg > button:hover::before { background: rgb(255 255 255 / .6); }
   .seg > button[aria-pressed="true"] { color: var(--color-ink); font-weight: 600; }
-  .seg > button[aria-pressed="true"]::before { background: #fff; box-shadow: 0 1px 2px rgb(0 0 0 / .12); }
+  .seg > button[aria-pressed="true"]::before { background: var(--color-surface); box-shadow: 0 0 0 1px var(--color-line-strong); }
   .seg > button:disabled { cursor: not-allowed; opacity: .4; }
   .seg > button:focus-visible { outline: 2px solid var(--color-ink); outline-offset: -3px; border-radius: .75rem; }
   /*
@@ -266,26 +331,28 @@ html { -webkit-text-size-adjust: 100%; }
   .navtab[aria-pressed="true"], .navtab[aria-selected="true"] { color: var(--color-ink); font-weight: 600; box-shadow: inset 0 -2px 0 var(--color-ink); }
   .navtab:focus-visible { outline-offset: -3px; }
   /*
-   * Tab CHẾ ĐỘ XEM trên thanh trên (sáu tab, `shell/ViewTabs`) — hướng D (Hưng duyệt
-   * 2026-10-04): VIÊN bo 10px, đang chọn nền mực chữ trắng. Viên 36px vẽ bằng
-   * ::before để nút vẫn cao 44px (cảm ứng). Tách khỏi `.navtab` (gạch chân) vì
-   * bảng Illustrator vẫn dùng kiểu gạch chân.
+   * Tab CHẾ ĐỘ XEM trên header (`shell/ViewTabs`) — Aura phương án C (Hưng duyệt
+   * 2026-10-21): VIÊN bo tròn viền `line-strong`, đang chọn nền mực chữ `on-dark`.
+   * Viên 40px vẽ bằng ::before để nút vẫn cao 44px (cảm ứng). Tách khỏi `.navtab`
+   * (gạch chân) vì bảng Illustrator vẫn dùng kiểu gạch chân.
    */
   .viewtab {
     position: relative; isolation: isolate; display: inline-flex; align-items: center; flex-shrink: 0;
-    min-height: 2.75rem; padding-inline: .875rem;
-    font-size: .875rem; font-weight: 500; color: var(--color-ink-2); white-space: nowrap;
+    min-height: 2.75rem; padding-inline: 1rem;
+    font-size: .875rem; font-weight: 500; color: var(--color-ink); white-space: nowrap;
     transition: color .12s; cursor: pointer;
   }
   .viewtab::before {
-    content: ""; position: absolute; inset: .25rem 0; z-index: -1; border-radius: .625rem;
-    transition: background-color .12s;
+    content: ""; position: absolute; inset: 2px 0; z-index: -1; border-radius: 999px;
+    border: 1px solid var(--color-line-strong); transition: background-color .12s, border-color .12s;
   }
-  .viewtab:hover { color: var(--color-ink); }
   .viewtab:hover::before { background: var(--color-sunken); }
-  .viewtab[aria-pressed="true"] { color: #fff; font-weight: 600; }
-  .viewtab[aria-pressed="true"]::before { background: var(--color-ink); }
-  .viewtab:focus-visible { outline-offset: -3px; border-radius: .625rem; }
+  .viewtab[aria-pressed="true"] { color: var(--color-on-dark); }
+  .viewtab[aria-pressed="true"]::before { background: var(--color-ink); border-color: var(--color-ink); }
+  .viewtab:focus-visible { outline-offset: -1px; border-radius: 999px; }
+  /* Hàng tab thứ hai ở tablet (artboard `Tablet`): viên CAO 44, đệm 0 18. */
+  .tabrow .viewtab { padding-inline: 1.125rem; }
+  .tabrow .viewtab::before { inset: 0; }
   /*
    * ★ Máy tính dùng CHUỘT (Hưng chốt 2026-09-25, điểm 1b): nút cao 36px đúng
    *   proposal. Màn cảm ứng (và mọi màn < 640px) giữ vùng bấm 44px. Ngưỡng WCAG
@@ -304,8 +371,6 @@ html { -webkit-text-size-adjust: 100%; }
     .navtab::before { content: ""; position: absolute; inset: .25rem 0; z-index: -1; border-radius: 999px; background: var(--color-page); }
     .navtab[aria-pressed="true"], .navtab[aria-selected="true"] { color: #fff; }
     .navtab[aria-pressed="true"]::before, .navtab[aria-selected="true"]::before { background: var(--color-ink); }
-    .viewtab { font-size: .84375rem; padding-inline: .75rem; }
-    .viewtab::before { border-radius: 999px; background: var(--color-page); }
   }
   /*
    * ≥1400px: danh tính + sáu tab + năm nút (Kho · Lưu · Xuất · Chart mới · VI) phải
@@ -324,9 +389,11 @@ html { -webkit-text-size-adjust: 100%; }
   .navtabs[data-more="lr"] { mask-image: linear-gradient(to right, transparent, #000 2.5rem, #000 calc(100% - 2.5rem), transparent); }
 
   /* ── Bề mặt ──────────────────────────────────────────────────────────── */
-  /* Hướng D: thẻ KHÔNG viền, nổi bằng `--shadow-card`, bo 18px. Viền TRONG SUỐT 1px giữ
-     đúng kích thước cũ — khung Illustrator là `.card`, mất 2px là ảnh tham chiếu lệch. */
-  .card { background: var(--color-surface); border: 1px solid transparent; border-radius: 1.125rem; box-shadow: var(--shadow-card); }
+  /* Aura: thẻ trắng VIỀN `line` 1px, bo 22px, không bóng. Viền giữ 1px như viền trong suốt cũ
+     (hướng D) — khung Illustrator là `.card`, đổi bề dày là ảnh tham chiếu lệch. */
+  .card { background: var(--color-surface); border: 1px solid var(--color-line); border-radius: 1.375rem; }
+  /* Thẻ "phần của bạn" (thẻ Type): nền `sun`, không viền. */
+  .card-sun { background: var(--color-sun); border-color: var(--color-sun); }
   /* Thẻ bảng phải (proposal `.A-card`): đệm 12/14px, tiêu đề 11px chữ hoa giãn .07em. */
   .card-title {
     font-size: var(--text-overline); font-weight: 600; letter-spacing: .07em; text-transform: uppercase;
@@ -340,10 +407,22 @@ html { -webkit-text-size-adjust: 100%; }
    */
   .section-title { font-size: 1rem; font-weight: 600; line-height: 1.35; color: var(--color-ink); }
   /*
-   * Tiêu đề thẻ ở BẢNG PHẢI từ hướng D (2026-10-04): 15px/700 chữ thường, thay
-   * `.card-title` chữ hoa 11px. Số đếm đi kèm ("5 / 9") là `<span>` màu phụ.
+   * Tiêu đề thẻ ở BẢNG PHẢI — Aura (2026-10-21): NHÃN chữ hoa 12px/600 giãn .12em màu
+   * `dawn` ("TRUNG TÂM XÁC ĐỊNH · 7"). Trước (hướng D): 15px/700 chữ thường.
    */
-  .card-heading { font-size: var(--text-card); font-weight: 700; line-height: 1.35; color: var(--color-ink); }
+  .card-heading {
+    font-size: .75rem; font-weight: 600; line-height: 1.35; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--color-dawn);
+  }
+  /* Tiêu đề chữ CÓ CHÂN (Newsreader 400) — Type, tên Thập tự, tiêu đề màn chào. */
+  .display { font-family: var(--font-display); font-weight: 400; letter-spacing: -.02em; }
+
+  /* Nút "i" ghi công (Aura cách 2, `CreditInfo`): 11px, KHÔNG vùng bấm 44px — Hưng chốt, ngoại lệ ở ui.spec. */
+  .credit-i {
+    display: inline-grid; place-items: center; width: 11px; height: 11px; padding: 0; border-radius: 50%;
+    border: .75px solid var(--color-line-strong); background: transparent; cursor: pointer;
+    font-family: var(--font-display); font-style: italic; font-size: 8px; line-height: 1; color: var(--color-faint);
+  }
 
   /* ── Ô nhập ──────────────────────────────────────────────────────────── */
   .field {
@@ -470,6 +549,12 @@ html { -webkit-text-size-adjust: 100%; }
     .select { height: 2.25rem; }
     .link-action { min-height: 2.25rem; margin-bottom: -.25rem; }
   }
+  /*
+   * Form MÀN CHÀO (Aura, artboard `Chart-Welcome`): ô cao 48px, nền `paper`, chữ 16px ở mọi khổ.
+   * ★ Đứng SAU khối "chuột 36px" ở trên — cùng độ ưu tiên thì viết sau thắng.
+   */
+  .welcome-form .field { min-height: 3rem; background: var(--color-page); font-size: 1rem; }
+  .welcome-form .select { height: 3rem; }
 }
 
 /*
@@ -525,6 +610,9 @@ html { -webkit-text-size-adjust: 100%; }
  *   (#68–70 từng đặt cột ĐÈ vào khoảng trống ~18% mỗi bên của khung cũ + công thức `translate`/`padding` căn hình —
  *   bỏ cùng khung cũ.)
  */
+/* Thẻ "Bầu trời lúc này" ở màn chào: hàng rộng vừa để CAO đúng `--now-h` (bề ngang tính ở `NowTransit`). */
+.now-fit { width: min(100%, var(--now-wd)); }
+@media (max-width: 639.98px) { .now-fit { width: min(100%, var(--now-wp)); } }
 .chart-row[data-compact="always"] { grid-template-columns: 0 minmax(0, 1fr) 3.75rem; column-gap: .75rem; }
 .chart-row[data-compact="always"] > .cr-std { display: none; }
 .chart-row[data-compact="always"] > .cr-compact { display: block; }
@@ -537,7 +625,7 @@ html { -webkit-text-size-adjust: 100%; }
    *   góc trên (khung không có lề trong) ⇒ điện thoại thêm lề trong. (Đã thử "B" — bỏ khung, in thẳng lên nền be,
    *   kênh trống tô đậm, quầng chữ theo màu nền — Hưng bỏ.) Chỉ bản công khai (`.pub-canvas` ở `ChartCanvas`).
    */
-  .pub-canvas[data-full="false"] { padding: .625rem .5rem; }
+  .pub-canvas[data-full="false"] { padding: .75rem; }   /* Aura (artboard `Chart-Mobile`, mục B6): đệm 12px */
   [data-full="false"] .chart-row[data-mobile="sides"] > .cr-std { display: none; }
   [data-full="false"] .chart-row[data-mobile="sides"] > .cr-compact { display: block; }
 }

@@ -76,7 +76,8 @@ export function ExportPanel({ api }: { api: IllustrationApi }): JSX.Element {
       if (!markup) throw new Error('Chưa có biểu đồ để xuất');
       const svg = composeSvg({
         width: w, height: h, caption, background,
-        fontFamily: getComputedStyle(document.body).fontFamily,
+        // Phông của biểu đồ (`--font-chart`), không phải phông giao diện tự host — xem `ChartExport`.
+        fontFamily: getComputedStyle(preview.current!.querySelector('svg')!).fontFamily,
         parts: [{ markup, x: 0, y: 0, width: w, height: h }],
         captionLayout: { at: 'bottom', align: 'middle', scale: w / 700 },
       });

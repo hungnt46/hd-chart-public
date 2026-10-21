@@ -25,7 +25,6 @@ import { deviceZone } from '../time-mode/format';
 import { PlaceSearch } from './PlaceSearch';
 import { DateField } from './DateField';
 import { parseTimeInput } from '../../lib/birth-input';
-import { Icon } from '../ui/Icon';
 import { Notice } from '../ui/Notice';
 import { useMedia } from '../workspace/ChartCanvas';
 import { PUBLIC_EDITION } from '../../lib/edition';
@@ -202,11 +201,17 @@ export function BirthForm({ initial, onResolved, onAmbiguous, busy, autoFocus, w
   );
 
   return (
-    <form onSubmit={submit} noValidate className="space-y-4" data-testid="birth-form" data-ready={icuReady}>
-      <div className={compact ? 'space-y-3.5 rounded-[1.125rem] bg-surface p-[1.125rem] shadow-card' : 'space-y-4'}>
-      {/* Họ tên (Hưng 2026-09-30): không bắt buộc, không vào phép tính — chỉ đặt tên gợi ý khi lưu và dòng danh tính. */}
+    /*
+     * Màn chào (Aura, artboard `Chart-Welcome` / `-Mobile`): thẻ trắng do trang dựng — form không tự bọc thẻ;
+     * `.welcome-form` cho ô nhập cao 48px nền `paper`, khoảng giữa các ô 18px (điện thoại 16px).
+     */
+    <form onSubmit={submit} noValidate className={welcome ? `welcome-form ${compact ? 'space-y-4' : 'space-y-4.5'}` : 'space-y-4'}
+          data-testid="birth-form" data-ready={icuReady}>
+      <div className={welcome ? (compact ? 'space-y-4' : 'space-y-4.5') : 'space-y-4'}>
+      {/* Tên (Hưng 2026-09-30): không bắt buộc, không vào phép tính — chỉ đặt tên gợi ý khi lưu và dòng danh tính.
+          Nhãn "Tên (không bắt buộc)" + gợi ý "Ví dụ: Lan" theo artboard `Chart-Welcome` (Aura, mục B9). */}
       <div>
-        <label className="label" htmlFor={`${uid}-name`}>{t('form.name')}</label>
+        <label className="label" htmlFor={`${uid}-name`}>{t('form.name')} <span className="font-normal text-ink-2">{t('form.optional')}</span></label>
         <input id={`${uid}-name`} type="text" value={value.name ?? ''} autoComplete="name"
                placeholder={t(compact ? 'form.namePlaceholderShort' : 'form.namePlaceholder')} className="field" data-testid="input-name"
                onChange={e => setValue(prev => ({ ...prev, name: e.target.value }))} />
@@ -267,21 +272,12 @@ export function BirthForm({ initial, onResolved, onAmbiguous, busy, autoFocus, w
           thì theo nơi sinh — chỉ là không còn hiện sẵn.
       */}
       <div className={compact ? '!mt-1' : ''}>
-        {compact ? (
-          /* Mockup M1: một dòng gợi ý, "Chỉnh múi giờ" là liên kết đậm (vùng bấm vẫn 44px). */
-          <p className="hint flex flex-wrap items-center gap-x-1 text-ui">
-            {t('form.zoneAuto')} ·
-            <button type="button" className="inline-flex min-h-11 items-center font-semibold text-ink underline underline-offset-2"
-                    aria-expanded={zoneOpen} aria-controls={`${uid}-zone`} onClick={() => setZoneOpen(o => !o)} data-testid="zone-toggle">
-              {t('form.zoneEdit')}
-            </button>
-          </p>
-        ) : (
-          <button type="button" className="btn btn-ghost -ml-2" aria-expanded={zoneOpen}
-                  aria-controls={`${uid}-zone`} onClick={() => setZoneOpen(o => !o)} data-testid="zone-toggle">
-            {t('form.zoneEdit')}<Icon name="chevronDown" size={16} className={zoneOpen ? 'rotate-180' : ''} />
-          </button>
-        )}
+        {/* Aura (artboard `Chart-Welcome`, mục B9): MỘT liên kết gạch chân "Chọn múi giờ thủ công", chữ phụ 14px —
+            bỏ dòng "Nơi sinh tự điền múi giờ ·" và mũi tên. Vùng bấm vẫn 44px. */}
+        <button type="button" className="inline-flex min-h-11 items-center text-sm text-ink-2 underline underline-offset-4 hover:text-ink"
+                aria-expanded={zoneOpen} aria-controls={`${uid}-zone`} onClick={() => setZoneOpen(o => !o)} data-testid="zone-toggle">
+          {t('form.zoneEdit')}
+        </button>
         <div id={`${uid}-zone`} hidden={!zoneOpen} className="mt-2 space-y-2 rounded-lg border border-line bg-subtle p-3">
           <p className="min-w-0 text-sm">
             <span className="text-ink-2">{t('form.zone')}: </span>
@@ -315,20 +311,27 @@ export function BirthForm({ initial, onResolved, onAmbiguous, busy, autoFocus, w
       </div>
       </div>
 
-      {/* Điện thoại (giao diện D, mockup M1): nút 54px GHIM đáy — `sticky` trong khung cuộn của
-          form (trang chào hay ngăn kéo), trên vùng an toàn của thanh home. */}
+      {/* Điện thoại: nút GHIM đáy — `sticky` trong khung cuộn của ngăn kéo, trên vùng an toàn của thanh home.
+          Màn chào (Aura, artboard `Chart-Welcome-Mobile`): nút nằm TRONG thẻ form, không ghim (giao diện D ghim
+          `fixed` ở đáy màn). */}
       {/* Nhúng (mockup D Hưng duyệt 2026-10-13): KHÔNG ghim — trong iframe cao bằng nội dung, đáy khung nhìn
           là đáy iframe. Nút nằm ngay cuối form. */}
       <div className={`${compact
-        ? 'fixed inset-x-0 bottom-0 z-20 bg-linear-to-t from-page from-70% px-4 pt-3 pb-[max(.75rem,env(safe-area-inset-bottom))]'
+        ? ''
         : `max-sm:sticky max-sm:bottom-0 max-sm:z-10 max-sm:-mx-5 max-sm:bg-linear-to-t max-sm:from-surface max-sm:from-70%
            max-sm:px-5 max-sm:pt-3 max-sm:pb-[max(.75rem,env(safe-area-inset-bottom))]`} embed:static! embed:mx-0! embed:bg-none! embed:p-0! embed:pt-1!`}>
         <button type="submit" disabled={busy} aria-busy={busy} data-testid="submit"
-                className="btn btn-primary min-h-12 w-full rounded-xl text-base font-semibold max-sm:min-h-[3.375rem] max-sm:rounded-2xl max-sm:text-[length:var(--text-input-touch)]">
+                className="btn btn-primary min-h-13 w-full text-base max-sm:text-[length:var(--text-input-touch)]">
           {busy && <span aria-hidden="true" className="spinner" />}
           {busy ? t('form.submitBusy') : t('form.submit')}
         </button>
       </div>
+      {/* Dòng dưới nút (artboard `Chart-Welcome`; điện thoại chỉ câu đầu). */}
+      {welcome && (
+        <p className="text-sm text-ink-2" data-testid="welcome-note">
+          {t('form.noPrior')}{!compact && <> {t('form.localCalc')}</>}
+        </p>
+      )}
 
       {/* Dòng ghi công GeoNames dưới nút đã BỎ khỏi form (Hưng 2026-10-05). Ghi công CC-BY
           vẫn ở NOTICE.md — app dùng nội bộ, sau mật khẩu (quyết định D1). */}

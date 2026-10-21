@@ -50,17 +50,17 @@ export function durationLabel(t: T, days: number): string {
 }
 
 /**
- * Tách nhãn của `momentLabel` ("28-09-2026 14:30" · "2026-09-28 14:30" · "… UTC")
+ * Tách nhãn của `momentLabel` ("28/09/2026 14:30" · "2026-09-28 14:30" · "… UTC")
  * thành ô hai dòng: ngày-tháng + giờ, rồi thứ (+ năm nếu khác năm đang xem).
  * Giờ vẫn đi qua `momentLabel` — luật CLAUDE.md, không tự ghép giờ ở component.
  */
 export interface WhenParts { day: string; time: string; dow: number; year: number }
 export function whenParts(label: string, lang: Lang): WhenParts {
-  const m = /(\d+)-(\d+)-(\d+) (\d\d:\d\d)/.exec(label);
+  const m = /(\d+)[-/](\d+)[-/](\d+) (\d\d:\d\d)/.exec(label);
   if (!m) return { day: label, time: '', dow: 0, year: 0 };
   const [Y, M, D] = lang === 'vi' ? [+m[3]!, m[2]!, m[1]!] : [+m[1]!, m[2]!, m[3]!];
   return {
-    day: lang === 'vi' ? `${D}-${M}` : `${M}-${D}`, time: m[4]!,
+    day: lang === 'vi' ? `${D}/${M}` : `${M}-${D}`, time: m[4]!,
     dow: new Date(Date.UTC(Y, +M - 1, +D)).getUTCDay(), year: Y,
   };
 }

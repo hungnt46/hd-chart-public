@@ -37,6 +37,11 @@ const PATHS = {
   calendar: 'M6 5h12a2.5 2.5 0 0 1 2.5 2.5v10A2.5 2.5 0 0 1 18 20H6a2.5 2.5 0 0 1-2.5-2.5v-10A2.5 2.5 0 0 1 6 5zM3.5 10h17M8 3v4M16 3v4',
   search: 'M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-4-4',
   reset: 'M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4',
+  /* Aura (2026-10-21): nút menu website (hai vạch), mũi tên link, hai ô thanh đáy bản công khai. */
+  twoLines: 'M5 9.5h14M5 14.5h14',
+  arrowRight: 'M5 12h14m0 0l-5-5m5 5l-5 5',
+  cross: 'M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM12 4v16M4 12h16',
+  connection: 'M9 6.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11zM15 6.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11z',
 } as const;
 
 export type IconName = keyof typeof PATHS;

@@ -60,7 +60,7 @@ export function ViewTabs({ view, setView }: { view: View; setView: (v: View) => 
   }, [view, lang, measure]);
   return (
     <div ref={strip} role="group" aria-label={t('view.group')} onScroll={measure} data-more={more || undefined}
-         className="navtabs flex h-full min-w-0 items-stretch gap-0.5 overflow-x-auto [scrollbar-width:none]">
+         className="navtabs flex h-full min-w-0 items-stretch gap-1.5 overflow-x-auto [scrollbar-width:none] max-lg:gap-2">
       {VIEWS.map(v => (
         <button key={v} type="button" onClick={() => setView(v)} data-testid={`view-${v}`}
                 aria-pressed={view === v} className="viewtab">

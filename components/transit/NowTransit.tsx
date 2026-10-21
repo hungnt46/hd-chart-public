@@ -29,13 +29,14 @@ import { channelName } from '../../i18n/hd-names/index.js';
 import { useTimeMode } from '../time-mode/TimeModeProvider.js';
 import { deviceZone, momentLabel } from '../time-mode/format.js';
 import { ChartCanvas, useZoom } from '../workspace/ChartCanvas.js';
-import { gateFontUnits, rowPercents, type RowSpec } from '../workspace/layout.js';
+import { gateFontUnits, rowPercents, rowRatio, type RowSpec } from '../workspace/layout.js';
 import { TransitControls, useDayTransit } from './TransitPanel.js';
 import { NextUp } from './NextUp.js';
 import dynamic from 'next/dynamic';
 import { Notice } from '../ui/Notice.js';
 import { dateUTToJd } from '../../calc-core/time/julian.js';
 import { PUBLIC_EDITION } from '../../lib/edition.js';
+import { DEFINING_BODIES_STANDARD } from '../../calc-core/ephemeris/bodies.js';
 
 /* Nạp sau — chỉ chế độ transit đầy đủ cần (thẻ ở màn chào thì không). */
 const ActivationWatch = dynamic(() => import('./ActivationWatch.js').then(m => m.ActivationWatch), { ssr: false });
@@ -81,11 +82,22 @@ function useNowRow(day: DayChart | null, bodygraphTestId?: string, card = false)
                            className="cr-r cr-compact" sideLayout={sides} />
     </div>
   );
-  return { spec, gate, row };
+  /*
+   * Bề ngang để hàng CAO đúng `--now-h` (thẻ màn chào, artboard `Chart-Welcome`: khung 372px, điện thoại
+   * 330px). Hàng không có chiều cao nội tại (SVG `h-auto`) ⇒ suy bề ngang từ tỉ lệ: cột gọn hai bên (bản
+   * công khai) = hình + cột 3.75rem + hai khe .75rem; cột chuẩn = tỉ lệ cả hàng; điện thoại kiểu "corners"
+   * cột nằm đè lên hình nên chỉ còn tỉ lệ hình.
+   */
+  const a = art.viewBox.w / art.viewBox.h;
+  const fit = sides && card
+    ? { desk: `calc(var(--now-h) * ${a.toFixed(4)} + 5.25rem)`, phone: `calc(var(--now-h) * ${a.toFixed(4)} + 5.25rem)` }
+    : { desk: `calc(var(--now-h) * ${rowRatio(spec).toFixed(4)})`, phone: `calc(var(--now-h) * ${a.toFixed(4)})` };
+  return { spec, gate, row, fit };
 }
 
 function LiveDot(): JSX.Element {
-  return <span aria-hidden="true" className="inline-block size-2 rounded-full bg-live animate-[hd-blink_2s_infinite]" />;
+  /* Aura: chấm `glow` có quầng (artboard `Chart-Welcome`) — thẻ nền tối. */
+  return <span aria-hidden="true" className="inline-block size-2 rounded-full bg-glow shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-glow)_25%,transparent)] animate-[hd-blink_2s_infinite]" />;
 }
 
 /**
@@ -148,41 +160,54 @@ function useIdleReady(): boolean {
 /** Thẻ màn chào (cột phải). */
 export function NowTransitCard({ onOpen }: { onOpen: () => void }): JSX.Element {
   const ready = useIdleReady();
-  return ready ? <NowCardBody onOpen={onOpen} /> : <NowCardFrame onOpen={onOpen} day={null} err={null} row={null} />;
+  return ready ? <NowCardBody onOpen={onOpen} /> : <NowCardFrame onOpen={onOpen} day={null} err={null} row={null} fit={null} />;
 }
 
 function NowCardBody({ onOpen }: { onOpen: () => void }): JSX.Element {
   const s = useDayTransit(null, { live: true });
-  const { row } = useNowRow(s.result, 'now-bodygraph', true);
-  return <NowCardFrame onOpen={onOpen} day={s.result} err={s.err} row={row} />;
+  const { row, fit } = useNowRow(s.result, 'now-bodygraph', true);
+  return <NowCardFrame onOpen={onOpen} day={s.result} err={s.err} row={row} fit={fit} />;
 }
 
-function NowCardFrame({ onOpen, day, err, row }: {
-  onOpen: () => void; day: DayChart | null; err: string | null; row: ReactNode;
+function NowCardFrame({ onOpen, day, err, row, fit }: {
+  onOpen: () => void; day: DayChart | null; err: string | null; row: ReactNode; fit: { desk: string; phone: string } | null;
 }): JSX.Element {
   const { lang, t } = useLanguage();
   const { mode } = useTimeMode();
+  const sun = day?.transit.byBody[DEFINING_BODIES_STANDARD[0]!]?.position;
+  /*
+   * ★ Aura (Hưng duyệt 2026-10-21, artboard `Chart-Welcome`): thẻ NỀN TỐI `ink` bo 28px — nhãn `glow`
+   *   "BẦU TRỜI LÚC NÀY" có chấm, tiêu đề Newsreader "Mặt Trời ở Cổng 48.3", giờ `on-dark-2`, rồi khung
+   *   SÁNG (`page`) chứa bodygraph + cột transit — màu biểu đồ giữ nguyên, chỉ vỏ đổi.
+   */
   return (
-    <section className="card px-5 pb-4 pt-5 sm:px-6" aria-labelledby="now-h" data-testid="now-card">
-      <div className="flex items-baseline justify-between gap-3">
-        <h2 id="now-h" className="text-xl font-bold">{t('now.title')}</h2>
-        <span className="inline-flex items-center gap-1.5 text-ui text-ink-2"><LiveDot />{t('transit.live')}</span>
-      </div>
-      <p className="mt-0.5 text-ui text-ink-3 tabular-nums" data-testid="now-when">
-        {day ? `${momentLabel(day.jdUT, mode, deviceZone(), lang)} · ${t('now.auto')}` : ' '}
+    <section className="rounded-[1.75rem] bg-ink p-5 text-on-dark sm:p-7" aria-labelledby="now-h" data-testid="now-card">
+      <p className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[.12em] text-glow">
+        <LiveDot />{t('now.title')}
+        <span className="sr-only"> · {t('transit.live')}</span>
+      </p>
+      <h2 id="now-h" className="display mt-3 text-2xl leading-tight tracking-[-.01em] sm:text-[length:var(--text-now)]">
+        {sun ? t('now.sunAt', { gate: `${sun.gate}.${sun.line}` }) : t('now.title')}
+      </h2>
+      <p className="mt-1 text-sm text-on-dark-2 tabular-nums" data-testid="now-when">
+        {day ? `${momentLabel(day.jdUT, mode, deviceZone(), lang)} · ${t('now.auto')}` : ' '}
       </p>
       {/* Khung `data-full="false"`: CSS cột gọn hai góc (điện thoại) bám thuộc tính này như ở ChartCanvas. */}
-      <div data-full="false" className="mt-3">
-        {row ?? (err
+      {/* Khung sáng (artboard): cao 372px, đệm 16 16 16 12 — điện thoại 330px, đệm 12 10 12 8. */}
+      <div data-full="false" className="mt-4 rounded-[1.125rem] bg-page py-3 pl-2 pr-2.5 text-ink [--now-h:19.125rem] sm:py-4 sm:pl-3 sm:pr-4 sm:[--now-h:21.25rem]">
+        {row && fit ? (
+          <div className="now-fit mx-auto" style={{ ['--now-wd' as string]: fit.desk, ['--now-wp' as string]: fit.phone }}>{row}</div>
+        ) : (err
           ? <Notice tone="danger">{err}</Notice>
-          : <div aria-hidden="true" className="aspect-[1379/1334] w-full animate-pulse rounded-xl bg-sunken" />)}
+          : <div aria-hidden="true" className="h-[var(--now-h)] w-full animate-pulse rounded-xl bg-sunken" />)}
       </div>
       {/* Bản công khai (Hưng 2026-10-13, STATUS §5 #64): KHÔNG dòng gợi ý và KHÔNG lối vào transit đầy đủ —
           thẻ chỉ là "bầu trời lúc này". Bản đầy đủ giữ nguyên. */}
       {!PUBLIC_EDITION && (
-        <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3">
-          <p className="text-ui text-ink-3" data-testid="now-hint">{t('now.hint')}</p>
-          <button type="button" onClick={onOpen} data-testid="now-open" className="link-action text-sm">
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+          <p className="text-ui text-on-dark-2" data-testid="now-hint">{t('now.hint')}</p>
+          <button type="button" onClick={onOpen} data-testid="now-open"
+                  className="btn border-on-dark bg-on-dark text-ink hover:bg-sunken focus-visible:outline-glow max-sm:w-full">
             {t('now.open')} <span aria-hidden="true">→</span>
           </button>
         </div>

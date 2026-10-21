@@ -98,9 +98,14 @@ export interface ChartWorkspaceProps {
    */
   view: View;
   setView: (v: View) => void;
+  /**
+   * THẺ ĐẦU bảng phải (Aura phương án C): ngày giờ · nơi sinh + Lưu — trang dựng
+   * (`IdentityCard`), chỉ ≥ 640px; điện thoại để danh tính trên thanh dưới header.
+   */
+  identity?: ReactNode;
 }
 
-export function ChartWorkspace({ chart, utcDate, value, resolution, view, setView: setViewState }: ChartWorkspaceProps): JSX.Element {
+export function ChartWorkspace({ chart, utcDate, value, resolution, view, setView: setViewState, identity }: ChartWorkspaceProps): JSX.Element {
   const { lang, t } = useLanguage();
   const { mode } = useTimeMode();
   const exportRef = useRef<HTMLDivElement>(null);
@@ -454,17 +459,18 @@ export function ChartWorkspace({ chart, utcDate, value, resolution, view, setVie
     </>
   ) : undefined;
 
-  /* Xuất: lên thanh trên cùng từ 640px (mockup hướng A); điện thoại để trong hàng nút trên biểu đồ. */
+  /*
+   * Xuất: ba nút nằm thẳng trong menu ⋯ của header (`#sheet-export` của `TopBar`) ở MỌI
+   * khổ — Aura phương án C (bản đầy đủ: "Xuất, Illustrator vào ⋯"). Máy tính ⋯ là bảng thả,
+   * điện thoại là bảng trượt; đổi khổ là đổi chỗ ⇒ dò lại theo `bigTop`.
+   */
   const bigTop = useMedia('(min-width: 640px)');
-  const topSlot = useTopbarSlot('topbar-export', bigTop);
-  /* Điện thoại (giao diện D): ba nút xuất nằm thẳng trong bảng ⋯ (`#sheet-export` của `TopBar`). */
   const sheetSlot = useTopbarSlot('sheet-export', bigTop);
   /* Bản công khai (STATUS §5 #57): không xuất ảnh ở khổ nào. */
-  const exportOnTop = !PUBLIC_EDITION && bigTop && topSlot !== null;
-  const exportInSheet = !PUBLIC_EDITION && !bigTop && sheetSlot !== null;
+  const exportInSheet = !PUBLIC_EDITION && sheetSlot !== null;
   const exportEl = <ChartExport target={exportRef} caption={exportCaption} fileBase={exportFile}
-                                menuAlign={exportOnTop ? 'end' : 'start'} inline={exportInSheet} />;
-  const exportInCorner = !PUBLIC_EDITION && !exportOnTop && !exportInSheet;
+                                menuAlign="start" inline={exportInSheet} />;
+  const exportInCorner = !PUBLIC_EDITION && !exportInSheet;
   const corners = {
     tl: (hubSeg || exportInCorner) ? <>{hubSeg}{exportInCorner && exportEl}</> : undefined,
   };
@@ -496,17 +502,17 @@ export function ChartWorkspace({ chart, utcDate, value, resolution, view, setVie
 
   return (
     <div className="space-y-3">
-    {exportOnTop && createPortal(exportEl, topSlot)}
     {exportInSheet && createPortal(exportEl, sheetSlot)}
     {/*
       ★ Lưới RIÊNG cho [biểu đồ | bảng phải]; phần dưới nằm NGOÀI lưới. Bảng phải
         `sticky` bám theo cả khối chứa nó — khi còn chung một lưới với phần dưới,
         cuộn xuống Tra cứu thì bảng trượt theo và đè lên chữ.
     */}
-    <div className="grid grid-cols-1 gap-3 wide:grid-cols-[minmax(0,1fr)_var(--rail)] wide:items-start [--rail:var(--rail-base)] min-[100rem]:[--rail:23.75rem]"
+    <div className="grid grid-cols-1 gap-3 sm:max-wide:gap-3.5 wide:grid-cols-[minmax(0,1fr)_var(--rail)] wide:items-start [--rail:var(--rail-base)] min-[100rem]:[--rail:23.75rem]"
          style={{ ['--rail-base' as string]: rail }}>
       {/* Bảng phải — `contents` dưới 1400px để các mảnh xếp vào luồng chính. */}
-      <div className="contents wide:sticky wide:top-[calc(var(--topbar-h)+.625rem)] wide:col-start-2 wide:row-start-1 wide:flex wide:max-h-[calc(var(--vh100)-var(--topbar-h)-.625rem)] wide:flex-col wide:gap-2.5 wide:overflow-y-auto wide:pb-2.5">
+      <div className="contents wide:sticky wide:top-[calc(var(--topbar-h)+.75rem)] wide:col-start-2 wide:row-start-1 wide:flex wide:max-h-[calc(var(--vh100)-var(--topbar-h)-.75rem)] wide:flex-col wide:gap-3 wide:overflow-y-auto wide:pb-3">
+        {identity && <div className="order-1 min-w-0">{identity}</div>}
         {(view === 'transit' || view === 'cycle' || view === 'connection') && (
           <div className="order-2 min-w-0 space-y-2.5">
             {view === 'transit' && (
@@ -572,9 +578,9 @@ export function ChartWorkspace({ chart, utcDate, value, resolution, view, setVie
 }
 
 /**
- * Chỗ trống do `TopBar` dựng cho nút Xuất — gắn bằng portal. `topbar-export` (≥ 640px)
- * hay `sheet-export` (bảng ⋯ của điện thoại). Thanh đổi khổ (`wide` = ≥ 640px) thì chỗ
- * đổi theo ⇒ dò lại. `TopBar` dựng chỗ đó cùng lượt vẽ với khung làm việc.
+ * Chỗ trống do `TopBar` dựng cho nút Xuất (`sheet-export`, trong menu ⋯) — gắn bằng portal.
+ * Header đổi khổ (`wide` = ≥ 640px: bảng thả ↔ bảng trượt) thì chỗ đổi theo ⇒ dò lại.
+ * `TopBar` dựng chỗ đó cùng lượt vẽ với khung làm việc.
  */
 function useTopbarSlot(id: string, wide: boolean): Element | null {
   const [slot, setSlot] = useState<Element | null>(null);

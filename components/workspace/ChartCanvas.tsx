@@ -196,14 +196,15 @@ export function ChartCanvas({ spec, gate, zoom, exportRef, children, band, corne
   const tl = <>{corners?.tl}{zoomCtl}</>;
   const hasCorners = !zoom.full && Boolean(corners?.tl ?? zoomCtl);
 
-  /* Giao diện D: thẻ nổi bằng bóng, bo 18px — nền `paper` từ bodygraph Aura A (2026-10-21). Viền TRONG SUỐT 1px giữ đúng bề ngang
-     cũ — bỏ hẳn viền là biểu đồ to thêm 2px và mọi ảnh tham chiếu lệch theo. */
+  /* Aura (2026-10-21): thẻ VIỀN `line` 1px, bo 22px, không bóng, nền `paper` (bodygraph Aura A) — viền 1px đúng bằng viền trong suốt
+     cũ nên bề ngang biểu đồ không đổi. Cao = màn − header − lề trên 12px − lề dưới 6px: artboard vẽ 20 + 12px nhưng
+     với header 72px thì 1440×900 hụt luật 8px (xem `app/page.tsx`). */
   return (
     <div data-testid="chart-canvas" data-full={zoom.full ? 'true' : 'false'} data-zoom={z.toFixed(3)}
          className={zoom.full
            ? 'fixed inset-0 z-50 flex flex-col bg-paper'
-           : `${PUBLIC_EDITION ? 'pub-canvas ' : ''}relative overflow-hidden rounded-[1.125rem] border border-transparent bg-paper shadow-card ${
-             desktop ? 'flex h-[calc(var(--vh100)-var(--topbar-h)-.625rem)] min-h-[26rem] flex-col' : ''}`}>
+           : `${PUBLIC_EDITION ? 'pub-canvas ' : ''}relative overflow-hidden rounded-[1.375rem] border border-line bg-paper ${
+             desktop ? 'flex h-[calc(var(--vh100)-var(--topbar-h)-1.125rem)] min-h-[26rem] flex-col' : ''}`}>
       {zoom.full && (
         <div className="flex items-center justify-between gap-2 border-b border-line p-2"
              style={{ paddingTop: 'max(.5rem, env(safe-area-inset-top))' }}>

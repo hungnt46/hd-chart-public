@@ -48,7 +48,10 @@ export function ChartExport({ target, caption, fileBase, menuAlign = 'start', in
     if (!root) throw new Error('Chưa có biểu đồ để xuất');
     const { width, height, parts } = collectParts(root);
     if (!parts.length) throw new Error('Chưa có biểu đồ để xuất');
-    const svg = composeSvg({ width, height, parts, caption, fontFamily: getComputedStyle(document.body).fontFamily });
+    /* Phông của chính biểu đồ (`--font-chart`, phông hệ thống) — không phải phông giao diện tự host:
+       ảnh SVG → PNG không mang theo phông web. */
+    const fontFamily = getComputedStyle(root.querySelector('svg') ?? document.body).fontFamily;
+    const svg = composeSvg({ width, height, parts, caption, fontFamily });
     const m = /width="(\d+)" height="(\d+)"/.exec(svg);
     return { svg, width: Number(m?.[1]), height: Number(m?.[2]) };
   };

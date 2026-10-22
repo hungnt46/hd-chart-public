@@ -91,6 +91,7 @@ export default {
      *   mượn từ một widget tham chiếu (không có giấy phép phân phối) — thay NGUYÊN tệp bằng `hdkit.public.json` (cùng hình học, cùng `viewBox`, bỏ nền) để
      *   đường nét đó không vào gói phát hành. Ẩn bằng cờ lúc chạy là KHÔNG đủ — cùng bẫy với nội dung ở trên.
      *   e2e `e2e-public/public.spec.ts` quét `out/` tìm đường nét nền đó.
+     *   Modern cũng thế từ STATUS §5 #89 (`alternate.public.json`, bỏ bóng người — vì bố cục cột điện thoại).
      */
     if (PUBLIC_EDITION) {
       /* Bộ đọc tệp `.mmi` — bản công khai không nhập tệp (nút ẩn) ⇒ thay bằng bản rỗng cùng chữ ký, để bộ đọc
@@ -100,10 +101,10 @@ export default {
         (r) => { r.request = r.request.replace(/mmi-import\.js$/, 'mmi-import.public.ts'); },
       ));
       config.plugins.push(new webpack.NormalModuleReplacementPlugin(
-        /^\.\/hdkit\.json$/,
+        /^\.\/(hdkit|alternate)\.json$/,
         (r) => {
           if (r.context.replace(/\\/g, '/').endsWith('components/bodygraph/artworks')) {
-            r.request = './hdkit.public.json';
+            r.request = r.request.replace(/\.json$/, '.public.json');
           }
         },
       ));

@@ -17,6 +17,7 @@
  */
 import { CenterId } from '../../calc-core/rave/derive/tables.js';
 import { textOnFill } from './contrast.js';
+import { PUBLIC_EDITION } from '../../lib/edition.js';
 
 export type ThemeName = 'classic' | 'modern';
 
@@ -272,6 +273,14 @@ export const CLASSIC: BodygraphTheme = {
   gateFontSize: 26,
 };
 
+/*
+ * ★ Ruột kênh trống của Modern BẢN CÔNG KHAI (Hưng chọn 2026-10-22, STATUS §5 #89, phương án "(2) ruột xám"):
+ *   bản công khai bỏ bóng người để cột gọn điện thoại không đè hình. Không nền thì ruột trắng tan vào nền trang;
+ *   Hưng so hai cách — lưới có viền (như Classic) bị bác lần nữa ("mớ đường" quanh cụm kênh cong) — chọn ruột XÁM,
+ *   không viền. Chỉ 1.27:1 với nền trắng: LỆCH ĐÃ BIẾT, khoá số ở `contrast.spec.ts` như lệch bóng người của bản đầy đủ.
+ */
+export const MODERN_PUBLIC_OPEN_FILL = '#e4e4e4';
+
 /** Cùng bảng màu Jovian, khác BẢN VẼ: kênh cong, trung tâm bo góc. */
 export const MODERN: BodygraphTheme = {
   name: 'modern',
@@ -284,7 +293,8 @@ export const MODERN: BodygraphTheme = {
   centerStroke: OUTLINE,
   centerStrokeWidth: 1.5,
   centerRadius: 16,
-  channelOpenFill: '#ffffff',
+  // Bản công khai KHÔNG bóng người (STATUS §5 #89) ⇒ ruột trắng không viền tan vào nền: tô xám — `MODERN_PUBLIC_OPEN_FILL`.
+  channelOpenFill: PUBLIC_EDITION ? MODERN_PUBLIC_OPEN_FILL : '#ffffff',
   // KHÔNG viền lưới — Hưng chốt 2026-10-21: Aura A chỉ bật viền cho Classic. Lệch đã biết
   // (ruột kênh vs bóng người 1.21:1) khoá trong `contrast.spec.ts`.
   badgeOpenStroke: OUTLINE,     // xem ghi chú ở CLASSIC — ngưỡng tương phản

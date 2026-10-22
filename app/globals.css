@@ -590,12 +590,16 @@ svg { font-family: var(--font-chart); }
   [data-full="false"] .chart-row[data-mobile="corners"] { grid-template-columns: 0 minmax(0, 1fr) 0; position: relative; }
   [data-full="false"] .chart-row[data-mobile="corners"] > .cr-std { display: none; }
   [data-full="false"] .chart-row[data-mobile="corners"] > .cr-compact {
-    display: block; position: absolute; z-index: 1; top: .125rem; width: 3.75rem; height: var(--corner-h, 60%);
+    display: block; position: absolute; z-index: 1; top: .125rem; width: 3.75rem;
+    /* Trần `--corner-cap` (bản công khai): dòng cuối không chạm kênh chéo ở máy hẹp — `CORNER_CAP`, `ChartWorkspace.tsx`. */
+    height: min(var(--corner-h, 60%), var(--corner-cap, 100%));
   }
   [data-full="false"] .chart-row[data-mobile="corners"] > .cr-compact.cr-l { left: .125rem; }
   [data-full="false"] .chart-row[data-mobile="corners"] > .cr-compact.cr-r { right: .125rem; }
   /* Cột HAI SỐ gọn (Personal, Chu kỳ) rộng hơn cột một số. */
-  [data-full="false"] .chart-row[data-mobile="corners"] > .cr-compact.cr-pair { width: 6.5rem; }
+  [data-full="false"] .chart-row[data-mobile="corners"] > .cr-compact.cr-pair {
+    width: 6.5rem; height: min(var(--corner-h, 60%), var(--corner-cap-pair, 100%));
+  }
 }
 
 /*
@@ -605,8 +609,8 @@ svg { font-family: var(--font-chart); }
  *   (điện thoại 8px). Một cột (thẻ "Bầu trời", "Chỉ transit") ⇒ KHÔNG rãnh trái: hình đứng giữa phần còn lại nên lề
  *   trái ≈ khe tới cột (rãnh trái trống làm hình lệch như lỗi #69: lề 84px / khe 20px).
  *   Cột đôi (tab Transit "Ghép"/"Của tôi", #70) rộng 7rem ⇒ hình nằm giữa hai cột, nhỏ hơn.
- *   CHỈ Classic: Modern phủ kín khung ⇒ giữ "corners"/cột chuẩn. Điện thoại (< 640px): chart đơn, tab Transit, thẻ
- *   "Bầu trời". `data-compact="always"`: thẻ "Bầu trời" dùng cột gọn ở MỌI khổ — cột chuẩn ra chữ ~9px trong thẻ.
+ *   Từ #89 (Hưng 2026-10-22) CẢ Modern: bản công khai bỏ bóng người (`alternate.public.json`) ⇒ cùng bố cục
+ *   Classic. Điện thoại (< 640px): chart đơn, tab Transit, thẻ "Bầu trời". `data-compact="always"`: thẻ "Bầu trời" dùng cột gọn ở MỌI khổ — cột chuẩn ra chữ ~9px trong thẻ.
  *   (#68–70 từng đặt cột ĐÈ vào khoảng trống ~18% mỗi bên của khung cũ + công thức `translate`/`padding` căn hình —
  *   bỏ cùng khung cũ.)
  */
@@ -621,11 +625,12 @@ svg { font-family: var(--font-chart); }
   [data-full="false"] .chart-row[data-mobile="sides"]:has(> .cr-pair.cr-l) { grid-template-columns: 7rem minmax(0, 1fr) 3.75rem; }
   [data-full="false"] .chart-row[data-mobile="sides"][data-cols="r"] { grid-template-columns: 0 minmax(0, 1fr) 3.75rem; }
   /*
-   * ★ #73 (Hưng 2026-10-15, chọn A): khung trắng bo 18px + `overflow-hidden` từng CẮT nhãn Design/Personality ở hai
-   *   góc trên (khung không có lề trong) ⇒ điện thoại thêm lề trong. (Đã thử "B" — bỏ khung, in thẳng lên nền be,
-   *   kênh trống tô đậm, quầng chữ theo màu nền — Hưng bỏ.) Chỉ bản công khai (`.pub-canvas` ở `ChartCanvas`).
+   * ★ Điện thoại: KHÔNG khung biểu đồ (Hưng 2026-10-22, STATUS §5 #89). Khung nền `paper` trùng màu nền trang (#85)
+   *   nên chỉ còn là một đường viền + đệm 12px — bỏ đi để hình rộng thêm ~26px. (Khác #73 "B" Hưng bác 2026-10-15:
+   *   khi đó khung TRẮNG trên nền be khác màu.) Cả hai bản. Máy tính giữ khung (canh thẻ bảng phải, luật 8px).
+   *   Luật đứng NGOÀI @layer nên thắng tiện ích `border` / `rounded` của `ChartCanvas`.
    */
-  .pub-canvas[data-full="false"] { padding: .75rem; }   /* Aura (artboard `Chart-Mobile`, mục B6): đệm 12px */
+  [data-testid="chart-canvas"][data-full="false"] { padding: 0; border-width: 0; border-radius: 0; overflow: visible; }
   [data-full="false"] .chart-row[data-mobile="sides"] > .cr-std { display: none; }
   [data-full="false"] .chart-row[data-mobile="sides"] > .cr-compact { display: block; }
 }

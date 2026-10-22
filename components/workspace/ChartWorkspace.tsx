@@ -86,6 +86,18 @@ const CROSS_BODIES = [Body.Sun, Body.Earth] as const;
  * sớm hơn nên chỉ 46% (phần dưới cột vẫn lấn nhẹ — chữ cột có viền trắng).
  */
 const CORNER_H: Record<ArtworkId, string> = { hdkit: '60%', alternate: '46%' };
+/*
+ * ★ TRẦN chiều cao cột góc — bản công khai (Hưng 2026-10-22, STATUS §5 #89): ở máy hẹp, dòng cuối cột (và dấu
+ *   ▲▼ nằm ở mép TRONG) chạm kênh chéo của hình (16-48 bên trái, 35-36 bên phải; chart 06/12/1992 Qui Nhơn: ▲ của
+ *   43.2). Kênh chéo là đường thẳng theo tỉ lệ hình còn cột rộng cố định 60px ⇒ chiều cao an toàn là hàm BẬC NHẤT
+ *   của chiều cao hàng: `a% − b px` (đo bằng tìm nhị phân trên chart mẫu ở 320 và 393px, trừ hao 4px; Modern đo trên `alternate.public.json`
+ *   — không bóng người). Trên
+ *   ~400px trần cao hơn `--corner-h` nên không đổi gì. `e2e-public/corner-overlap.spec.ts` đo đè thật — đổi bản vẽ
+ *   hay cỡ cột thì đo lại hai hằng này, đừng nới test.
+ */
+const CORNER_CAP: Record<ArtworkId, string> = { hdkit: 'calc(76.6% - 113px)', alternate: 'calc(63.1% - 94px)' };
+/* Cột HAI SỐ (104px, tab Transit "Ghép"/"Của tôi") lấn sâu hơn ⇒ trần riêng, đo cùng cách. */
+const CORNER_CAP_PAIR: Record<ArtworkId, string> = { hdkit: 'calc(77.7% - 177px)', alternate: 'calc(53.4% - 80px)' };
 
 export interface ChartWorkspaceProps {
   chart: RaveChart;
@@ -233,7 +245,8 @@ export function ChartWorkspace({ chart, utcDate, value, resolution, view, setVie
   const gate = isRing ? undefined
     : { vbWidth: art.viewBox.w, fontUnits: gateFontUnits(Object.values(art.badges)[0]!.r) };
   const singleView = !xemTransit && !xemCycle && !isRing;
-  const sidesCols = PUBLIC_EDITION && !isRing && THEMES[theme].artwork === 'hdkit';
+  /* #89: Modern công khai cũng không nền (`alternate.public.json`) ⇒ cột như Classic. */
+  const sidesCols = PUBLIC_EDITION && !isRing;
 
   const bodygraphEl = (() => {
     const cls = 'block h-auto w-full';
@@ -312,11 +325,14 @@ export function ChartWorkspace({ chart, utcDate, value, resolution, view, setVie
        giác) giữ góc. */
     /* #75 (Hưng 2026-10-16, chọn B trên bản nháp): chart ĐƠN điện thoại về lại cột ở HAI GÓC TRÊN, cao 56%, để hình
        trọn bề ngang (rộng 214 → 356px ở 390px) — cột dàn trọn chiều cao chiếm chỗ, thu nhỏ hình. Cột vẫn chữ
-       `COMPACT_SIDE` (sideLayout). Thẻ "Bầu trời" và tab Transit giữ "sides". */
-    <div className="chart-row" data-mobile={sidesCols && !singleView ? 'sides' : 'corners'}
+       `COMPACT_SIDE` (sideLayout). Thẻ "Bầu trời" và "Chỉ transit" giữ "sides".
+       #89 (Hưng 2026-10-22, chọn A): tab Transit "Ghép"/"Của tôi" (có cột đôi) cũng về góc — hình 166 → 350px. */
+    <div className="chart-row" data-mobile={sidesCols && !singleView && !cotNguoi ? 'sides' : 'corners'}
          data-cols={cotNguoi || singleView ? 'lr' : 'r'}
          style={{ ['--gl' as string]: `${pct.left.toFixed(4)}%`, ['--gc' as string]: `${pct.chart.toFixed(4)}%`,
-                  ['--gr' as string]: `${pct.right.toFixed(4)}%`, ['--corner-h' as string]: sidesCols ? '56%' : CORNER_H[THEMES[theme].artwork] }}>
+                  ['--gr' as string]: `${pct.right.toFixed(4)}%`, ['--corner-h' as string]: sidesCols ? '56%' : CORNER_H[THEMES[theme].artwork],
+                  ...(PUBLIC_EDITION ? { ['--corner-cap' as string]: CORNER_CAP[THEMES[theme].artwork],
+                                          ['--corner-cap-pair' as string]: CORNER_CAP_PAIR[THEMES[theme].artwork] } : {}) }}>
       {singleView && (
         <>
           <PlanetColumn set={chart.design} chartSets={chartSets} side="design" showDate zone={resolution.zone}

@@ -447,6 +447,24 @@ svg { font-family: var(--font-chart); }
     .transit-when { padding-inline: .625rem; }
     .transit-when::-webkit-calendar-picker-indicator { display: none; }
   }
+  /*
+   * Thanh kéo giờ của thẻ Thời điểm transit (cách A, `docs/aura-canvas/Transit-Scrub.dc.html`). Vùng bấm 44px ở MỌI
+   * khổ — kể cả chuột (luật 36px dưới không đụng tới lớp này); rãnh 6px, núm 26px mực viền trắng 3px + vòng mực 1px.
+   * Firefox tính núm theo content-box ⇒ 20px + 2×3px viền = 26px.
+   */
+  .time-scrub { -webkit-appearance: none; appearance: none; display: block; width: 100%; height: 2.75rem; margin: 0; background: transparent; cursor: pointer; }
+  .time-scrub:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 2px; border-radius: .5rem; }
+  .time-scrub::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: var(--color-line); }
+  .time-scrub::-moz-range-track { height: 6px; border-radius: 3px; background: var(--color-line); }
+  .time-scrub::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 26px; height: 26px; margin-top: -10px; border-radius: 50%;
+    background: var(--color-ink); border: 3px solid var(--color-surface); box-shadow: 0 0 0 1px var(--color-ink);
+  }
+  .time-scrub::-moz-range-thumb {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--color-ink); border: 3px solid var(--color-surface); box-shadow: 0 0 0 1px var(--color-ink);
+  }
+  .time-scrub-ticks { display: flex; justify-content: space-between; margin-top: -6px; font-size: 11px; color: var(--color-ink-2); font-variant-numeric: tabular-nums; }
   .label { display: block; margin-bottom: .25rem; font-size: var(--text-ui); font-weight: 500; color: var(--color-ink-2); }
   .hint { font-size: var(--text-caption); color: var(--color-ink-3); }
   /* Lỗi của MỘT ô nhập — ngay dưới ô, nối bằng `aria-describedby`. */

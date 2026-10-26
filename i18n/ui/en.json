@@ -305,6 +305,7 @@
   "transit.stepGroup": "Step through time",
   "transit.stepBack": "One day earlier",
   "transit.stepForward": "One day later",
+  "transit.scrub": "Time of day",
   "transit.dayShort": "day",
   "canvas.close": "Close",
   "canvas.panHint": "Chart — drag or scroll to move around",

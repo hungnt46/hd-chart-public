@@ -70,6 +70,23 @@ const toUtInput = (d: Date) => d.toISOString().slice(0, 16);
 const toInput = (d: Date, mode: TimeMode) => (mode === 'ut' ? toUtInput(d) : toLocalInput(d));
 const fromInput = (s: string, mode: TimeMode) => new Date(mode === 'ut' ? `${s}:00Z` : s);
 
+/**
+ * Thanh kéo GIỜ trong thẻ (Hưng chọn cách A, `docs/aura-canvas/Transit-Scrub.dc.html`): 00:00 → 23:55 của NGÀY
+ * đang nằm trong ô, bước 5 phút. Đọc / ghi thẳng phần giờ của chuỗi ô nhập ⇒ theo đúng hệ giờ của công tắc, không
+ * bao giờ đổi ngày (◀ ▶ lo việc đó).
+ */
+export const SCRUB_STEP = 5, SCRUB_MAX = 24 * 60 - SCRUB_STEP;
+export const minuteOfDay = (w: string): number => {
+  const m = /T(\d{2}):(\d{2})/.exec(w);
+  return m ? Number(m[1]) * 60 + Number(m[2]) : 0;
+};
+const todayIn = (mode: TimeMode) => toInput(new Date(), mode).slice(0, 10);
+export const withMinuteOfDay = (w: string, min: number, today: string): string => {
+  const date = /^\d{4,}-\d{2}-\d{2}(?=T)/.exec(w)?.[0] ?? today;
+  const v = Math.max(0, Math.min(SCRUB_MAX, Math.round(min)));
+  return `${date}T${pad(Math.floor(v / 60))}:${pad(v % 60)}`;
+};
+
 /** Nhãn múi giờ của máy, ví dụ "Asia/Ho_Chi_Minh". */
 const localZone = deviceZone;
 
@@ -95,6 +112,12 @@ export interface TransitState<R extends DayChart = TransitChart> {
   runNow: () => void;
   /** Lùi / tiến một số ngày so với mốc đang xem. */
   step: (days: number) => void;
+  /** Đang kéo thanh giờ: ô đã đổi nhưng CHƯA tính (tính khi thả tay). */
+  scrubbing: boolean;
+  /** Kéo thanh giờ tới `min` phút trong ngày: đổi ô, tắt Trực tiếp, chưa tính. */
+  scrub: (min: number) => void;
+  /** Thả tay: tính tại giờ đang nằm trong ô (hoặc `min` nếu truyền). Không đang kéo thì thôi. */
+  commitScrub: (min?: number) => void;
 }
 
 /**
@@ -280,10 +303,39 @@ function useTimeline<R extends DayChart>(
     setWhen(toInput(at, mode));
     void runAt(at);
   }, [runAt, when, mode, cancelTyping]);
+  /*
+   * Thanh giờ: kéo chỉ đổi ô + dòng UTC (rẻ); biểu đồ, cột, các thẻ dưới tính lại khi THẢ tay — tính theo từng
+   * bước 5 phút là vẽ lại cả bodygraph lẫn mandala hàng chục lần một giây. `whenRef` vì thả tay có thể đến ngay
+   * trong cùng lượt sự kiện với lần kéo cuối, trước khi `when` kịp vẽ lại.
+   */
+  const [scrubbing, setScrubbing] = useState(false);
+  const scrubRef = useRef(false);
+  const whenRef = useRef(when);
+  whenRef.current = when;
+  const scrub = useCallback((min: number) => {
+    cancelTyping();
+    setLiveState(false);
+    scrubRef.current = true;
+    setScrubbing(true);
+    const w = withMinuteOfDay(whenRef.current, min, todayIn(modeRef.current));
+    whenRef.current = w;
+    setWhen(w);
+  }, [cancelTyping]);
+  const commitScrub = useCallback((min?: number) => {
+    if (!scrubRef.current) return;
+    scrubRef.current = false;
+    setScrubbing(false);
+    const w = withMinuteOfDay(whenRef.current, min ?? minuteOfDay(whenRef.current), todayIn(modeRef.current));
+    const at = fromInput(w, modeRef.current);
+    /* Giờ không tồn tại (nhảy DST) thì Date tự dời — ghi lại ô theo đúng khoảnh khắc sẽ tính. */
+    setWhen(Number.isNaN(at.getTime()) ? w : toInput(at, modeRef.current));
+    void runAt(at);
+  }, [runAt]);
   const dismissToast = useCallback((id: number) => setToasts(ts => ts.filter(y => y.id !== id)), []);
 
   return {
     when, setWhen, result, ut, busy, err, live, setLive: setLiveState, toasts, dismissToast, edit, run, runNow, step,
+    scrubbing, scrub, commitScrub,
   };
 }
 
@@ -291,6 +343,9 @@ function useTimeline<R extends DayChart>(
 export function TransitControls({ s }: { s: TransitState<DayChart> }): JSX.Element {
   const { t } = useLanguage();
   const { mode } = useTimeMode();
+  /* Đang kéo thì dòng UTC theo ô (chưa tính) — không thì người kéo thấy giờ đổi mà UTC đứng yên. */
+  const dragged = s.scrubbing ? fromInput(s.when, mode) : null;
+  const shownUt = dragged && !Number.isNaN(dragged.getTime()) ? dragged : s.ut;
   return (
     <div className="space-y-2" data-testid="transit-controls" aria-busy={s.busy}>
       {/*
@@ -312,6 +367,7 @@ export function TransitControls({ s }: { s: TransitState<DayChart> }): JSX.Eleme
           <button type="button" className="btn btn-icon" aria-label={t('transit.stepForward')} disabled={s.live}
                   onClick={() => s.step(1)} data-testid="transit-next-day"><span aria-hidden="true">▶</span></button>
         </div>
+        <TimeScrub s={s} />
         <div className="flex flex-wrap items-center gap-1.5">
           <button type="button" className="btn" disabled={s.live} onClick={s.runNow} data-testid="transit-now">
             {t('transit.now')}
@@ -324,12 +380,12 @@ export function TransitControls({ s }: { s: TransitState<DayChart> }): JSX.Eleme
       </form>
       <p className="hint" data-time-mode={mode}>
         {mode === 'ut' ? t('transit.utNote') : t('transit.localNote', { zone: localZone() })}
-        {s.ut && (
+        {shownUt && (
           <span data-testid="transit-ut">
             {' · '}
             {mode === 'ut'
-              ? t('transit.equalsLocal', { local: toLocalInput(s.ut).replace('T', ' '), zone: localZone() })
-              : t('transit.equalsUt', { ut: s.ut.toISOString().slice(0, 16).replace('T', ' ') })}
+              ? t('transit.equalsLocal', { local: toLocalInput(shownUt).replace('T', ' '), zone: localZone() })
+              : t('transit.equalsUt', { ut: shownUt.toISOString().slice(0, 16).replace('T', ' ') })}
           </span>
         )}
       </p>
@@ -347,6 +403,45 @@ export function TransitControls({ s }: { s: TransitState<DayChart> }): JSX.Eleme
                     onClick={() => s.dismissToast(x.id)}><Icon name="close" /></button>
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Thanh kéo giờ (cách A). KHÔNG khoá khi Trực tiếp như các nút khác: kéo chính là cách thoát "bây giờ" để xem giờ
+ * khác — `scrub` tự tắt Trực tiếp. Thả tay = sự kiện `change` gốc (React gộp nó vào `onChange` mỗi bước nên phải
+ * gắn tay); `pointerup` / `blur` chỉ là lưới đỡ khi kéo rồi trả về đúng chỗ cũ (`change` không bắn).
+ * PageUp/PageDown tự xử lý: mỗi trình duyệt nhảy một khác (Chrome 10% khoảng), Hưng muốn đúng 1 giờ.
+ */
+function TimeScrub({ s }: { s: TransitState<DayChart> }): JSX.Element {
+  const { t } = useLanguage();
+  const ref = useRef<HTMLInputElement>(null);
+  const { commitScrub } = s;
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const onChange = () => commitScrub(Number(el.value));
+    el.addEventListener('change', onChange);
+    return () => el.removeEventListener('change', onChange);
+  }, [commitScrub]);
+  const min = minuteOfDay(s.when);
+  return (
+    <div>
+      <input ref={ref} type="range" className="time-scrub" min={0} max={SCRUB_MAX} step={SCRUB_STEP}
+             value={Math.min(min, SCRUB_MAX)} aria-label={t('transit.scrub')}
+             aria-valuetext={`${pad(Math.floor(min / 60))}:${pad(min % 60)}`} data-testid="transit-scrub"
+             onChange={e => s.scrub(Number(e.target.value))}
+             onPointerUp={() => commitScrub()} onBlur={() => commitScrub()}
+             onKeyDown={e => {
+               if (e.key !== 'PageUp' && e.key !== 'PageDown') return;
+               e.preventDefault();
+               const to = min + (e.key === 'PageUp' ? 60 : -60);
+               s.scrub(to);
+               commitScrub(to);
+             }} />
+      <div className="time-scrub-ticks" aria-hidden="true">
+        <span>0h</span><span>6h</span><span>12h</span><span>18h</span><span>24h</span>
       </div>
     </div>
   );

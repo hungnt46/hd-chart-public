@@ -472,8 +472,6 @@
   "illu.legend": "Colour key",
   "illu.artwork": "Drawing style",
   "illu.layers": "Layers · visibility / opacity",
-  "illu.layer.backdrop.classic": "Backdrop (triangle + figure)",
-  "illu.layer.backdrop.modern": "Backdrop (figure)",
   "illu.layer.lattice": "Channel lattice",
   "illu.layer.centers": "Centers",
   "illu.layer.gates": "Gate discs",

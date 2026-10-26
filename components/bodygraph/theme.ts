@@ -17,7 +17,6 @@
  */
 import { CenterId } from '../../calc-core/rave/derive/tables.js';
 import { textOnFill } from './contrast.js';
-import { PUBLIC_EDITION } from '../../lib/edition.js';
 
 export type ThemeName = 'classic' | 'modern';
 
@@ -184,6 +183,16 @@ const DESIGN = '#c63a2b';
 const PERSONALITY_LIGHT = '#172033';
 /** Viền mọi nét (trung tâm, lưới, đĩa) — token `control` của Aura. */
 const OUTLINE = '#7d8592';
+/*
+ * ★ Ruột kênh TRỐNG — XÁM nhạt ánh lục, KHÔNG viền lưới, KHÔNG nền (tam giác / bóng người), cả Classic lẫn
+ *   Modern, bản đầy đủ lẫn bản công khai, bodygraph chính lẫn bodygraph-ở-tâm mandala (Hưng chốt 2026-10-26,
+ *   `docs/PLAN-bodygraph-aura.md` §6.1 — thay "Classic trắng + viền" của Aura A 2026-10-21).
+ *   So trên ảnh render thật: viền trên kênh cong Modern thành chùm đường; ở cỡ điện thoại viền < 1px gần như
+ *   mất; ống xám giữ khối ở mọi cỡ và để màu kích hoạt nổi hơn. Xám đậm hơn (`#d5dad6`) bị bác: lưới nặng mà vẫn
+ *   không tới 3:1. LỆCH ĐÃ BIẾT: 1.23:1 với nền giấy, 1.27:1 với trắng — khoá số ở `contrast.spec.ts`.
+ *   Trung tâm trống VẪN viền `OUTLINE` (không còn nền để tách nó).
+ */
+const OPEN_CHANNEL = '#e1e5e2';
 /** Số cổng chưa kích hoạt trên trung tâm TRỐNG — `ink-2` của Aura, 7.81:1. */
 const GATE_TEXT_OPEN = '#4a5266';
 
@@ -192,8 +201,7 @@ export const CLASSIC: BodygraphTheme = {
   artwork: 'hdkit',
   centerFill: CENTER_FILL,
   centerOpenFill: '#ffffff',
-  figureFill: '#e6ebe7',
-  triangleFill: '#f1f3ef',
+  // KHÔNG nền (không tam giác, không bóng người) — xem `OPEN_CHANNEL`.
   mixedBandDuty: 0.7,
   // ★ Viền mảnh và ĐỒNG NHẤT cho cả trung tâm lẫn kênh — đo từ mẫu chuẩn:
   //   ở đó mọi nét đều là hairline cùng màu, nên hình đọc ra như MỘT mạng lưới
@@ -205,20 +213,8 @@ export const CLASSIC: BodygraphTheme = {
   centerStroke: OUTLINE,
   centerStrokeWidth: 1.5,
   centerRadius: 0,
-  // ★ Ruột kênh KHÔNG để trắng: sơ đồ chuẩn có nền thân người màu xám phía sau
-  //   nên dải trắng nổi lên thành khối đặc. Bỏ nền đó mà vẫn tô trắng thì chỉ
-  //   còn thấy viền — hình biến thành mớ khung dây mảnh, rối hơn hẳn.
-  // ★ Bản công khai KHÔNG có nền (STATUS §5 #66; chỉ Classic). Trước Aura nó tô kênh trống xám
-  //   nhạt `#e4e4e4` cho khỏi chìm vào nền trắng; từ khi lưới Classic có VIỀN (Aura A,
-  //   2026-10-21) thì trắng + viền là đủ, nên hai bản như nhau.
-  channelOpenFill: '#ffffff',
-  /*
-   * ★ Viền LƯỚI bật lại — Aura hướng A, Hưng chốt 2026-10-21, CHỈ Classic (Modern
-   *   giữ không viền: viền trên kênh cong thành một mớ đường). `#7d8592` đạt 3.72:1
-   *   với ruột kênh trắng, 3.08:1 với bóng người, 3.33:1 với tam giác ⇒ lệch đã biết
-   *   "ruột kênh 1.14:1" của Classic không còn. Trước đó (2026-09-22) Hưng chọn không viền.
-   */
-  channelOpenStroke: OUTLINE,
+  // Ruột XÁM, KHÔNG viền lưới — `OPEN_CHANNEL` (Hưng chốt 2026-10-26).
+  channelOpenFill: OPEN_CHANNEL,
   /*
    * ★ Vành huy hiệu đổi #d4d4d4 → #807c7c ngày 2026-09-22 vì TƯƠNG PHẢN.
    *
@@ -273,30 +269,17 @@ export const CLASSIC: BodygraphTheme = {
   gateFontSize: 26,
 };
 
-/*
- * ★ Ruột kênh trống của Modern BẢN CÔNG KHAI (Hưng chọn 2026-10-22, STATUS §5 #89, phương án "(2) ruột xám"):
- *   bản công khai bỏ bóng người để cột gọn điện thoại không đè hình. Không nền thì ruột trắng tan vào nền trang;
- *   Hưng so hai cách — lưới có viền (như Classic) bị bác lần nữa ("mớ đường" quanh cụm kênh cong) — chọn ruột XÁM,
- *   không viền. Chỉ 1.27:1 với nền trắng: LỆCH ĐÃ BIẾT, khoá số ở `contrast.spec.ts` như lệch bóng người của bản đầy đủ.
- */
-export const MODERN_PUBLIC_OPEN_FILL = '#e4e4e4';
-
 /** Cùng bảng màu Jovian, khác BẢN VẼ: kênh cong, trung tâm bo góc. */
 export const MODERN: BodygraphTheme = {
   name: 'modern',
   artwork: 'alternate',
   centerFill: CENTER_FILL,
   centerOpenFill: '#ffffff',
-  figureFill: '#e6ebe7',
-  triangleFill: '#f1f3ef',
   mixedBandDuty: 0.7,
   centerStroke: OUTLINE,
   centerStrokeWidth: 1.5,
   centerRadius: 16,
-  // Bản công khai KHÔNG bóng người (STATUS §5 #89) ⇒ ruột trắng không viền tan vào nền: tô xám — `MODERN_PUBLIC_OPEN_FILL`.
-  channelOpenFill: PUBLIC_EDITION ? MODERN_PUBLIC_OPEN_FILL : '#ffffff',
-  // KHÔNG viền lưới — Hưng chốt 2026-10-21: Aura A chỉ bật viền cho Classic. Lệch đã biết
-  // (ruột kênh vs bóng người 1.21:1) khoá trong `contrast.spec.ts`.
+  channelOpenFill: OPEN_CHANNEL,   // ruột xám, không viền lưới, không bóng người — như Classic
   badgeOpenStroke: OUTLINE,     // xem ghi chú ở CLASSIC — ngưỡng tương phản
   channelWidth: 20,
   personality: PERSONALITY_LIGHT,

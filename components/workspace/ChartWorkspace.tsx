@@ -80,14 +80,15 @@ const ChartExport = dynamic(() => import('../export/ChartExport.js').then(m => m
 /** Chế độ Thập tự Nhập Thế (E4): hai thiên thể tạo nên Incarnation Cross. */
 const CROSS_BODIES = [Body.Sun, Body.Earth] as const;
 /**
- * Điện thoại: cột gọn nằm ở hai góc trên, cao bằng phần này của biểu đồ — xem
- * `data-mobile="corners"` trong `app/globals.css`. Đo theo nền của từng bản vẽ:
- * cạnh tam giác Classic chừa chỗ tới ~61% ở 320px; bóng người Modern rộng vai
- * sớm hơn nên chỉ 46% (phần dưới cột vẫn lấn nhẹ — chữ cột có viền trắng).
+ * Điện thoại: cột gọn nằm ở hai góc trên, cao TỐI ĐA bằng phần này của biểu đồ — xem
+ * `data-mobile="corners"` trong `app/globals.css`. Con số gốc đo theo NỀN cũ (tam giác Classic ~61%, bóng người
+ * Modern 46%); từ 2026-10-26 không còn nền, khung ôm sát lưới ⇒ chiều cao thật do TRẦN `CORNER_CAP` quyết định
+ * ở mọi khổ điện thoại (hai bản), số này chỉ còn là mức trên.
  */
 const CORNER_H: Record<ArtworkId, string> = { hdkit: '60%', alternate: '46%' };
 /*
- * ★ TRẦN chiều cao cột góc — bản công khai (Hưng 2026-10-22, STATUS §5 #89): ở máy hẹp, dòng cuối cột (và dấu
+ * ★ TRẦN chiều cao cột góc — cả hai bản (Hưng 2026-10-22, STATUS §5 #89; bản đầy đủ từ 2026-10-26 khi nó cũng
+ *   bỏ nền, khung giống hệt bản công khai): ở máy hẹp, dòng cuối cột (và dấu
  *   ▲▼ nằm ở mép TRONG) chạm kênh chéo của hình (16-48 bên trái, 35-36 bên phải; chart 06/12/1992 Qui Nhơn: ▲ của
  *   43.2). Kênh chéo là đường thẳng theo tỉ lệ hình còn cột rộng cố định 60px ⇒ chiều cao an toàn là hàm BẬC NHẤT
  *   của chiều cao hàng: `a% − b px` (đo bằng tìm nhị phân trên chart mẫu ở 320 và 393px, trừ hao 4px; Modern đo trên `alternate.public.json`
@@ -331,8 +332,8 @@ export function ChartWorkspace({ chart, utcDate, value, resolution, view, setVie
          data-cols={cotNguoi || singleView ? 'lr' : 'r'}
          style={{ ['--gl' as string]: `${pct.left.toFixed(4)}%`, ['--gc' as string]: `${pct.chart.toFixed(4)}%`,
                   ['--gr' as string]: `${pct.right.toFixed(4)}%`, ['--corner-h' as string]: sidesCols ? '56%' : CORNER_H[THEMES[theme].artwork],
-                  ...(PUBLIC_EDITION ? { ['--corner-cap' as string]: CORNER_CAP[THEMES[theme].artwork],
-                                          ['--corner-cap-pair' as string]: CORNER_CAP_PAIR[THEMES[theme].artwork] } : {}) }}>
+                  ['--corner-cap' as string]: CORNER_CAP[THEMES[theme].artwork],
+                  ['--corner-cap-pair' as string]: CORNER_CAP_PAIR[THEMES[theme].artwork] }}>
       {singleView && (
         <>
           <PlanetColumn set={chart.design} chartSets={chartSets} side="design" showDate zone={resolution.zone}

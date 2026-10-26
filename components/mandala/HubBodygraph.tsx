@@ -11,8 +11,8 @@
  *   bằng `HUB_R`.
  * ★ Góp ý lần hai (cùng ngày): bỏ nền rồi thì trung tâm TRỐNG và kênh MỞ — đều
  *   trắng — biến mất vào nền trắng của mandala. Lúc đó đặt một ĐĨA XÁM sau lưng.
- *   Đĩa đã BỎ 2026-09-29 (nền trắng như bản tham chiếu) — cách giữ kênh khỏi chìm nay là
- *   viền mảnh (Classic) / bóng người (Modern), xem `HUB_OUTLINE` bên dưới.
+ *   Đĩa đã BỎ 2026-09-29 (nền trắng như bản tham chiếu). Từ 2026-10-26 kênh mở tự đứng được nhờ ruột XÁM của
+ *   theme chính (`OPEN_CHANNEL`, `theme.ts`) — không viền riêng, không bóng người.
  *
  * Cách đặt: `<svg>` con không kích thước phủ trọn khung vuông của mandala
  * (`mandalaSide`) và "meet" viewBox của bản vẽ vào đó; phép biến đổi dưới đây
@@ -45,35 +45,17 @@ export interface HubBodygraphProps {
   title?: string;
 }
 
-/**
- * ★ Đổi 2026-09-29 (Hưng chọn phương án b sau khi so với các ứng dụng tham chiếu):
- *   mandala nền TRẮNG, bỏ ĐĨA XÁM. Mỗi chủ đề giữ trung tâm trống / kênh mở khỏi
- *   chìm vào nền trắng bằng cách hợp với nó nhất:
- *   · Classic — VIỀN MẢNH quanh lưới kênh (`channelOpenStroke`, cùng màu viền
- *     trung tâm `#7d8592`); không nền.
- *   · Modern — giữ BÓNG NGƯỜI xám của bản vẽ `alternate` như bản tham chiếu, không viền:
- *     kênh Modern là đường cong, viền hai bên từng kênh thành một mớ đường mảnh
- *     (đã thử trên mockup, Hưng thấy). Bóng người cắt gọn trong vòng trong.
- *   Hồi đó viền chỉ bật cho bodygraph Ở TÂM; từ Aura A (2026-10-21) bodygraph chính
- *   Classic cũng có viền lưới, Modern thì không (cả chính lẫn ở tâm).
- */
 /*
- * Aura A (2026-10-21): `#7d8592` — cùng viền với bodygraph chính, nay bodygraph chính
- * Classic cũng có viền lưới. Modern ở tâm vẫn KHÔNG viền (luật trên) — Modern chính
- * cũng không (Hưng chốt 2026-10-21); vẫn tắt tường minh cho chắc.
+ * ★ Bodygraph ở tâm dùng ĐÚNG theme chính, cả Classic lẫn Modern (Hưng chốt 2026-10-26,
+ *   `docs/PLAN-bodygraph-aura.md` §2 · §6.1): ruột kênh xám, không viền lưới, không bóng người — một luật duy nhất.
+ *   Trước đó (2026-09-29 → 10-26) ở tâm có luật riêng: Classic viền mảnh `HUB_OUTLINE`, Modern giữ bóng người.
  */
-const HUB_OUTLINE = '#7d8592';
 
 export function HubBodygraph({ theme, zodiac, ...rest }: HubBodygraphProps): JSX.Element {
   const art = ARTWORKS[THEMES[theme].artwork];
   const fit = useMemo(() => hubFit(Object.values(art.centers)), [art]);
-  const withFigure = theme === 'modern';
-  /* Không tam giác; bóng người chỉ giữ ở Modern (xem trên). */
-  const bare = useMemo(() => ({ ...art, triangle: undefined, figure: withFigure ? art.figure : undefined }), [art, withFigure]);
-  /* Nền = màu Illustrator tự chọn (nếu có) rồi mới thêm viền — thống nhất với Phase 3. */
-  const base = rest.themeOverride;
-  const themeOverride = useMemo(
-    () => ({ ...(base ?? THEMES[theme]), channelOpenStroke: withFigure ? undefined : HUB_OUTLINE }), [base, theme, withFigure]);
+  /* Không nền ở tâm, kể cả khi Illustrator tự chọn màu nền — chỉ chín trung tâm phải vừa `HUB_R`. */
+  const bare = useMemo(() => ({ ...art, triangle: undefined, figure: undefined }), [art]);
   const clipId = `hub-clip-${useId().replace(/:/g, '')}`;
 
   const side = mandalaSide(zodiac);
@@ -88,10 +70,10 @@ export function HubBodygraph({ theme, zodiac, ...rest }: HubBodygraphProps): JSX
       <clipPath id={clipId}>
         <circle cx={CENTER.x} cy={CENTER.y} r={WEDGE_INNER - 1} />
       </clipPath>
-      <g clipPath={`url(#${clipId})`} data-hub-style={withFigure ? 'figure' : 'outline'}>
+      <g clipPath={`url(#${clipId})`} data-hub-style="plain">
         <g transform={`translate(${CENTER.x} ${CENTER.y}) scale(${k.toFixed(5)}) translate(${(-px).toFixed(3)} ${(-py).toFixed(3)})`}
            data-hub-bodygraph={art.id}>
-          <BodygraphArtwork art={bare} theme={theme} {...rest} themeOverride={themeOverride} />
+          <BodygraphArtwork art={bare} theme={theme} {...rest} />
         </g>
       </g>
     </>

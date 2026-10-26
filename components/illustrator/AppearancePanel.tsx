@@ -25,7 +25,9 @@ import { Icon } from '../ui/Icon.js';
 import type { IllustrationApi } from './useIllustration.js';
 import { illustrationTheme } from './render.js';
 
-const LAYERS: readonly LayerKey[] = ['backdrop', 'lattice', 'centers', 'gates', 'gateNumbers', 'activation'];
+/* Không còn lớp "Nền": không chủ đề nào vẽ nền từ 2026-10-26 (PLAN-bodygraph-aura §6.1). Khoá `backdrop` vẫn
+   nằm trong mô hình để đọc bản vẽ cũ. */
+const LAYERS: readonly Exclude<LayerKey, 'backdrop'>[] = ['lattice', 'centers', 'gates', 'gateNumbers', 'activation'];
 const FULL: LayerSetting = { visible: true, opacity: 1 };
 
 type Appearance = IllustrationState['appearance'];
@@ -49,8 +51,7 @@ export function AppearancePanel({ api }: { api: IllustrationApi }): JSX.Element 
       return { ...a, colors: v === undefined ? rest : { ...rest, [k]: v } };
     }), `color-${k}`);
 
-  const layerName = (k: LayerKey): string =>
-    t(k === 'backdrop' ? `illu.layer.backdrop.${ap.theme}` : `illu.layer.${k}`);
+  const layerName = (k: Exclude<LayerKey, 'backdrop'>): string => t(`illu.layer.${k}`);
 
   const swatches: readonly [keyof ColorOverrides, UiKey, string][] = [
     ['design', 'illu.side.design', th.design],

@@ -620,7 +620,7 @@ svg { font-family: var(--font-chart); }
   [data-full="false"] .chart-row[data-mobile="corners"] > .cr-std { display: none; }
   [data-full="false"] .chart-row[data-mobile="corners"] > .cr-compact {
     display: block; position: absolute; z-index: 1; top: .125rem; width: 3.75rem;
-    /* Trần `--corner-cap` (bản công khai): dòng cuối không chạm kênh chéo ở máy hẹp — `CORNER_CAP`, `ChartWorkspace.tsx`. */
+    /* Trần `--corner-cap` (cả hai bản): dòng cuối không chạm kênh chéo ở máy hẹp — `CORNER_CAP`, `ChartWorkspace.tsx`. */
     height: min(var(--corner-h, 60%), var(--corner-cap, 100%));
   }
   [data-full="false"] .chart-row[data-mobile="corners"] > .cr-compact.cr-l { left: .125rem; }

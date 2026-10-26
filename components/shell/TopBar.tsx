@@ -81,6 +81,18 @@ export function TopBar({ identity, nav, drawerOpen, onLibrary, onNewChart, onSav
   const { t } = useLanguage();
   const bar = useRef<HTMLDivElement>(null);
   const phone = useMedia('(max-width: 639.98px)');
+  /* Nhãn + nút Thoát của "Transit lúc này" — hàng một (≥ 640px) hoặc hàng hai (điện thoại). */
+  const nowLabel = now && !illustrator && !identity ? (
+    /* Chỉ viên TRANSIT — chữ "Transit lúc này" bỏ (Hưng 2026-10-25: thừa). */
+    <span className="mr-auto inline-flex shrink-0 items-center rounded-full bg-ink px-2 py-0.5 text-overline font-semibold uppercase tracking-wide text-on-dark"
+          data-testid="now-identity">{t('view.transit')}</span>
+  ) : null;
+  const nowExit = now && !illustrator && !identity ? (
+    <button type="button" onClick={now.onExit} data-testid="now-exit" title={t('now.exitTitle')}
+            className="btn btn-ghost max-lg:w-11 max-lg:px-0">
+      <Icon name="close" size={18} /><span className="max-lg:sr-only">{t('illu.exit')}</span>
+    </button>
+  ) : null;
   /* ≥ 1024px tab nằm GIỮA hàng một; hẹp hơn xuống hàng hai. */
   const roomy = useMedia('(min-width: 1024px)');
   const [menu, setMenu] = useState(false);
@@ -173,12 +185,7 @@ export function TopBar({ identity, nav, drawerOpen, onLibrary, onNewChart, onSav
                 <span className="truncate text-xs text-ink-2" data-testid="illu-identity-summary">{illustrator.summary}</span>
               </button>
             )}
-            {now && !illustrator && !identity && (
-              <span className="mr-auto flex min-w-0 items-center gap-2 text-sm font-semibold" data-testid="now-identity">
-                <span className="inline-flex shrink-0 items-center rounded-full bg-ink px-2 py-0.5 text-overline font-semibold uppercase tracking-wide text-on-dark">{t('view.transit')}</span>
-                <span className="truncate">{t('now.mode')}</span>
-              </span>
-            )}
+            {nowLabel && !phone && nowLabel}
           </div>
 
           <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
@@ -188,13 +195,8 @@ export function TopBar({ identity, nav, drawerOpen, onLibrary, onNewChart, onSav
                 <Icon name="save" className="lg:hidden" /><span className="max-lg:sr-only">{t('shell.save')}</span>
               </button>
             )}
-            {now && <SettingsButton />}
-            {now && !illustrator && !identity && (
-              <button type="button" onClick={now.onExit} data-testid="now-exit" title={t('now.exitTitle')}
-                      className="btn btn-ghost max-lg:w-11 max-lg:px-0">
-                <Icon name="close" size={18} /><span className="max-lg:sr-only">{t('illu.exit')}</span>
-              </button>
-            )}
+            {now && !(phone && nowLabel) && <SettingsButton />}
+            {nowLabel && !phone && nowExit}
             {illustrator && (
               <button type="button" onClick={illustrator.onExit} data-testid="illu-exit" title={t('illu.exitTitle')}
                       className="btn btn-ghost max-lg:w-11 max-lg:px-0">
@@ -211,6 +213,19 @@ export function TopBar({ identity, nav, drawerOpen, onLibrary, onNewChart, onSav
         {/* 640–1023px (artboard `Tablet`): tab xuống hàng hai CỦA header — không vạch ngăn, lề 0 24 12, viên cao 44. */}
         {nav && !illustrator && !phone && !roomy && (
           <nav aria-label={t('view.group')} className="tabrow min-w-0 px-6 pb-3">{nav}</nav>
+        )}
+
+        {/*
+          ★ Điện thoại ở "Xem transit đầy đủ" (Transit lúc này): nhãn TRANSIT + nút ⚙ VI + Thoát xuống HÀNG HAI như thanh
+            danh tính của chart. Hàng một ở 390px chỉ còn ~2px giữa chữ hiệu và nhóm nút ⇒ nút ⚙ đè lên viên "TRANSIT"
+            (lỗi Hưng báo 2026-10-25: đọc thành "TRAN$IT").
+        */}
+        {phone && nowLabel && (
+          <div className="flex items-center gap-2 border-t border-line bg-surface py-1.5 pl-4 pr-3" data-testid="now-bar">
+            {nowLabel}
+            <SettingsButton />
+            {nowExit}
+          </div>
         )}
 
         {/* Điện thoại có chart: THANH DANH TÍNH (artboard `Chart-Mobile`). */}

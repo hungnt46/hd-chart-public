@@ -436,6 +436,17 @@ svg { font-family: var(--font-chart); }
   /* Chữ gợi ý: `ink-3` (5.7:1 trên trắng) thay mặc định Tailwind (mực 50% ≈ 3.25:1 < 4.5). */
   .field::placeholder { color: var(--color-ink-3); opacity: 1; }
   .field[aria-invalid="true"] { border-color: var(--color-danger); }
+  /*
+   * ★ Ô thời điểm transit trên điện thoại (Hưng 2026-10-26): ô `datetime-local` GỐC (giữ, không tự vẽ) bị CẮT chữ số
+   *   ("25/10/2026, 21:4") — ô chỉ còn ~190px giữa ◀ ▶ mà Chrome còn chừa chỗ biểu tượng lịch. Điện thoại chạm vào ô là
+   *   mở bảng chọn, nên bỏ biểu tượng + bớt đệm. Dưới 360px vẫn không đủ (~116px cho ~141px chữ) ⇒ ô lên một hàng
+   *   riêng, ◀ ▶ xuống dưới (tiện ích `max-[359.98px]:` ở `TransitPanel` — `flex-1` là tiện ích nên phải đè bằng tiện ích).
+   *   e2e-public kiểm chữ vừa ô.
+   */
+  @media (max-width: 639.98px) {
+    .transit-when { padding-inline: .625rem; }
+    .transit-when::-webkit-calendar-picker-indicator { display: none; }
+  }
   .label { display: block; margin-bottom: .25rem; font-size: var(--text-ui); font-weight: 500; color: var(--color-ink-2); }
   .hint { font-size: var(--text-caption); color: var(--color-ink-3); }
   /* Lỗi của MỘT ô nhập — ngay dưới ô, nối bằng `aria-describedby`. */

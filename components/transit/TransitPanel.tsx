@@ -300,7 +300,7 @@ export function TransitControls({ s }: { s: TransitState<DayChart> }): JSX.Eleme
         ngay cạnh chính cái ngày đang xem — còn Bây giờ / Trực tiếp ở hàng dưới.
       */}
       <form className="space-y-1.5" onSubmit={e => { e.preventDefault(); s.run(); }}>
-        <div role="group" aria-label={t('transit.stepGroup')} className="flex items-center gap-1.5">
+        <div role="group" aria-label={t('transit.stepGroup')} className="flex items-center gap-1.5 max-[359.98px]:flex-wrap">
           <button type="button" className="btn btn-icon" aria-label={t('transit.stepBack')} disabled={s.live}
                   onClick={() => s.step(-1)} data-testid="transit-prev-day"><span aria-hidden="true">◀</span></button>
           {/* Enter bắt ở phím, không trông vào "gửi ngầm" của form: form KHÔNG còn nút
@@ -308,7 +308,7 @@ export function TransitControls({ s }: { s: TransitState<DayChart> }): JSX.Eleme
           <input type="datetime-local" value={s.when} onChange={e => s.edit(e.target.value)}
                  onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); s.run(e.currentTarget.value); } }}
                  aria-label={t('transit.moment')} data-testid="transit-when" disabled={s.live}
-                 className="field min-w-0 flex-1 tabular-nums" />
+                 className="field transit-when min-w-0 flex-1 tabular-nums max-[359.98px]:order-first max-[359.98px]:basis-full" />
           <button type="button" className="btn btn-icon" aria-label={t('transit.stepForward')} disabled={s.live}
                   onClick={() => s.step(1)} data-testid="transit-next-day"><span aria-hidden="true">▶</span></button>
         </div>
@@ -333,7 +333,7 @@ export function TransitControls({ s }: { s: TransitState<DayChart> }): JSX.Eleme
           </span>
         )}
       </p>
-      {s.live && <p className="hint" data-testid="transit-live-note">{t('transit.liveNote')}</p>}
+      {/* Dòng "Đang theo giờ thật — tự tính lại mỗi 30 giây…" bỏ (Hưng 2026-10-25): nút Trực tiếp đã sáng là đủ. */}
       {s.err && <Notice tone="danger" testId="transit-error">{s.err}</Notice>}
 
       {/* Thông báo đổi hào khi Trực tiếp — góc dưới phải, đọc được bằng trình đọc màn hình. */}

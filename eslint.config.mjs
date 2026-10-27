@@ -38,6 +38,8 @@ export default tseslint.config(
       'i18n/hd-content/generate/**',
       // xuất mã nguồn công khai (AGPL, STATUS §5 #65) — node thuần
       'deploy/public-source/**',
+      // Worker trang tạm humandesign.vn (RG-2) — JS thuần chạy trên Cloudflare, không nằm trong tsconfig
+      'deploy/holding/**',
       // script .js trong fixtures, chạy bằng node thuần, không nằm trong tsconfig
       'calc-core/__fixtures__/**/*.js',
       // spikes/ là code thăm dò Phase 0, không thuộc ứng dụng và không nằm trong tsconfig

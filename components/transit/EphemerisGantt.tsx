@@ -12,7 +12,7 @@
  *
  * "Địa phương" ở đây = GIỜ MÁY, như ô nhập transit (STATUS §5 #18).
  */
-import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type JSX } from 'react';
+import { memo, useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type JSX } from 'react';
 import { IANAZone } from 'luxon';
 import type { RaveChart } from '../../calc-core/rave/chart.js';
 import { BODY_NAMES, DEFINING_BODIES_STANDARD, type Body } from '../../calc-core/ephemeris/bodies.js';
@@ -22,6 +22,7 @@ import {
 } from '../../calc-core/rave/ephemeris-segments.js';
 import { getBrowserEphemeris } from '../../lib/ephemeris/browser-client.js';
 import { useLanguage } from '../../i18n/ui/LanguageProvider.js';
+import type { Lang } from '../../i18n/ui/index.js';
 import { planetName } from '../../i18n/terms.js';
 import { momentLabel } from '../time-mode/format.js';
 import { useTimeMode } from '../time-mode/TimeModeProvider.js';
@@ -342,41 +343,8 @@ export function EphemerisGantt({ chart, jdRef, zone, onPick }: EphemerisGanttPro
                         data-testid="ephemeris-day-sticky">{label(jdLeft).split(' ')[0]}</text>
                 );
               })()}
-              {DEFINING_BODIES_STANDARD.map((b, i) => {
-                const y = HEADER + i * ROW + 2, h = ROW - 4;
-                return (
-                  <g key={b} data-ephem-body={BODY_NAMES[b]}>
-                    {(segs.get(b) ?? []).map(s => {
-                      const x0 = Math.max(s.jdStart, range.from), x1 = Math.min(s.jdEnd, range.to);
-                      if (x1 <= x0) return null;
-                      const x = xOf(x0), w = xOf(x1) - x;
-                      const rel = segmentRelation(s.gate, personGates);
-                      const cell = `${s.gate}.${s.line}${s.retrograde ? ' R' : ''}`;
-                      return (
-                        <g key={s.jdStart} data-seg={`${s.gate}.${s.line}`} data-rel={rel}
-                           data-retro={s.retrograde || undefined}
-                           data-start={isoOf(s.jdStart)} data-end={isoOf(s.jdEnd)}>
-                          <title>{`${planetName(b, lang)} ${cell} · ${label(s.jdStart)} → ${label(s.jdEnd)}`}</title>
-                          {rel === 'both' ? (
-                            <>
-                              <rect x={x} y={y} width={w} height={h / 2} fill={EPHEMERIS_FILL.same} />
-                              <rect x={x} y={y + h / 2} width={w} height={h / 2} fill={EPHEMERIS_FILL.harmonic} />
-                            </>
-                          ) : <rect x={x} y={y} width={w} height={h} fill={EPHEMERIS_FILL[rel]} />}
-                          {s.jdStart >= range.from && (
-                            <line x1={x} x2={x} y1={y} y2={y + h} stroke={EPHEMERIS_DIVIDER} />
-                          )}
-                          {x + w - Math.max(x, viewLeft) >= LABEL_MIN_PX && (
-                            // Bám mép trái phần đang thấy, nhưng không trượt ra khỏi ô.
-                            <text x={Math.min(Math.max(x, viewLeft) + 4, x + w - LABEL_MIN_PX + 4)} y={y + h / 2 + 4}
-                                  fontSize={11} fill={EPHEMERIS_TEXT} pointerEvents="none">{cell}</text>
-                          )}
-                        </g>
-                      );
-                    })}
-                  </g>
-                );
-              })}
+              <GanttRows segs={segs} from={range.from} to={range.to} pxPerDay={pxPerDay} viewLeft={viewLeft}
+                         personGates={personGates} label={label} lang={lang} />
               {marker(nowJd, NOW_MARKER, 'now')}
               {marker(jdRef, CHART_MARKER, 'chart')}
             </svg>
@@ -411,3 +379,55 @@ export function EphemerisGantt({ chart, jdRef, zone, onPick }: EphemerisGanttPro
     </section>
   );
 }
+
+/**
+ * Các hàng ô hào — phần NẶNG của lịch (hàng trăm ô × 13 thiên thể). Tách riêng và `memo` vì nó KHÔNG phụ thuộc
+ * mốc transit: kéo thanh giờ của thẻ Thời điểm transit đổi `jdRef` hàng chục lần một giây, mà chỉ cần dời một
+ * vạch mốc. Không tách thì mỗi bước vẽ lại cả lịch (đo 2026-10-27: phần lớn thời gian một bước kéo ở tab Transit).
+ */
+const GanttRows = memo(function GanttRows({ segs, from, to, pxPerDay, viewLeft, personGates, label, lang }: {
+  segs: Segs; from: number; to: number; pxPerDay: number; viewLeft: number;
+  personGates: ReadonlySet<number>; label: (jd: number) => string; lang: Lang;
+}): JSX.Element {
+  const range = { from, to };
+  const xOf = (jd: number) => (jd - from) * pxPerDay;
+  return (
+    <>
+      {DEFINING_BODIES_STANDARD.map((b, i) => {
+        const y = HEADER + i * ROW + 2, h = ROW - 4;
+        return (
+          <g key={b} data-ephem-body={BODY_NAMES[b]}>
+            {(segs.get(b) ?? []).map(s => {
+              const x0 = Math.max(s.jdStart, range.from), x1 = Math.min(s.jdEnd, range.to);
+              if (x1 <= x0) return null;
+              const x = xOf(x0), w = xOf(x1) - x;
+              const rel = segmentRelation(s.gate, personGates);
+              const cell = `${s.gate}.${s.line}${s.retrograde ? ' R' : ''}`;
+              return (
+                <g key={s.jdStart} data-seg={`${s.gate}.${s.line}`} data-rel={rel}
+                   data-retro={s.retrograde || undefined}
+                   data-start={isoOf(s.jdStart)} data-end={isoOf(s.jdEnd)}>
+                  <title>{`${planetName(b, lang)} ${cell} · ${label(s.jdStart)} → ${label(s.jdEnd)}`}</title>
+                  {rel === 'both' ? (
+                    <>
+                      <rect x={x} y={y} width={w} height={h / 2} fill={EPHEMERIS_FILL.same} />
+                      <rect x={x} y={y + h / 2} width={w} height={h / 2} fill={EPHEMERIS_FILL.harmonic} />
+                    </>
+                  ) : <rect x={x} y={y} width={w} height={h} fill={EPHEMERIS_FILL[rel]} />}
+                  {s.jdStart >= range.from && (
+                    <line x1={x} x2={x} y1={y} y2={y + h} stroke={EPHEMERIS_DIVIDER} />
+                  )}
+                  {x + w - Math.max(x, viewLeft) >= LABEL_MIN_PX && (
+                    // Bám mép trái phần đang thấy, nhưng không trượt ra khỏi ô.
+                    <text x={Math.min(Math.max(x, viewLeft) + 4, x + w - LABEL_MIN_PX + 4)} y={y + h / 2 + 4}
+                          fontSize={11} fill={EPHEMERIS_TEXT} pointerEvents="none">{cell}</text>
+                  )}
+                </g>
+              );
+            })}
+          </g>
+        );
+      })}
+    </>
+  );
+});

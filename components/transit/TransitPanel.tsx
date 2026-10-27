@@ -15,7 +15,7 @@
  * ⚠️ KHÔNG hiện Type/Authority/Profile mới. Transit không đổi thiết kế của một
  *   người — xem ghi chú trong `calc-core/rave/transit.ts`.
  */
-import { useCallback, useEffect, useRef, useState, type JSX } from 'react';
+import { startTransition, useCallback, useEffect, useRef, useState, type JSX } from 'react';
 import type { RaveChart } from '../../calc-core/rave/chart.js';
 import { calculateDayChart, calculateTransitChart, type DayChart, type TransitChart } from '../../calc-core/rave/transit.js';
 import type { EphemerisProvider } from '../../calc-core/ephemeris/provider.js';
@@ -112,9 +112,9 @@ export interface TransitState<R extends DayChart = TransitChart> {
   runNow: () => void;
   /** Lùi / tiến một số ngày so với mốc đang xem. */
   step: (days: number) => void;
-  /** Đang kéo thanh giờ: ô đã đổi nhưng CHƯA tính (tính khi thả tay). */
+  /** Đang kéo thanh giờ: ô có thể đi trước kết quả một vài bước (tính giới hạn nhịp). */
   scrubbing: boolean;
-  /** Kéo thanh giờ tới `min` phút trong ngày: đổi ô, tắt Trực tiếp, chưa tính. */
+  /** Kéo thanh giờ tới `min` phút trong ngày: đổi ô, tắt Trực tiếp, tính lại (giới hạn nhịp, bỏ bước trung gian). */
   scrub: (min: number) => void;
   /** Thả tay: tính tại giờ đang nằm trong ô (hoặc `min` nếu truyền). Không đang kéo thì thôi. */
   commitScrub: (min?: number) => void;
@@ -156,21 +156,26 @@ function useTimeline<R extends DayChart>(
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
-  /** Lõi: tính transit tại ĐÚNG một khoảnh khắc (Trực tiếp dùng giờ chính xác, không cắt phút). */
-  const runAt = useCallback(async (at: Date): Promise<R | null> => {
-    setBusy(true); setErr(null);
+  /**
+   * Lõi: tính transit tại ĐÚNG một khoảnh khắc (Trực tiếp dùng giờ chính xác, không cắt phút).
+   * `transition`: đang kéo thanh giờ — kết quả vẽ ở mức ƯU TIÊN THẤP (`startTransition`), ngắt được, để núm kéo
+   * không phải chờ cả khung chart vẽ lại; không bật `busy` (mỗi bước kéo lại vẽ thêm hai lần chỉ để bật/tắt nó).
+   */
+  const runAt = useCallback(async (at: Date, opts: { transition?: boolean } = {}): Promise<R | null> => {
+    if (!opts.transition) setBusy(true);
+    setErr(null);
     try {
       if (Number.isNaN(at.getTime())) throw new Error(`Thời điểm không hợp lệ: ${String(at)}`);
       const eph = await getBrowserEphemeris();
-      setUt(at);
       const tc = compute(eph, dateUTToJd(at));
-      setResult(tc);
+      const apply = () => { setUt(at); setResult(tc); };
+      if (opts.transition) startTransition(apply); else apply();
       return tc;
     } catch (e) {
       setErr(e instanceof Error ? e.message : String(e));
       setResult(null);
       return null;
-    } finally { setBusy(false); }
+    } finally { if (!opts.transition) setBusy(false); }
   }, [compute]);
 
   /*
@@ -304,14 +309,33 @@ function useTimeline<R extends DayChart>(
     void runAt(at);
   }, [runAt, when, mode, cancelTyping]);
   /*
-   * Thanh giờ: kéo chỉ đổi ô + dòng UTC (rẻ); biểu đồ, cột, các thẻ dưới tính lại khi THẢ tay — tính theo từng
-   * bước 5 phút là vẽ lại cả bodygraph lẫn mandala hàng chục lần một giây. `whenRef` vì thả tay có thể đến ngay
-   * trong cùng lượt sự kiện với lần kéo cuối, trước khi `when` kịp vẽ lại.
+   * Thanh giờ: biểu đồ + cột tính lại NGAY TRONG LÚC KÉO (Hưng 2026-10-27 — trước đó chỉ khi thả tay). Kéo bắn
+   * hàng chục bước 5 phút mỗi giây, mỗi lần tính + vẽ lại cả khung chart tốn vài chục ms ⇒
+   *   · núm là input KHÔNG điều khiển (`TimeScrub`) — trình duyệt tự dời núm, không chờ React;
+   *   · ô ngày giờ + kết quả cập nhật trong `startTransition`: ưu tiên thấp, ngắt được, không chặn tay kéo;
+   *   · giới hạn nhịp: chỉ MỘT lần tính tại một thời điểm, chờ một khung hình rồi tính tiếp, chỉ tính bước MỚI
+   *     NHẤT — bước trung gian bị bỏ.
+   * Thả tay tính đúng mốc cuối ở mức ưu tiên thường. `whenRef` vì thả tay có thể đến ngay trong cùng lượt sự
+   * kiện với lần kéo cuối, trước khi `when` kịp vẽ lại.
    */
   const [scrubbing, setScrubbing] = useState(false);
   const scrubRef = useRef(false);
   const whenRef = useRef(when);
   whenRef.current = when;
+  const drag = useRef<{ running: boolean; next: Date | null }>({ running: false, next: null });
+  const pump = useCallback(async () => {
+    const q = drag.current;
+    if (q.running) return;
+    q.running = true;
+    try {
+      while (q.next) {
+        const at = q.next;
+        q.next = null;
+        await runAt(at, { transition: true });
+        await new Promise<void>(r => requestAnimationFrame(() => r()));
+      }
+    } finally { q.running = false; }
+  }, [runAt]);
   const scrub = useCallback((min: number) => {
     cancelTyping();
     setLiveState(false);
@@ -319,12 +343,17 @@ function useTimeline<R extends DayChart>(
     setScrubbing(true);
     const w = withMinuteOfDay(whenRef.current, min, todayIn(modeRef.current));
     whenRef.current = w;
-    setWhen(w);
-  }, [cancelTyping]);
+    startTransition(() => setWhen(w));
+    const at = fromInput(w, modeRef.current);
+    if (Number.isNaN(at.getTime())) return;
+    drag.current.next = at;
+    void pump();
+  }, [cancelTyping, pump]);
   const commitScrub = useCallback((min?: number) => {
     if (!scrubRef.current) return;
     scrubRef.current = false;
     setScrubbing(false);
+    drag.current.next = null;          // bước kéo còn chờ đã cũ — mốc thả tay thay nó
     const w = withMinuteOfDay(whenRef.current, min ?? minuteOfDay(whenRef.current), todayIn(modeRef.current));
     const at = fromInput(w, modeRef.current);
     /* Giờ không tồn tại (nhảy DST) thì Date tự dời — ghi lại ô theo đúng khoảnh khắc sẽ tính. */
@@ -426,10 +455,19 @@ function TimeScrub({ s }: { s: TransitState<DayChart> }): JSX.Element {
     return () => el.removeEventListener('change', onChange);
   }, [commitScrub]);
   const min = minuteOfDay(s.when);
+  /*
+   * KHÔNG điều khiển (`defaultValue`): núm đi theo tay ngay, không chờ React vẽ lại (ô ngày giờ cập nhật trong
+   * transition nên đi sau vài bước — điều khiển thì núm bị kéo lùi về giá trị cũ của ô). Giờ đổi từ nơi khác
+   * (◀ ▶, Bây giờ, Trực tiếp, gõ ô) thì đồng bộ núm theo — trừ lúc đang kéo.
+   */
+  const { scrubbing } = s;
+  useEffect(() => {
+    if (!scrubbing && ref.current) ref.current.value = String(Math.min(min, SCRUB_MAX));
+  }, [min, scrubbing]);
   return (
     <div>
       <input ref={ref} type="range" className="time-scrub" min={0} max={SCRUB_MAX} step={SCRUB_STEP}
-             value={Math.min(min, SCRUB_MAX)} aria-label={t('transit.scrub')}
+             defaultValue={Math.min(min, SCRUB_MAX)} aria-label={t('transit.scrub')}
              aria-valuetext={`${pad(Math.floor(min / 60))}:${pad(min % 60)}`} data-testid="transit-scrub"
              onChange={e => s.scrub(Number(e.target.value))}
              onPointerUp={() => commitScrub()} onBlur={() => commitScrub()}

@@ -22,7 +22,7 @@
  * Giờ: công tắc Địa phương/UTC; "địa phương" = MÁY (luật transit). Tháng cắt theo
  * UTC như engine. In 1–3 tháng: khung ẩn như `export/ChartExport`.
  */
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type JSX, type ReactNode } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type JSX, type ReactNode } from 'react';
 import type { RaveChart } from '../../calc-core/rave/chart.js';
 import { BODY_NAMES, DEFINING_BODIES_STANDARD, type Body } from '../../calc-core/ephemeris/bodies.js';
 import {
@@ -362,7 +362,8 @@ function InfluenceTable({
   chart, palette, mode, lang, t, cols, keep, data, ongoingOpen, onToggleOngoing, onPick, jdTransit, print = false,
 }: TableProps): JSX.Element {
   const zone = deviceZone();
-  const visible = INFLUENCE_COLUMNS.filter(c => cols.has(c));
+  /* GIỮ cùng mảng giữa các lần vẽ: `InfluenceTr` là `memo` — mảng mới mỗi lần là cả bảng vẽ lại. */
+  const visible = useMemo(() => INFLUENCE_COLUMNS.filter(c => cols.has(c)), [cols]);
   const ongoing = data.res.ongoing.filter(keep);
   const rows = data.res.rows.filter(keep);
   const { jdFrom, jdTo } = monthRange(data.month);
@@ -440,7 +441,11 @@ function NowRow({ span, label }: { span: number; label: string }): JSX.Element {
   );
 }
 
-function InfluenceTr({ r, ongoing, visible, chart, palette, mode, zone, lang, t, year, picked, onPick }: {
+/*
+ * `memo`: kéo thanh giờ của thẻ Thời điểm transit đổi `jdTransit` hàng chục lần một giây, mà nó chỉ đổi `picked`
+ * của một hai dòng. Không memo thì mỗi bước vẽ lại cả bảng (~80 ms ⇒ thanh kéo giật, đo 2026-10-27).
+ */
+const InfluenceTr = memo(function InfluenceTr({ r, ongoing, visible, chart, palette, mode, zone, lang, t, year, picked, onPick }: {
   r: InfluenceRow; ongoing: boolean; visible: readonly InfluenceColumn[]; chart: RaveChart; palette: CompositePalette;
   mode: TimeMode; zone: string; lang: Lang; t: T; year: number; picked: boolean; onPick?: (jd: number) => void;
 }): JSX.Element {
@@ -530,7 +535,7 @@ function InfluenceTr({ r, ongoing, visible, chart, palette, mode, zone, lang, t,
       ))}
     </tr>
   );
-}
+});
 
 /**
  * In trong khung ẩn — cùng cách `export/ChartExport`: in cả trang thì ra kèm
